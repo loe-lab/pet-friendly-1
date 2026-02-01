@@ -53,13 +53,17 @@
           <div class="flex items-center gap-3">
             <div class="grid h-12 w-12 place-items-center rounded-2xl bg-brand text-white font-semibold">
               W
-            </div>            <div class="flex flex-col">              <span class="text-sm font-semibold tracking-[0.2em]">데일리펫</span>              <span class="text-xs text-slate-500">발도장을 남기는 데일리 라이프</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-sm font-semibold tracking-[0.2em]">데일리펫</span>
+              <span class="text-xs text-slate-500">함께 발도장 남기는 일상여행</span>
             </div>
           </div>
           <!-- GNB 메뉴: 데스크톱에서만 보임 -->
           <nav class="hidden items-center gap-6 text-sm md:flex">
+            <a href="index.html" class="text-slate-600 hover:text-ink">홈</a>
             <a href="airline.html" class="text-slate-600 hover:text-ink">항공정보</a>
-            <a href="#airline" class="text-slate-600 hover:text-ink">추천 여행지</a>
+            <a href="travel.html" class="text-slate-600 hover:text-ink">추천 여행지</a>
           </nav>
           <!-- 검색 및 액션: 데스크톱에서만 보임 -->
           <div class="hidden items-center gap-3 md:flex">
@@ -73,17 +77,17 @@
       <!-- 메인 콘텐츠 -->
       <main class="mx-auto flex w-[min(1200px,92%)] flex-col gap-20 pb-28 pt-10">
         <!-- 히어로 일러스트: 상단 분위기 이미지 -->
-        <figure class="flex justify-center">
+        <figure class="relative flex justify-center">
           <img
-            src="pet%20travel.png"
+            src="pet%20flying.png"
             alt="반려견 여행 일러스트"
-            class="w-[40%] max-w-[210px] md:max-w-[260px]"
+            class="relative z-10 w-full max-w-[900px] md:max-w-[1000px]"
           />
         </figure>
         <!-- 히어로 섹션 (JS 렌더): app.js에서 카드/검색 UI 생성 -->
         <section id="hero"></section>
 
-        <!-- 항공 규정 (JS 렌더): 항공사 규정/필터/쇼핑 영역 -->
+        <!-- 추천 여행지 (JS 렌더) -->
         <section id="airline"></section>
       </main>
 

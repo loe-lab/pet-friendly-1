@@ -246,7 +246,27 @@ function renderHero() {
         </div>
         <div class="mx-auto flex w-full flex-wrap items-center justify-center gap-3 rounded-2xl bg-white/90 px-4 py-4 text-ink">
           <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
-            견종
+            출발지
+            <select id="hero-departure" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
+              <option value="icn">인천 (ICN)</option>
+              <option value="gmp">김포 (GMP)</option>
+              <option value="pus">부산 (PUS)</option>
+              <option value="cju">제주 (CJU)</option>
+              <option value="tae">대구 (TAE)</option>
+            </select>
+          </label>
+          <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
+            도착지
+            <select id="hero-destination" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
+              <option value="cju">제주 (CJU)</option>
+              <option value="pus">부산 (PUS)</option>
+              <option value="icn">인천 (ICN)</option>
+              <option value="gmp">김포 (GMP)</option>
+              <option value="tae">대구 (TAE)</option>
+            </select>
+          </label>
+          <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
+            견종 크기
             <select id="hero-breed" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
               <option value="small">소형견</option>
               <option value="medium">중형견</option>
@@ -273,7 +293,7 @@ function renderHero() {
           </label>
         </div>
         <div class="flex w-full flex-wrap justify-center gap-3">
-          <button class="float-cta rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-soft">
+          <button id="hero-search" class="float-cta rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-soft">
             지금 우리 아이와 떠나기
           </button>
         </div>
@@ -394,6 +414,26 @@ function renderAirlines(airlines = currentAirlines) {
       <div class="view-panel tab-panel active mt-6" data-view-panel="rules">
         <div class="grid gap-4 rounded-2xl border border-line bg-slate-50 p-4 text-sm">
           <div class="grid justify-items-center gap-3 sm:grid-cols-3 sm:justify-items-stretch">
+            <label class="grid gap-2">
+              출발지
+              <select id="departure-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
+                <option value="icn">인천 (ICN)</option>
+                <option value="gmp">김포 (GMP)</option>
+                <option value="pus">부산 (PUS)</option>
+                <option value="cju">제주 (CJU)</option>
+                <option value="tae">대구 (TAE)</option>
+              </select>
+            </label>
+            <label class="grid gap-2">
+              도착지
+              <select id="destination-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
+                <option value="cju">제주 (CJU)</option>
+                <option value="pus">부산 (PUS)</option>
+                <option value="icn">인천 (ICN)</option>
+                <option value="gmp">김포 (GMP)</option>
+                <option value="tae">대구 (TAE)</option>
+              </select>
+            </label>
             <label class="grid gap-2">
               견종 크기
               <select id="breed-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
@@ -779,16 +819,28 @@ function setupHeroSearch() {
   if (!heroBtn) return;
 
   heroBtn.addEventListener("click", () => {
-    const breedSelect = document.getElementById("breed-select");
-    const weightSelect = document.getElementById("weight-select");
-    const ageSelect = document.getElementById("age-select");
-
-    if (breedSelect && weightSelect && ageSelect) {
-      breedSelect.value = heroBreed.value;
-      weightSelect.value = heroWeight.value;
-      ageSelect.value = heroAge.value;
-      renderEligibleList();
+    if (!document.getElementById("page-loading")) {
+      const overlay = document.createElement("div");
+      overlay.id = "page-loading";
+      overlay.className = "page-loading";
+      overlay.innerHTML = `
+        <div class="page-loading__card">
+          <p class="text-xs uppercase tracking-[0.35em] text-slate-400">Loading</p>
+          <div class="results-spinner"></div>
+          <p class="text-sm text-slate-500">탑승 가능한 항공사를 찾는 중...</p>
+        </div>
+      `;
+      document.body.appendChild(overlay);
     }
+    heroBtn.setAttribute("disabled", "true");
+    const params = new URLSearchParams({
+      breed: heroBreed.value,
+      weight: heroWeight.value,
+      age: heroAge.value,
+    });
+    setTimeout(() => {
+      window.location.href = `results.html?${params.toString()}`;
+    }, 500);
   });
 }
 

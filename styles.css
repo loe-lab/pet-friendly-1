@@ -291,3 +291,24 @@ body {
     opacity: 1;
   }
 }
+
+/* Page loading overlay */
+.page-loading {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  display: grid;
+  place-items: center;
+  z-index: 80;
+}
+
+.page-loading__card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px 28px;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.2);
+  text-align: center;
+}
