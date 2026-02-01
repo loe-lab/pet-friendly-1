@@ -238,7 +238,7 @@ function renderHero() {
     <div class="hero-stage shadow-soft" style="background-image:url('${heroSlides[0].image}')">
       <div class="relative z-10 flex h-full flex-col justify-start gap-6 px-8 py-[50px] text-ink">
         <span class="hero-tag inline-flex w-fit max-w-[1136px] items-center gap-2 rounded-full bg-white/80 px-4 py-1 text-[10px] uppercase tracking-[0.35em] text-deep">
-          DAILY-PET CURATIOND
+          DAILY PET CURATION
         </span>
         <div>
           <h1 class="hero-title text-3xl font-semibold md:text-4xl">${heroSlides[0].title}</h1>
