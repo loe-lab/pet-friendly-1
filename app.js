@@ -351,7 +351,7 @@ const travelSpots = [
     location: "일본 · 오사카",
     category: "overseas",
     image:
-      "https://images.unsplash.com/photo-1505069442586-7a3f2f7f4a76?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1526481280695-3c687fd543f4?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "바르셀로나 해안 산책",
@@ -365,7 +365,35 @@ const travelSpots = [
     location: "호주 · 시드니",
     category: "overseas",
     image:
-      "https://images.unsplash.com/photo-1506973035872-a4f23f3baaba?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "하롱베이 크루즈 뷰",
+    location: "베트남 · 하롱베이",
+    category: "overseas",
+    image:
+      "https://images.unsplash.com/photo-1505739773434-caa0e5f18360?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "밴쿠버 해안 산책",
+    location: "캐나다 · 밴쿠버",
+    category: "overseas",
+    image:
+      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "베네치아 운하 루트",
+    location: "이탈리아 · 베네치아",
+    category: "overseas",
+    image:
+      "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "유럽 감성 시티워크",
+    location: "유럽 · 로망 코스",
+    category: "overseas",
+    image:
+      "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=900&q=80",
   },
 ];
 
@@ -510,9 +538,6 @@ function renderResultsPage() {
           <h1 class="mt-2 text-3xl font-semibold text-deep">탑승 가능 항공사</h1>
           <p class="mt-2 text-sm text-slate-500">${breedLabel} · ${weight}kg · ${ageLabel}</p>
         </div>
-        <a href="index.html" class="rounded-full border border-line bg-white px-4 py-2 text-xs text-slate-500">
-          돌아가기
-        </a>
       </div>
 
       <div id="results-loading" class="results-loading">
