@@ -79,6 +79,66 @@ const airlineData = [
     maxCargoWeight: 28,
     breeds: ["small", "medium"],
   },
+  {
+    id: "jinair",
+    name: "진에어",
+    badge: "JIN AIR",
+    cabin: { maxWeight: 7, cage: "40 x 30 x 20cm", note: "기내 반입 사전 예약" },
+    cargo: { maxWeight: 25, cage: "80 x 55 x 60cm", note: "노선별 제한" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 25,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "eastar",
+    name: "이스타항공",
+    badge: "EASTAR",
+    cabin: { maxWeight: 9, cage: "45 x 30 x 20cm", note: "케이지 포함 9kg 미만" },
+    cargo: { maxWeight: 20, cage: "80 x 50 x 55cm", note: "국내선 중심" },
+    maxCabinWeight: 9,
+    maxCargoWeight: 20,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "airseoul",
+    name: "에어서울",
+    badge: "AIR SEOUL",
+    cabin: { maxWeight: 7, cage: "40 x 30 x 20cm", note: "기내 좌석 수 제한" },
+    cargo: { maxWeight: 25, cage: "85 x 55 x 65cm", note: "국제선 예약 필수" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 25,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "twaye",
+    name: "플라이강원",
+    badge: "FLY GANGWON",
+    cabin: { maxWeight: 9, cage: "45 x 35 x 25cm", note: "기내 반입 제한" },
+    cargo: { maxWeight: 20, cage: "80 x 50 x 55cm", note: "노선별 확인" },
+    maxCabinWeight: 9,
+    maxCargoWeight: 20,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "aerok",
+    name: "에어로케이",
+    badge: "AERO K",
+    cabin: { maxWeight: 9, cage: "45 x 30 x 20cm", note: "케이지 포함 9kg 미만" },
+    cargo: { maxWeight: 20, cage: "80 x 50 x 55cm", note: "국내선 중심" },
+    maxCabinWeight: 9,
+    maxCargoWeight: 20,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "airpremia",
+    name: "에어프레미아",
+    badge: "AIR PREMIA",
+    cabin: { maxWeight: 7, cage: "40 x 30 x 20cm", note: "기내 반입 사전 예약" },
+    cargo: { maxWeight: 30, cage: "85 x 55 x 65cm", note: "노선별 제한" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 30,
+    breeds: ["small", "medium"],
+  },
 ];
 
 // 쇼핑 카드 샘플 데이터
@@ -351,7 +411,7 @@ const travelSpots = [
     location: "일본 · 오사카",
     category: "overseas",
     image:
-      "https://images.unsplash.com/photo-1526481280695-3c687fd543f4?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "바르셀로나 해안 산책",
@@ -372,7 +432,7 @@ const travelSpots = [
     location: "베트남 · 하롱베이",
     category: "overseas",
     image:
-      "https://images.unsplash.com/photo-1505739773434-caa0e5f18360?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "밴쿠버 해안 산책",
@@ -455,11 +515,22 @@ function renderAirlines(airlines = currentAirlines) {
             <label class="grid gap-2">
               도착지
               <select id="destination-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
+                <option value="any">Anywhere</option>
                 <option value="cju">제주 (CJU)</option>
                 <option value="pus">부산 (PUS)</option>
                 <option value="icn">인천 (ICN)</option>
                 <option value="gmp">김포 (GMP)</option>
                 <option value="tae">대구 (TAE)</option>
+                <option value="nrt">도쿄/나리타 (NRT)</option>
+                <option value="kix">오사카/간사이 (KIX)</option>
+                <option value="hnd">도쿄/하네다 (HND)</option>
+                <option value="syd">시드니 (SYD)</option>
+                <option value="yvr">밴쿠버 (YVR)</option>
+                <option value="han">하노이 (HAN)</option>
+                <option value="sgn">호치민 (SGN)</option>
+                <option value="fco">로마/피우미치노 (FCO)</option>
+                <option value="cdg">파리/샤를드골 (CDG)</option>
+                <option value="lhr">런던/히드로 (LHR)</option>
               </select>
             </label>
             <label class="grid gap-2">
