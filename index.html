@@ -1,16 +1,21 @@
 <!doctype html>
 <html lang="ko">
   <head>
+    <!-- 기본 문서 설정 -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>윗포(with paw) | 반려견 동반 여행 정보 큐레이션</title>
+    <!-- 브라우저 탭에 표시되는 제목 -->
+    <title>데일리 펫, 반려견 동반 여행 정보 큐레이션</title>
+    <!-- 구글 폰트 로딩 (Work Sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Tailwind CSS CDN (유틸리티 클래스 사용) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind 커스텀 컬러/폰트/그림자 설정 -->
     <script>
       tailwind.config = {
         theme: {
@@ -35,33 +40,31 @@
         },
       };
     </script>
+    <!-- 커스텀 스타일 -->
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="bg-white text-ink font-body">
-    <!-- Page shell -->
+    <!-- 페이지 전체 래퍼 -->
     <div class="min-h-screen">
-      <!-- 상단 고정 헤더 -->
+      <!-- 상단 고정 헤더: 브랜드/메뉴/검색 영역 -->
       <header class="sticky top-0 z-30 border-b border-line bg-white/80 backdrop-blur-xl">
         <div class="mx-auto flex w-[min(1200px,92%)] items-center justify-between gap-6 py-4">
-          <!-- 브랜드 영역 -->
+          <!-- 브랜드 영역: 로고 + 브랜드명 + 슬로건 -->
           <div class="flex items-center gap-3">
             <div class="grid h-12 w-12 place-items-center rounded-2xl bg-brand text-white font-semibold">
               W
-            </div>
-            <div class="flex flex-col">
-              <span class="text-sm font-semibold tracking-[0.2em]">데일리펫</span>
-              <span class="text-xs text-slate-500">with paw, 발도장을 남기는 여행</span>
+            </div>            <div class="flex flex-col">              <span class="text-sm font-semibold tracking-[0.2em]">데일리펫</span>              <span class="text-xs text-slate-500">발도장을 남기는 데일리 라이프</span>
             </div>
           </div>
-          <!-- GNB 메뉴 -->
-          <nav class="hidden items-center gap-6 text-sm md:flex"></nav>
-          <!-- 검색 및 액션 -->
+          <!-- GNB 메뉴: 데스크톱에서만 보임 -->
+          <nav class="hidden items-center gap-6 text-sm md:flex">
+            <a href="airline.html" class="text-slate-600 hover:text-ink">항공정보</a>
+            <a href="#airline" class="text-slate-600 hover:text-ink">추천 여행지</a>
+          </nav>
+          <!-- 검색 및 액션: 데스크톱에서만 보임 -->
           <div class="hidden items-center gap-3 md:flex">
-            <div class="rounded-full bg-slate-50 px-5 py-2 text-sm text-slate-500">
-              지역, 항공사, 액티비티 검색
-            </div>
-            <button class="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white shadow-soft">
-              로그인
+            <button class="rounded-full border-1-5 border-line bg-white px-5 py-2 text-sm font-semibold text-brand shadow-soft">
+              로그인/회원가입
             </button>
           </div>
         </div>
@@ -69,7 +72,7 @@
 
       <!-- 메인 콘텐츠 -->
       <main class="mx-auto flex w-[min(1200px,92%)] flex-col gap-20 pb-28 pt-10">
-        <!-- 히어로 일러스트 -->
+        <!-- 히어로 일러스트: 상단 분위기 이미지 -->
         <figure class="flex justify-center">
           <img
             src="pet%20travel.png"
@@ -77,18 +80,18 @@
             class="w-[40%] max-w-[210px] md:max-w-[260px]"
           />
         </figure>
-        <!-- 히어로 섹션 (JS 렌더) -->
+        <!-- 히어로 섹션 (JS 렌더): app.js에서 카드/검색 UI 생성 -->
         <section id="hero"></section>
 
-        <!-- 항공 규정 (JS 렌더) -->
+        <!-- 항공 규정 (JS 렌더): 항공사 규정/필터/쇼핑 영역 -->
         <section id="airline"></section>
       </main>
 
-      <!-- 푸터 -->
+      <!-- 푸터: 사이트 하단 정보 -->
       <footer class="border-t border-line py-10 text-sm text-slate-500">
         <div class="mx-auto flex w-[min(1200px,92%)] flex-wrap items-center justify-between gap-6">
           <div>
-            <p class="text-xl font-semibold text-ink">윗포(with paw)</p>
+            <p class="text-xl font-semibold text-ink">데일리펫</p>
             <p>반려견과 함께하는 프리미엄 라이프스타일 큐레이션</p>
           </div>
           <div class="flex items-center gap-6 text-xs">
@@ -100,10 +103,10 @@
         </div>
       </footer>
 
-      <!-- 모바일 하단 네비게이션 (JS 렌더) -->
+      <!-- 모바일 하단 네비게이션 (JS 렌더): app.js에서 버튼 생성 -->
       <nav id="mobile-nav"></nav>
 
-      <!-- 필터 바텀 시트 -->
+      <!-- 필터 바텀 시트: 모바일에서 필터 선택용 모달 -->
       <div id="bottom-sheet" class="bottom-sheet hidden">
         <div class="bottom-sheet__panel">
           <div class="bottom-sheet__handle"></div>

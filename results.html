@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>윗포(with paw) | 항공사 검색 결과</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: "#DD0035",
+              deep: "#12273B",
+              sand: "#F4EDE2",
+              warm: "#FFB27A",
+              ink: "#0F172A",
+              line: "#E2E8F0",
+            },
+            fontFamily: {
+              display: ["Work Sans", "sans-serif"],
+              body: ["Work Sans", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 24px 60px rgba(16, 24, 40, 0.12)",
+              card: "0 14px 30px rgba(18, 39, 59, 0.08)",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="bg-white text-ink font-body" data-page="results">
+    <div class="min-h-screen">
+      <header class="border-b border-line bg-white">
+        <div class="mx-auto flex w-[min(1000px,92%)] items-center justify-between gap-6 py-4">
+          <div class="flex items-center gap-3">
+            <div class="grid h-10 w-10 place-items-center rounded-2xl bg-brand text-white font-semibold">
+              W
+            </div>
+            <div class="flex flex-col">
+              <span class="text-sm font-semibold tracking-[0.2em]">데일리펫</span>
+              <span class="text-xs text-slate-500">with paw, 발도장을 남기는 데일리 라이프</span>
+            </div>
+          </div>
+          <a href="index.html" class="rounded-full border border-line bg-white px-4 py-2 text-xs text-slate-500">
+            홈으로
+          </a>
+        </div>
+      </header>
+      <div id="results-root"></div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

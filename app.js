@@ -1,12 +1,13 @@
 // ---------------------------
-// Data models
+// 데이터: 화면에 사용할 기본 콘텐츠
+// - 실제 서비스라면 API/DB에서 받아오는 영역입니다.
 // ---------------------------
+// 히어로(상단 배너) 슬라이드 데이터
 const heroSlides = [
   {
     title: "데일리펫과 함께 떠나는 반려견 여행",
     subtitle: "항공 규정부터 액티비티까지, 우리 아이와의 모든 여정을 큐레이션합니다.",
-    image:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
+    image: "eva-darron-oCdVtGFeDC0-unsplash.jpg",
     tag: "WITH PAW CURATION",
   },
   {
@@ -26,6 +27,7 @@ const heroSlides = [
 ];
 
 
+// 항공사 규정 샘플 데이터
 const airlineData = [
   {
     id: "korean",
@@ -79,6 +81,7 @@ const airlineData = [
   },
 ];
 
+// 쇼핑 카드 샘플 데이터
 const shopItems = [
   {
     id: "carry-1",
@@ -202,6 +205,7 @@ const shopItems = [
   },
 ];
 
+// 모바일 하단 네비게이션 버튼
 const bottomNav = [
   { label: "홈", icon: "🏠" },
   { label: "검색", icon: "🔍" },
@@ -209,46 +213,49 @@ const bottomNav = [
   { label: "마이", icon: "👤" },
 ];
 
+// 화면 상태(현재 선택/필터)
 let currentAirlines = [...airlineData];
 let currentShopItems = [...shopItems];
 const shopState = { category: "all", sort: "recommend" };
 
 // ---------------------------
-// Root containers
+// DOM 루트: HTML에서 id로 연결되는 영역
 // ---------------------------
 const heroEl = document.getElementById("hero");
 const airlineEl = document.getElementById("airline");
 const mobileNavEl = document.getElementById("mobile-nav");
 const bottomSheetEl = document.getElementById("bottom-sheet");
+bottomSheetEl?.classList.add("hidden");
+const pageType = document.body?.dataset?.page;
 
 // ---------------------------
-// Render functions
+// 렌더 함수: 데이터 → HTML 문자열 생성
 // ---------------------------
+// 히어로 섹션 생성
 function renderHero() {
   heroEl.innerHTML = `
-    <!-- Hero section -->
+    <!-- Hero section: 타이틀 + 검색 필터 -->
     <div class="hero-stage shadow-soft" style="background-image:url('${heroSlides[0].image}')">
-      <div class="hero-overlay"></div>
       <div class="relative z-10 flex h-full flex-col justify-start gap-6 px-8 py-[50px] text-ink">
-        <span class="hero-tag inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-1 text-[10px] uppercase tracking-[0.35em] text-deep">
-          ${heroSlides[0].tag}
+        <span class="hero-tag inline-flex w-fit max-w-[1136px] items-center gap-2 rounded-full bg-white/80 px-4 py-1 text-[10px] uppercase tracking-[0.35em] text-deep">
+          DAILY-PET CURATIOND
         </span>
         <div>
           <h1 class="hero-title text-3xl font-semibold md:text-4xl">${heroSlides[0].title}</h1>
           <p class="mt-2 max-w-xl text-sm text-slate-600">${heroSlides[0].subtitle}</p>
         </div>
-        <div class="flex flex-wrap items-center gap-3 rounded-2xl bg-white/90 p-4 text-ink">
-          <label class="grid gap-1 text-xs">
+        <div class="mx-auto flex w-full flex-wrap items-center justify-center gap-3 rounded-2xl bg-white/90 px-4 py-4 text-ink">
+          <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
             견종
-            <select id="hero-breed" class="rounded-xl border border-line px-3 py-2 text-sm">
+            <select id="hero-breed" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
               <option value="small">소형견</option>
               <option value="medium">중형견</option>
               <option value="large">대형견</option>
             </select>
           </label>
-          <label class="grid gap-1 text-xs">
+          <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
             몸무게
-            <select id="hero-weight" class="rounded-xl border border-line px-3 py-2 text-sm">
+            <select id="hero-weight" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
               <option value="5">5kg 이하</option>
               <option value="7">7kg 이하</option>
               <option value="9">9kg 이하</option>
@@ -256,35 +263,123 @@ function renderHero() {
               <option value="20">20kg 이하</option>
             </select>
           </label>
-          <label class="grid gap-1 text-xs">
+          <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
             나이
-            <select id="hero-age" class="rounded-xl border border-line px-3 py-2 text-sm">
+            <select id="hero-age" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
               <option value="puppy">1살 이하</option>
               <option value="adult">1~7살</option>
               <option value="senior">7살 이상</option>
             </select>
           </label>
-          <button id="hero-search" class="rounded-full bg-deep px-5 py-2 text-sm font-semibold text-white">
-            항공사 검색
-          </button>
         </div>
-        <div class="flex flex-wrap gap-3">
+        <div class="flex w-full flex-wrap justify-center gap-3">
           <button class="float-cta rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-soft">
             지금 우리 아이와 떠나기
           </button>
-          <button class="rounded-full border border-line px-6 py-3 text-sm text-slate-600">
-            큐레이션 둘러보기
-          </button>
         </div>
       </div>
+      <div class="hero-overlay"></div>
     </div>
   `;
 }
 
+const travelSpots = [
+  {
+    title: "제주 애월 해안 산책길",
+    location: "제주 · 애월",
+    category: "domestic",
+    image:
+      "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "강릉 바다 앞 힐링 코스",
+    location: "강원 · 강릉",
+    category: "domestic",
+    image:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "남해 독일마을 뷰 포인트",
+    location: "경남 · 남해",
+    category: "domestic",
+    image:
+      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "가평 숲길 캠핑 스팟",
+    location: "경기 · 가평",
+    category: "domestic",
+    image:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "부산 해운대 펫 프렌들리",
+    location: "부산 · 해운대",
+    category: "domestic",
+    image:
+      "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "속초 바다 전망 드라이브",
+    location: "강원 · 속초",
+    category: "domestic",
+    image:
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "오사카 강변 산책 루트",
+    location: "일본 · 오사카",
+    category: "overseas",
+    image:
+      "https://images.unsplash.com/photo-1505069442586-7a3f2f7f4a76?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "바르셀로나 해안 산책",
+    location: "스페인 · 바르셀로나",
+    category: "overseas",
+    image:
+      "https://images.unsplash.com/photo-1495562569060-2eec283d3391?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "시드니 하버 루트",
+    location: "호주 · 시드니",
+    category: "overseas",
+    image:
+      "https://images.unsplash.com/photo-1506973035872-a4f23f3baaba?auto=format&fit=crop&w=900&q=80",
+  },
+];
+
+// 항공사 규정 + 쇼핑 섹션 생성
 function renderAirlines(airlines = currentAirlines) {
   currentAirlines = airlines;
+
+  if (pageType !== "airline") {
+    airlineEl.innerHTML = `
+      <!-- Travel recommendations -->
+      <div class="rounded-[32px] border border-line bg-white p-8 text-ink shadow-card" id="shopping">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Recommended</p>
+            <h2 class="mt-2 text-3xl font-semibold text-deep">추천 여행지</h2>
+            <p class="mt-2 text-sm text-slate-500">반려견과 함께 가기 좋은 여행지를 모았어요.</p>
+          </div>
+          <div class="flex items-center gap-2 rounded-full border border-line bg-white p-1 text-xs">
+            <button class="travel-tab rounded-full bg-deep px-4 py-2 font-semibold text-white" data-category="domestic">
+              국내
+            </button>
+            <button class="travel-tab rounded-full px-4 py-2 font-semibold text-slate-500" data-category="overseas">
+              해외
+            </button>
+          </div>
+        </div>
+        <div id="travel-grid" class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
+      </div>
+    `;
+    return;
+  }
+
   airlineEl.innerHTML = `
-    <!-- Airline + Shopping section -->
+    <!-- Airline + Shopping section: 규정 + 쇼핑 -->
     <div class="rounded-[32px] border border-line bg-white p-8 text-ink shadow-card" id="shopping">
       <div class="flex flex-wrap items-start justify-between gap-6">
         <div>
@@ -292,15 +387,13 @@ function renderAirlines(airlines = currentAirlines) {
           <h2 class="mt-2 text-3xl font-semibold text-deep">항공사별 탑승 규정</h2>
           <p class="mt-2 text-sm text-slate-500">견종 · 나이 · 무게를 선택하면 가능한 항공사를 안내합니다.</p>
         </div>
-        <div class="flex gap-2">
-          <button class="view-tab rounded-full bg-deep px-4 py-2 text-xs font-semibold text-white" data-view="rules">탑승 규정</button>
-        </div>
+        <div class="flex gap-2"></div>
       </div>
 
-      <!-- Rule panel -->
+      <!-- Rule panel: 필터/규정 UI -->
       <div class="view-panel tab-panel active mt-6" data-view-panel="rules">
-        <div class="grid gap-4 rounded-2xl border border-line bg-slate-50 p-4 text-sm lg:grid-cols-[1.5fr_1fr]">
-          <div class="grid gap-3 sm:grid-cols-3">
+        <div class="grid gap-4 rounded-2xl border border-line bg-slate-50 p-4 text-sm">
+          <div class="grid justify-items-center gap-3 sm:grid-cols-3 sm:justify-items-stretch">
             <label class="grid gap-2">
               견종 크기
               <select id="breed-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
@@ -327,125 +420,161 @@ function renderAirlines(airlines = currentAirlines) {
                 <option value="senior">7살 이상</option>
               </select>
             </label>
+            <button
+              id="rules-search"
+              class="w-fit rounded-full bg-deep px-20 py-2 text-xs font-semibold text-white shadow-soft sm:col-start-2 sm:justify-self-center"
+            >
+              항공사 검색
+            </button>
+            <p class="text-center text-xs text-slate-500 sm:col-span-3">
+              검색 버튼을 누르면 결과 페이지에서 항공사 규정을 확인할 수 있어요.
+            </p>
           </div>
-          <div class="flex items-center justify-between gap-4">
-            <div>
-              <p class="text-xs text-slate-500">탑승 가능 항공사</p>
-              <div id="eligible-list" class="mt-2 flex flex-wrap gap-2 text-xs"></div>
-              <p id="age-note" class="mt-2 text-xs text-slate-400"></p>
-            </div>
+          <div class="flex items-center justify-end gap-4">
             <button id="open-sheet" class="rounded-full border border-line px-4 py-2 text-xs text-slate-500 md:hidden">
               필터 열기
             </button>
           </div>
         </div>
 
-        <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
-          <h3 class="text-base font-semibold">항공사 규정 상세</h3>
-          <div class="airline-tabs flex flex-wrap gap-2">
-            ${airlines
-              .map(
-                (airline, idx) => `
-                <button class="${idx === 0 ? "active" : ""}" data-airline="${airline.id}">
-                  ${airline.badge}
-                </button>
-              `
-              )
-              .join("")}
-          </div>
-        </div>
-
-        <div class="mt-6 grid items-start gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <div class="space-y-4">
-            ${airlines
-              .map(
-                (airline, idx) => `
-                <div class="airline-card tab-panel ${idx === 0 ? "active" : ""} rounded-2xl border border-line bg-white p-5" data-panel="${airline.id}">
-                  <div class="flex items-center justify-between">
-                    <h4 class="text-lg font-semibold">${airline.name}</h4>
-                    <span class="rounded-full bg-deep/10 px-3 py-1 text-xs text-deep">규정 요약</span>
-                  </div>
-                  <div class="mt-4 grid gap-4 sm:grid-cols-2">
-                    <div class="rounded-xl border border-line bg-slate-50 p-4">
-                      <p class="text-xs font-semibold text-deep">기내 동반</p>
-                      <p class="mt-2 text-xs text-slate-500">무게 제한</p>
-                      <div class="mt-2 h-2 rounded-full bg-slate-200">
-                        <div class="h-full rounded-full bg-brand" style="width:${airline.cabin.maxWeight * 10}%"></div>
-                      </div>
-                      <p class="mt-1 text-xs text-slate-500">케이지 포함 ${airline.cabin.maxWeight}kg 미만</p>
-                      <div class="mt-3 flex items-center gap-3">
-                        <div class="cage-iso"></div>
-                        <div>
-                          <strong class="text-sm text-ink">${airline.cabin.cage}</strong>
-                          <p class="text-xs text-slate-500">케이지 규격</p>
-                        </div>
-                      </div>
-                      <p class="mt-3 text-xs text-slate-500">${airline.cabin.note}</p>
-                    </div>
-                    <div class="rounded-xl border border-line bg-slate-50 p-4">
-                      <p class="text-xs font-semibold text-deep">화물칸 동반</p>
-                      <p class="mt-2 text-xs text-slate-500">무게 제한</p>
-                      <div class="mt-2 h-2 rounded-full bg-slate-200">
-                        <div class="h-full rounded-full bg-deep" style="width:${Math.min(airline.cargo.maxWeight, 40) * 2.5}%"></div>
-                      </div>
-                      <p class="mt-1 text-xs text-slate-500">${airline.cargo.maxWeight}kg 이하</p>
-                      <div class="mt-3 flex items-center gap-3">
-                        <div class="cage-iso"></div>
-                        <div>
-                          <strong class="text-sm text-ink">${airline.cargo.cage}</strong>
-                          <p class="text-xs text-slate-500">케이지 규격</p>
-                        </div>
-                      </div>
-                      <p class="mt-3 text-xs text-slate-500">${airline.cargo.note}</p>
-                    </div>
-                  </div>
-                </div>
-              `
-              )
-              .join("")}
-          </div>
-
-          <div class="rounded-[24px] border border-line bg-white p-5">
-            <h4 class="text-base font-semibold">항공사 비교 테이블</h4>
-            <div class="no-scrollbar mt-3 overflow-x-auto">
-              <table class="min-w-[520px] text-left text-xs">
-                <thead class="text-slate-500">
-                  <tr>
-                    <th class="py-2 pr-4">항공사</th>
-                    <th class="py-2 pr-4">기내</th>
-                    <th class="py-2 pr-4">화물칸</th>
-                    <th class="py-2 pr-4">케이지 규격</th>
-                  </tr>
-                </thead>
-                <tbody class="text-slate-600">
-                  ${airlines
-                    .map(
-                      (airline) => `
-                      <tr class="border-t border-line">
-                        <td class="py-2 pr-4 font-semibold">${airline.name}</td>
-                        <td class="py-2 pr-4">${airline.cabin.maxWeight}kg 미만</td>
-                        <td class="py-2 pr-4">${airline.cargo.maxWeight}kg 이하</td>
-                        <td class="py-2 pr-4">${airline.cabin.cage}</td>
-                      </tr>
-                    `
-                    )
-                    .join("")}
-                </tbody>
-              </table>
-            </div>
-            <p class="mt-3 text-xs text-slate-400">모바일에서는 좌우 스와이프로 표를 확인하세요.</p>
-          </div>
-        </div>
-        <div class="mt-6">
-          <h4 class="text-base font-semibold">탑승 가능 항공사 리스트</h4>
-        <div id="eligible-cards" class="mt-3 grid gap-4 md:grid-cols-2"></div>
-        </div>
       </div>
 
     </div>
   `;
 }
 
+// 검색 결과 페이지 렌더
+function renderResultsPage() {
+  const rootEl = document.getElementById("results-root");
+  if (!rootEl) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const breed = params.get("breed") || "small";
+  const weight = Number(params.get("weight") || 5);
+  const age = params.get("age") || "puppy";
+  const eligible = currentAirlines.filter((airline) => {
+    const cabinOk =
+      airline.maxCabinWeight >= weight && airline.breeds.includes(breed) && breed !== "large";
+    const cargoOk = airline.maxCargoWeight >= weight;
+    return cabinOk || cargoOk;
+  });
+
+  const breedLabel = breed === "small" ? "소형견" : breed === "medium" ? "중형견" : "대형견";
+  const ageLabel = age === "puppy" ? "1살 이하" : age === "senior" ? "7살 이상" : "1~7살";
+
+  rootEl.innerHTML = `
+    <main class="mx-auto flex w-[min(1000px,92%)] flex-col gap-8 pb-20 pt-10">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.35em] text-slate-400">Search Results</p>
+          <h1 class="mt-2 text-3xl font-semibold text-deep">탑승 가능 항공사</h1>
+          <p class="mt-2 text-sm text-slate-500">${breedLabel} · ${weight}kg · ${ageLabel}</p>
+        </div>
+        <a href="index.html" class="rounded-full border border-line bg-white px-4 py-2 text-xs text-slate-500">
+          돌아가기
+        </a>
+      </div>
+
+      <div id="results-loading" class="results-loading">
+        <p class="text-xs uppercase tracking-[0.35em] text-slate-400">Loading</p>
+        <div class="results-spinner"></div>
+        <div id="results-airlines" class="results-airlines"></div>
+      </div>
+
+      <div id="results-content" class="hidden">
+        <div id="results-list" class="grid gap-4 md:grid-cols-2"></div>
+      </div>
+    </main>
+  `;
+
+  const loadingEl = rootEl.querySelector("#results-loading");
+  const contentEl = rootEl.querySelector("#results-content");
+  const airlinesEl = rootEl.querySelector("#results-airlines");
+  const listEl = rootEl.querySelector("#results-list");
+
+  airlinesEl.innerHTML = currentAirlines
+    .map(
+      (airline, idx) =>
+        `<span class="results-airline" style="--delay:${idx * 0.12}s">${airline.name}</span>`
+    )
+    .join("");
+
+  const cardsMarkup = eligible.length
+    ? eligible
+        .map(
+          (airline) => `
+        <article class="rounded-2xl border border-line bg-white p-5">
+          <div class="flex items-center justify-between">
+            <h4 class="text-base font-semibold text-deep">${airline.name}</h4>
+            <span class="text-xs text-slate-400">${airline.badge}</span>
+          </div>
+          <div class="mt-3 grid gap-3 text-xs text-slate-500 sm:grid-cols-2">
+            <div class="rounded-xl bg-slate-50 p-3">
+              <p class="font-semibold text-deep">기내 동반</p>
+              <p class="mt-1">무게: ${airline.cabin.maxWeight}kg 미만</p>
+              <p class="mt-1">케이지: ${airline.cabin.cage}</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 p-3">
+              <p class="font-semibold text-deep">화물칸 동반</p>
+              <p class="mt-1">무게: ${airline.cargo.maxWeight}kg 이하</p>
+              <p class="mt-1">케이지: ${airline.cargo.cage}</p>
+            </div>
+          </div>
+        </article>
+      `
+        )
+        .join("")
+    : `<div class="rounded-2xl border border-line bg-slate-50 p-4 text-sm text-slate-400">조건에 맞는 항공사가 없습니다.</div>`;
+
+  setTimeout(() => {
+    loadingEl.classList.add("hidden");
+    contentEl.classList.remove("hidden");
+    listEl.innerHTML = cardsMarkup;
+  }, 1200);
+}
+
+function renderTravelGrid(category = "domestic") {
+  const gridEl = document.getElementById("travel-grid");
+  if (!gridEl) return;
+  const filtered = travelSpots.filter((spot) => spot.category === category);
+  gridEl.innerHTML = filtered
+    .map(
+      (spot) => `
+      <article class="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
+        <div class="aspect-[4/3] w-full overflow-hidden">
+          <img src="${spot.image}" alt="${spot.title}" class="h-full w-full object-cover" />
+        </div>
+        <div class="p-4">
+          <p class="text-xs uppercase tracking-[0.2em] text-slate-400">${spot.location}</p>
+          <h3 class="mt-2 text-base font-semibold text-deep">${spot.title}</h3>
+          <p class="mt-2 text-xs text-slate-500">산책, 식사, 숙소까지 펫 프렌들리 루트</p>
+        </div>
+      </article>
+    `
+    )
+    .join("");
+}
+
+function setupTravelTabs() {
+  const tabs = document.querySelectorAll(".travel-tab");
+  if (!tabs.length) return;
+  let currentCategory = "domestic";
+  renderTravelGrid(currentCategory);
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((item) => {
+        item.classList.remove("bg-deep", "text-white");
+        item.classList.add("text-slate-500");
+      });
+      tab.classList.add("bg-deep", "text-white");
+      tab.classList.remove("text-slate-500");
+      currentCategory = tab.dataset.category;
+      renderTravelGrid(currentCategory);
+    });
+  });
+}
+
+// 모바일 하단 네비게이션 생성
 function renderMobileNav() {
   mobileNavEl.innerHTML = `
     <!-- Mobile bottom nav -->
@@ -465,12 +594,14 @@ function renderMobileNav() {
 }
 
 // ---------------------------
-// Interaction logic
+// 인터랙션 로직: 클릭/변경 이벤트 연결
 // ---------------------------
+// 히어로 슬라이드(현재는 사용하지 않음)
 function setupHeroCarousel() {
   return;
 }
 
+// 이벤트용 카운트다운(샘플 기능)
 function setupCountdown() {
   const countdownEl = document.getElementById("countdown");
   if (!countdownEl) return;
@@ -485,6 +616,7 @@ function setupCountdown() {
   }, 1000);
 }
 
+// 로딩 스켈레톤 제거 타이밍
 function setupSkeletons() {
   setTimeout(() => {
     document.querySelectorAll(".loading").forEach((card) => {
@@ -493,6 +625,7 @@ function setupSkeletons() {
   }, 1200);
 }
 
+// 항공사 탭(규정 카드 전환)
 function setupAirlineTabs() {
   const tabs = airlineEl.querySelectorAll(".airline-tabs button");
   const panels = airlineEl.querySelectorAll(".airline-card");
@@ -508,6 +641,7 @@ function setupAirlineTabs() {
   });
 }
 
+// 규정/쇼핑 탭 전환(상단 보기 버튼)
 function setupViewTabs() {
   const viewTabs = airlineEl.querySelectorAll(".view-tab");
   const panels = airlineEl.querySelectorAll(".view-panel");
@@ -530,17 +664,19 @@ function setupViewTabs() {
   });
 }
 
+// 필터 결과 렌더 함수(아래에서 실제 로직 지정)
 let renderEligibleList = () => {};
 
+// 필터 조건에 따라 항공사 목록 업데이트
 function setupEligibilityFilter() {
   const breedSelect = document.getElementById("breed-select");
   const weightSelect = document.getElementById("weight-select");
   const ageSelect = document.getElementById("age-select");
-  const listEl = document.getElementById("eligible-list");
-  const ageNoteEl = document.getElementById("age-note");
-  const cardsEl = document.getElementById("eligible-cards");
+  const rulesSearchBtn = document.getElementById("rules-search");
 
   renderEligibleList = function () {
+    const cardsEl = document.getElementById("eligible-cards");
+    if (!cardsEl) return;
     const breed = breedSelect.value;
     const weight = Number(weightSelect.value);
     const age = ageSelect.value;
@@ -550,21 +686,6 @@ function setupEligibilityFilter() {
       const cargoOk = airline.maxCargoWeight >= weight;
       return cabinOk || cargoOk;
     });
-    listEl.innerHTML = eligible.length
-      ? eligible
-          .map(
-            (airline) =>
-              `<span class="rounded-full bg-deep/10 px-3 py-1 text-xs text-deep">${airline.name}</span>`
-          )
-          .join("")
-      : `<span class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-400">조건에 맞는 항공사가 없습니다.</span>`;
-    ageNoteEl.textContent =
-      age === "puppy"
-        ? "1살 이하 강아지는 항공사별 건강 확인서가 필요할 수 있습니다."
-        : age === "senior"
-        ? "7살 이상 강아지는 탑승 전 건강 체크를 권장합니다."
-        : "성견 기준의 기본 규정을 적용했습니다.";
-
     cardsEl.innerHTML = eligible.length
       ? eligible
           .map(
@@ -596,9 +717,17 @@ function setupEligibilityFilter() {
   breedSelect.addEventListener("change", renderEligibleList);
   weightSelect.addEventListener("change", renderEligibleList);
   ageSelect.addEventListener("change", renderEligibleList);
-  renderEligibleList();
+  rulesSearchBtn?.addEventListener("click", () => {
+    const params = new URLSearchParams({
+      breed: breedSelect.value,
+      weight: weightSelect.value,
+      age: ageSelect.value,
+    });
+    window.location.href = `results.html?${params.toString()}`;
+  });
 }
 
+// 모바일 필터 바텀시트 열기/닫기
 function setupBottomSheet() {
   const openBtn = document.getElementById("open-sheet");
   const closeBtn = document.getElementById("close-sheet");
@@ -610,6 +739,7 @@ function setupBottomSheet() {
   const sheetAge = document.getElementById("sheet-age");
   const ageSelect = document.getElementById("age-select");
 
+  // 바텀시트 열기: 현재 필터 값을 복사해서 보여줌
   function openSheet() {
     bottomSheetEl.classList.remove("hidden");
     sheetBreed.value = breedSelect.value;
@@ -617,9 +747,13 @@ function setupBottomSheet() {
     sheetAge.value = ageSelect.value;
   }
 
+  // 바텀시트 닫기
   function closeSheet() {
     bottomSheetEl.classList.add("hidden");
   }
+
+  // 새로고침 시 항상 닫힘 상태로 유지
+  closeSheet();
 
   openBtn?.addEventListener("click", openSheet);
   closeBtn?.addEventListener("click", closeSheet);
@@ -635,6 +769,7 @@ function setupBottomSheet() {
   });
 }
 
+// 히어로 영역에서 선택한 값을 규정 필터에 반영
 function setupHeroSearch() {
   const heroBreed = document.getElementById("hero-breed");
   const heroWeight = document.getElementById("hero-weight");
@@ -657,6 +792,7 @@ function setupHeroSearch() {
   });
 }
 
+// (옵션) 외부 API에서 항공사 데이터 가져오기
 async function fetchAirlinesFromApi() {
   try {
     const response = await fetch("https://api.instantwebtools.net/v1/airlines");
@@ -668,6 +804,7 @@ async function fetchAirlinesFromApi() {
     const cages = ["32 x 45 x 25cm", "40 x 30 x 20cm", "45 x 35 x 25cm", "35 x 45 x 20cm"];
     const cargoCages = ["80 x 50 x 55cm", "85 x 55 x 65cm", "90 x 60 x 70cm"];
     const sliced = data.slice(0, 8);
+    // 외부 데이터를 현재 화면 구조에 맞게 가공
     return sliced.map((item, idx) => {
       const cabinWeight = weights[idx % weights.length];
       const cargoWeight = cargoWeights[idx % cargoWeights.length];
@@ -697,6 +834,7 @@ async function fetchAirlinesFromApi() {
   }
 }
 
+// (옵션) 외부 API에서 쇼핑 아이템 가져오기
 async function fetchShopItemsFromApi() {
   try {
     const response = await fetch("https://dummyjson.com/products?limit=24");
@@ -730,13 +868,14 @@ async function fetchShopItemsFromApi() {
   }
 }
 
+// 외부 API 데이터가 있으면 화면을 갱신
 async function initApiData() {
   const [airlines, products] = await Promise.all([
     fetchAirlinesFromApi(),
     fetchShopItemsFromApi(),
   ]);
 
-  if (airlines && airlineEl) {
+  if (airlines && airlineEl && pageType === "airline") {
     renderAirlines(airlines);
     setupAirlineTabs();
     setupViewTabs();
@@ -750,14 +889,17 @@ async function initApiData() {
   }
 }
 
+// 쇼핑 카드 그리드 렌더
 function renderShopGrid(category = "all", sort = "recommend") {
   const gridEl = document.getElementById("shop-grid");
   if (!gridEl) return;
 
+  // 카테고리 필터
   const filtered = currentShopItems.filter((item) =>
     category === "all" ? true : item.category === category
   );
 
+  // 정렬 기준 적용
   const sorted = [...filtered].sort((a, b) => {
     if (sort === "price-high") return b.price - a.price;
     if (sort === "price-low") return a.price - b.price;
@@ -809,6 +951,7 @@ function renderShopGrid(category = "all", sort = "recommend") {
     .join("");
 }
 
+// 쇼핑 탭/정렬 이벤트 연결
 function setupShopFilters() {
   const tabs = document.querySelectorAll(".shop-tab");
   const sortSelect = document.getElementById("shop-sort");
@@ -841,7 +984,7 @@ function setupShopFilters() {
 }
 
 // ---------------------------
-// Boot
+// Boot: 페이지 로드 시 실행 순서
 // ---------------------------
 if (heroEl) renderHero();
 if (airlineEl) renderAirlines();
@@ -852,18 +995,22 @@ if (heroEl) {
   setupHeroSearch();
 }
 setupSkeletons();
-if (airlineEl) {
+if (airlineEl && pageType === "airline") {
   setupAirlineTabs();
   setupViewTabs();
   setupEligibilityFilter();
   setupBottomSheet();
   setupShopFilters();
 }
-
-const pageType = document.body?.dataset?.page;
+if (airlineEl && pageType !== "airline" && pageType !== "results") {
+  setupTravelTabs();
+}
 if (pageType === "shopping" && airlineEl) {
   const shopTab = airlineEl.querySelector('.view-tab[data-view="shop"]');
   shopTab?.click();
+}
+if (pageType === "results") {
+  renderResultsPage();
 }
 
 initApiData();
