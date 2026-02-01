@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>윗포(with paw) | 반려견 동반 여행 정보 큐레이션</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: "#DD0035",
+              deep: "#12273B",
+              sand: "#F4EDE2",
+              warm: "#FFB27A",
+              ink: "#0F172A",
+              line: "#E2E8F0",
+            },
+            fontFamily: {
+              display: ["Work Sans", "sans-serif"],
+              body: ["Work Sans", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 24px 60px rgba(16, 24, 40, 0.12)",
+              card: "0 14px 30px rgba(18, 39, 59, 0.08)",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="bg-white text-ink font-body">
+    <!-- Page shell -->
+    <div class="min-h-screen">
+      <!-- 상단 고정 헤더 -->
+      <header class="sticky top-0 z-30 border-b border-line bg-white/80 backdrop-blur-xl">
+        <div class="mx-auto flex w-[min(1200px,92%)] items-center justify-between gap-6 py-4">
+          <!-- 브랜드 영역 -->
+          <div class="flex items-center gap-3">
+            <div class="grid h-12 w-12 place-items-center rounded-2xl bg-brand text-white font-semibold">
+              W
+            </div>
+            <div class="flex flex-col">
+              <span class="text-sm font-semibold tracking-[0.2em]">윗포</span>
+              <span class="text-xs text-slate-500">with paw, 발도장을 남기는 여행</span>
+            </div>
+          </div>
+          <!-- GNB 메뉴 -->
+          <nav class="hidden items-center gap-6 text-sm md:flex"></nav>
+          <!-- 검색 및 액션 -->
+          <div class="hidden items-center gap-3 md:flex">
+            <div class="rounded-full bg-slate-50 px-5 py-2 text-sm text-slate-500">
+              지역, 항공사, 액티비티 검색
+            </div>
+            <button class="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white shadow-soft">
+              로그인
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- 메인 콘텐츠 -->
+      <main class="mx-auto flex w-[min(1200px,92%)] flex-col gap-20 pb-28 pt-10">
+        <!-- 히어로 일러스트 -->
+        <figure class="flex justify-center">
+          <img
+            src="pet%20travel.png"
+            alt="반려견 여행 일러스트"
+            class="w-[80%] max-w-[420px] md:max-w-[520px]"
+          />
+        </figure>
+        <!-- 히어로 섹션 (JS 렌더) -->
+        <section id="hero"></section>
+
+        <!-- 항공 규정 (JS 렌더) -->
+        <section id="airline"></section>
+      </main>
+
+      <!-- 푸터 -->
+      <footer class="border-t border-line py-10 text-sm text-slate-500">
+        <div class="mx-auto flex w-[min(1200px,92%)] flex-wrap items-center justify-between gap-6">
+          <div>
+            <p class="text-xl font-semibold text-ink">윗포(with paw)</p>
+            <p>반려견과 함께하는 프리미엄 라이프스타일 큐레이션</p>
+          </div>
+          <div class="flex items-center gap-6 text-xs">
+            <span>이용약관</span>
+            <span>개인정보 처리방침</span>
+            <span>제휴 문의</span>
+            <button class="rounded-full border border-line px-4 py-2 text-xs text-slate-500">Contact · 문의하기</button>
+          </div>
+        </div>
+      </footer>
+
+      <!-- 모바일 하단 네비게이션 (JS 렌더) -->
+      <nav id="mobile-nav"></nav>
+
+      <!-- 필터 바텀 시트 -->
+      <div id="bottom-sheet" class="bottom-sheet hidden">
+        <div class="bottom-sheet__panel">
+          <div class="bottom-sheet__handle"></div>
+          <div class="flex items-center justify-between">
+            <h3 class="text-2xl font-semibold">필터 설정</h3>
+            <button id="close-sheet" class="rounded-full bg-slate-100 px-3 py-1 text-xs">닫기</button>
+          </div>
+          <div class="mt-4 grid gap-4 text-sm">
+            <label class="grid gap-2">
+              견종 크기
+              <select id="sheet-breed" class="rounded-xl border border-line px-3 py-2">
+                <option value="small">소형견</option>
+                <option value="medium">중형견</option>
+                <option value="large">대형견</option>
+              </select>
+            </label>
+            <label class="grid gap-2">
+              몸무게
+              <select id="sheet-weight" class="rounded-xl border border-line px-3 py-2">
+                <option value="5">5kg 이하</option>
+                <option value="7">7kg 이하</option>
+                <option value="9">9kg 이하</option>
+                <option value="12">12kg 이하</option>
+                <option value="20">20kg 이하</option>
+              </select>
+            </label>
+            <label class="grid gap-2">
+              나이
+              <select id="sheet-age" class="rounded-xl border border-line px-3 py-2">
+                <option value="puppy">1살 이하</option>
+                <option value="adult">1~7살</option>
+                <option value="senior">7살 이상</option>
+              </select>
+            </label>
+            <button id="apply-sheet" class="rounded-full bg-brand px-4 py-2 text-white shadow-soft">
+              필터 적용하기
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 앱 스크립트 -->
+    <script src="app.js"></script>
+  </body>
+</html>
