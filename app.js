@@ -318,11 +318,22 @@ function renderHero() {
           <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
             도착지
             <select id="hero-destination" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
+              <option value="any">Anywhere</option>
               <option value="cju">제주 (CJU)</option>
               <option value="pus">부산 (PUS)</option>
               <option value="icn">인천 (ICN)</option>
               <option value="gmp">김포 (GMP)</option>
               <option value="tae">대구 (TAE)</option>
+              <option value="nrt">도쿄/나리타 (NRT)</option>
+              <option value="kix">오사카/간사이 (KIX)</option>
+              <option value="hnd">도쿄/하네다 (HND)</option>
+              <option value="syd">시드니 (SYD)</option>
+              <option value="yvr">밴쿠버 (YVR)</option>
+              <option value="han">하노이 (HAN)</option>
+              <option value="sgn">호치민 (SGN)</option>
+              <option value="fco">로마/피우미치노 (FCO)</option>
+              <option value="cdg">파리/샤를드골 (CDG)</option>
+              <option value="lhr">런던/히드로 (LHR)</option>
             </select>
           </label>
           <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
@@ -561,7 +572,7 @@ function renderAirlines(airlines = currentAirlines) {
             </label>
             <button
               id="rules-search"
-              class="w-fit rounded-full bg-deep px-20 py-2 text-xs font-semibold text-white shadow-soft sm:col-start-2 sm:justify-self-center"
+              class="w-fit rounded-full bg-deep px-20 py-2 text-sm font-semibold text-white shadow-soft sm:col-start-2 sm:justify-self-center"
             >
               항공사 검색
             </button>
