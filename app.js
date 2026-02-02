@@ -592,26 +592,31 @@ const dailyThemes = [
     title: "실내동반 가능! 더위/추위 걱정없는 애견동반 카페",
     image:
       "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=900&q=80",
+    tags: ["실내동반가능"],
   },
   {
     title: "애견동반 가능한 축제/전시회",
     image:
       "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
+    tags: ["예스키즈/펫존"],
   },
   {
     title: "카공족을 위한 추천 애견동반 카페",
     image:
       "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=900&q=80",
+    tags: ["카공족", "실내동반가능"],
   },
   {
     title: "아이와 강아지가 함께! 즐길 수 있는 곳",
     image:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+    tags: ["예스키즈/펫존", "천연잔디"],
   },
   {
     title: "꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장",
     image:
       "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
+    tags: ["애견운동장", "천연잔디", "오프리쉬가능"],
   },
 ];
 
@@ -880,27 +885,21 @@ function renderResultsPage() {
 function renderDailyCarousel() {
   if (!dailyEl) return;
   dailyEl.innerHTML = `
-    <div class="rounded-[32px] border border-line bg-white p-8 text-ink shadow-card">
+    <div class="rounded-[32px] bg-white p-8 text-ink shadow-card">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Daily themes</p>
           <h2 class="mt-2 text-3xl font-semibold text-deep">추천 일상 테마</h2>
           <p class="mt-2 text-sm text-slate-500">반려견과 함께 즐길 수 있는 테마를 모았어요.</p>
         </div>
-        <div class="flex items-center gap-2">
-          <button class="carousel-btn" data-carousel="prev">‹</button>
-          <button class="carousel-btn" data-carousel="next">›</button>
-        </div>
       </div>
-      <div class="daily-carousel mt-6">
+      <div class="daily-banners mt-6">
         ${dailyThemes
           .map(
             (theme) => `
-          <article class="daily-card">
-            <div class="daily-card__media">
-              <img src="${theme.image}" alt="${theme.title}" />
-            </div>
-            <div class="daily-card__body">
+          <article class="daily-banner">
+            <img src="${theme.image}" alt="${theme.title}" />
+            <div class="daily-banner__overlay">
               <h3>${theme.title}</h3>
             </div>
           </article>
@@ -910,88 +909,60 @@ function renderDailyCarousel() {
       </div>
     </div>
   `;
-
-  const carousel = dailyEl.querySelector(".daily-carousel");
-  const prevBtn = dailyEl.querySelector('[data-carousel="prev"]');
-  const nextBtn = dailyEl.querySelector('[data-carousel="next"]');
-  if (!carousel || !prevBtn || !nextBtn) return;
-  prevBtn.addEventListener("click", () => {
-    carousel.scrollBy({ left: -360, behavior: "smooth" });
-  });
-  nextBtn.addEventListener("click", () => {
-    carousel.scrollBy({ left: 360, behavior: "smooth" });
-  });
 }
 
 function renderDailyPanel(targetEl) {
   if (!targetEl) return;
   targetEl.innerHTML = `
-    <div class="rounded-[32px] border border-line bg-white p-8 text-ink shadow-card">
-      <div class="flex flex-wrap items-start justify-between gap-4">
+    <div class="rounded-[32px] bg-white p-8 text-ink shadow-card">
+      <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Daily spots</p>
           <h2 class="mt-2 text-3xl font-semibold text-deep">추천 일상지</h2>
-          <p class="mt-2 text-sm text-slate-500">태그를 선택하면 장소가 필터링됩니다.</p>
-        </div>
-        <div class="tag-filter">
-          ${[
-            "실내동반가능",
-            "오프리쉬가능",
-            "예스키즈/펫존",
-            "천연잔디",
-            "애견운동장",
-          ]
-            .map((tag) => `<button class="tag-chip" data-tag="${tag}">${tag}</button>`)
-            .join("")}
+          <p class="mt-2 text-sm text-slate-500">테마별 장소를 모아 보여드립니다.</p>
         </div>
       </div>
-      <div id="daily-grid" class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
+      <div class="daily-section-wrap mt-6">
+        ${dailyThemes
+          .map((theme) => {
+            const items = dailyPlaces.filter((place) =>
+              theme.tags.every((tag) => place.tags.includes(tag))
+            );
+            return `
+            <section class="daily-section">
+              <div class="daily-banner">
+                <img src="${theme.image}" alt="${theme.title}" />
+                <div class="daily-banner__overlay">
+                  <h3>${theme.title}</h3>
+                </div>
+              </div>
+              <div class="daily-grid mt-5">
+                ${items
+                  .map(
+                    (place) => `
+                  <article class="daily-place">
+                    <div class="daily-place__media">
+                      <img src="${place.image}" alt="${place.title}" />
+                    </div>
+                    <div class="daily-place__body">
+                      <p class="daily-place__location">${place.location}</p>
+                      <h3>${place.title}</h3>
+                      <div class="daily-place__tags">
+                        ${place.tags.map((tag) => `<span>${tag}</span>`).join("")}
+                      </div>
+                    </div>
+                  </article>
+                `
+                  )
+                  .join("")}
+              </div>
+            </section>
+          `;
+          })
+          .join("")}
+      </div>
     </div>
   `;
-
-  const gridEl = targetEl.querySelector("#daily-grid");
-  const tags = Array.from(targetEl.querySelectorAll(".tag-chip"));
-  const activeTags = new Set();
-
-  function renderDailyGrid() {
-    const filtered = activeTags.size
-      ? dailyPlaces.filter((place) => [...activeTags].every((tag) => place.tags.includes(tag)))
-      : dailyPlaces;
-    gridEl.innerHTML = filtered
-      .map(
-        (place) => `
-        <article class="daily-place">
-          <div class="daily-place__media">
-            <img src="${place.image}" alt="${place.title}" />
-          </div>
-          <div class="daily-place__body">
-            <p class="daily-place__location">${place.location}</p>
-            <h3>${place.title}</h3>
-            <div class="daily-place__tags">
-              ${place.tags.map((tag) => `<span>${tag}</span>`).join("")}
-            </div>
-          </div>
-        </article>
-      `
-      )
-      .join("");
-  }
-
-  tags.forEach((tagBtn) => {
-    tagBtn.addEventListener("click", () => {
-      const tag = tagBtn.dataset.tag;
-      if (activeTags.has(tag)) {
-        activeTags.delete(tag);
-        tagBtn.classList.remove("active");
-      } else {
-        activeTags.add(tag);
-        tagBtn.classList.add("active");
-      }
-      renderDailyGrid();
-    });
-  });
-
-  renderDailyGrid();
 }
 
 function renderDailyPage() {

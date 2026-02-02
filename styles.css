@@ -297,104 +297,69 @@ body {
   }
 }
 
-/* Daily carousel */
-.daily-carousel {
+/* Daily banners */
+.daily-banners {
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(280px, 1fr);
-  gap: 24px;
-  overflow-x: auto;
-  padding-bottom: 14px;
-  scroll-snap-type: x mandatory;
+  gap: 20px;
 }
 
-.daily-carousel::-webkit-scrollbar {
-  height: 6px;
-}
-
-.daily-carousel::-webkit-scrollbar-thumb {
-  background: rgba(15, 23, 42, 0.2);
-  border-radius: 999px;
-}
-
-.daily-card {
-  scroll-snap-align: start;
-  border: 1px solid #e2e8f0;
-  border-radius: 24px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 18px 34px rgba(18, 39, 59, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.daily-card__media {
-  height: 190px;
-  overflow: hidden;
+.daily-banner {
   position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow: 0 20px 45px rgba(18, 39, 59, 0.12);
 }
 
-.daily-card__media img {
+.daily-banner img {
   width: 100%;
-  height: 100%;
+  height: 240px;
   object-fit: cover;
   transform: scale(1);
-  transition: transform 0.4s ease;
+  transition: transform 0.45s ease;
 }
 
-.daily-card__body {
-  padding: 18px 18px 20px;
+.daily-banner__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 22px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0) 30%, rgba(15, 23, 42, 0.55));
 }
 
-.daily-card__body h3 {
-  font-size: 16px;
+.daily-banner__overlay h3 {
+  color: #fff;
+  font-size: 20px;
   font-weight: 600;
-  color: #0f172a;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
-.carousel-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  border: 1px solid #e2e8f0;
-  background: #fff;
-  color: #12273b;
-  font-size: 18px;
-  display: grid;
-  place-items: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.carousel-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+.daily-banner:hover img {
+  transform: scale(1.04);
 }
 
 /* Daily page tags */
-.tag-filter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 999px;
-  padding: 8px 10px;
+/* Daily sections */
+.daily-section-wrap {
+  display: grid;
+  gap: 28px;
 }
 
-.tag-chip {
-  border-radius: 999px;
-  border: 1px solid #e2e8f0;
-  padding: 6px 14px;
-  font-size: 12px;
-  color: #64748b;
-  background: #fff;
-  transition: all 0.2s ease;
+.daily-section .daily-grid {
+  display: grid;
+  gap: 20px;
 }
 
-.tag-chip.active {
-  background: #12273b;
-  color: #fff;
-  border-color: #12273b;
+@media (min-width: 768px) {
+  .daily-section .daily-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .daily-section .daily-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* Places tabs */
@@ -476,13 +441,11 @@ body {
   color: #12273b;
 }
 
-.daily-card:hover,
 .daily-place:hover {
   transform: translateY(-4px);
   box-shadow: 0 24px 50px rgba(18, 39, 59, 0.16);
 }
 
-.daily-card:hover img,
 .daily-place:hover img {
   transform: scale(1.04);
 }
