@@ -5,10 +5,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- 브라우저 탭에 표시되는 제목 -->
-    <title>데일리 펫, 반려견 동반 여행과 일상 큐레이션</title>
+    <title>데일리 펫, 반려견과 함께하는 프리미엄 라이프스타일 큐레이션</title>
     <!-- 구글 폰트 로딩 (Work Sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link
       href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -51,18 +52,17 @@
         <div class="mx-auto flex w-[min(1200px,92%)] items-center justify-between gap-6 py-4">
           <!-- 브랜드 영역: 로고 + 브랜드명 + 슬로건 -->
           <a href="index.html" class="flex items-center gap-3">
-            <div class="grid h-12 w-12 place-items-center rounded-2xl bg-brand text-white font-semibold">
-              W
-            </div>
+            <img src="Logo.png" alt="데일리펫 로고" class="h-12 w-12 rounded-2xl object-cover" />
             <div class="flex flex-col">
               <span class="text-sm font-semibold tracking-[0.2em]">데일리펫</span>
-              <span class="text-xs text-slate-500">반려견 동반 여행과 일상 큐레이션</span>
+              <span class="text-xs text-slate-500">반려견과 함께하는 프리미엄 라이프스타일 큐레이션</span>
             </div>
           </a>
           <!-- GNB 메뉴: 데스크톱에서만 보임 -->
           <nav class="hidden items-center gap-6 text-sm md:flex">
             <a href="index.html" class="text-slate-600 hover:text-ink">홈</a>
             <a href="airline.html" class="text-slate-600 hover:text-ink">항공정보</a>
+            <a href="travel.html" class="text-slate-600 hover:text-ink">추천 일상지</a>
             <a href="travel.html" class="text-slate-600 hover:text-ink">추천 여행지</a>
           </nav>
           <!-- 검색 및 액션: 데스크톱에서만 보임 -->
@@ -86,6 +86,9 @@
         </figure>
         <!-- 히어로 섹션 (JS 렌더): app.js에서 카드/검색 UI 생성 -->
         <section id="hero"></section>
+
+        <!-- 추천 일상 테마 캐로셀 (JS 렌더) -->
+        <section id="daily"></section>
 
         <!-- 추천 여행지 (JS 렌더) -->
         <section id="airline"></section>

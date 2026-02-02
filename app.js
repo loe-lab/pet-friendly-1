@@ -173,6 +173,96 @@ const airlineData = [
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
+  {
+    id: "vietnam",
+    name: "베트남항공",
+    badge: "VIETNAM",
+    cabin: { maxWeight: 7, cage: "소프트 45 x 30 x 20cm", note: "국제선 $150 내외" },
+    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 0,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "vietjet",
+    name: "비엣젯",
+    badge: "VIETJET",
+    cabin: { maxWeight: 7, cage: "소프트 40 x 30 x 20cm", note: "저비용항공 · 정책 변동 가능" },
+    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 0,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "thai",
+    name: "타이항공",
+    badge: "THAI",
+    cabin: { maxWeight: 7, cage: "소프트 45 x 30 x 20cm", note: "국제선 $150~200" },
+    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 0,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "airasia",
+    name: "에어아시아",
+    badge: "AIRASIA",
+    cabin: { maxWeight: 7, cage: "소프트 40 x 30 x 20cm", note: "저비용항공 · 노선별 확인" },
+    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 0,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "singapore",
+    name: "싱가포르항공",
+    badge: "SIA",
+    cabin: { maxWeight: 7, cage: "소프트 45 x 30 x 20cm", note: "국제선 $150~200" },
+    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 0,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "scoot",
+    name: "스쿠트",
+    badge: "SCOOT",
+    cabin: { maxWeight: 7, cage: "소프트 40 x 30 x 20cm", note: "저비용항공 · 제한 확인" },
+    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 0,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "malaysia",
+    name: "말레이시아항공",
+    badge: "MALAYSIA",
+    cabin: { maxWeight: 7, cage: "소프트 45 x 30 x 20cm", note: "국제선 $150~200" },
+    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 0,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "cebu",
+    name: "세부퍼시픽",
+    badge: "CEBU",
+    cabin: { maxWeight: 7, cage: "소프트 40 x 30 x 20cm", note: "저비용항공 · 제한 확인" },
+    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 0,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "pal",
+    name: "필리핀항공",
+    badge: "PAL",
+    cabin: { maxWeight: 7, cage: "소프트 45 x 30 x 20cm", note: "국제선 $150 내외" },
+    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
+    maxCabinWeight: 7,
+    maxCargoWeight: 0,
+    breeds: ["small", "medium"],
+  },
 ];
 
 // 쇼핑 카드 샘플 데이터
@@ -301,10 +391,11 @@ const shopItems = [
 
 // 모바일 하단 네비게이션 버튼
 const bottomNav = [
-  { label: "홈", icon: "🏠" },
-  { label: "검색", icon: "🔍" },
-  { label: "내 주변", icon: "📍" },
-  { label: "마이", icon: "👤" },
+  { label: "홈", icon: "home", href: "index.html" },
+  { label: "검색", icon: "search", href: "#" },
+  { label: "항공정보", icon: "flight_takeoff", href: "airline.html" },
+  { label: "추천장소", icon: "place", href: "travel.html" },
+  { label: "마이페이지", icon: "person", href: "#" },
 ];
 
 // 화면 상태(현재 선택/필터)
@@ -316,6 +407,9 @@ const shopState = { category: "all", sort: "recommend" };
 // DOM 루트: HTML에서 id로 연결되는 영역
 // ---------------------------
 const heroEl = document.getElementById("hero");
+const dailyEl = document.getElementById("daily");
+const dailyPageEl = document.getElementById("daily-page");
+const placesEl = document.getElementById("places");
 const airlineEl = document.getElementById("airline");
 const mobileNavEl = document.getElementById("mobile-nav");
 const bottomSheetEl = document.getElementById("bottom-sheet");
@@ -365,6 +459,13 @@ function renderHero() {
               <option value="yvr">밴쿠버 (YVR)</option>
               <option value="han">하노이 (HAN)</option>
               <option value="sgn">호치민 (SGN)</option>
+                <option value="dad">다낭 (DAD)</option>
+                <option value="cxr">나트랑/깜란 (CXR)</option>
+                <option value="bkk">방콕 (BKK)</option>
+                <option value="hkt">푸켓 (HKT)</option>
+                <option value="sin">싱가포르 (SIN)</option>
+                <option value="kul">쿠알라룸푸르 (KUL)</option>
+                <option value="mnl">마닐라 (MNL)</option>
               <option value="fco">로마/피우미치노 (FCO)</option>
               <option value="cdg">파리/샤를드골 (CDG)</option>
               <option value="lhr">런던/히드로 (LHR)</option>
@@ -486,6 +587,93 @@ const travelSpots = [
   },
 ];
 
+const dailyThemes = [
+  {
+    title: "실내동반 가능! 더위/추위 걱정없는 애견동반 카페",
+    image:
+      "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "애견동반 가능한 축제/전시회",
+    image:
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "카공족을 위한 추천 애견동반 카페",
+    image:
+      "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "아이와 강아지가 함께! 즐길 수 있는 곳",
+    image:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장",
+    image:
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
+  },
+];
+
+const dailyPlaces = [
+  {
+    title: "스테이포레스트 카페",
+    location: "서울 · 성수",
+    tags: ["실내동반가능", "예스키즈/펫존"],
+    image:
+      "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "햇살 실내 펫카페",
+    location: "서울 · 합정",
+    tags: ["실내동반가능", "카공족", "예스키즈/펫존"],
+    image:
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "펫프렌들리 아트페어",
+    location: "서울 · 용산",
+    tags: ["예스키즈/펫존"],
+    image:
+      "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "아이와 함께 놀이터 파크",
+    location: "경기 · 하남",
+    tags: ["예스키즈/펫존", "천연잔디"],
+    image:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "천연잔디 애견운동장",
+    location: "경기 · 가평",
+    tags: ["천연잔디", "애견운동장", "오프리쉬가능"],
+    image:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "오프리쉬 펫런 파크",
+    location: "강원 · 강릉",
+    tags: ["오프리쉬가능", "애견운동장", "천연잔디"],
+    image:
+      "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "루프탑 펫존 카페",
+    location: "부산 · 해운대",
+    tags: ["예스키즈/펫존", "카공족"],
+    image:
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "리빙 전시 & 펫마켓",
+    location: "대전 · 유성",
+    tags: ["예스키즈/펫존", "실내동반가능"],
+    image:
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
+  },
+];
+
 // 항공사 규정 + 쇼핑 섹션 생성
 function renderAirlines(airlines = currentAirlines) {
   currentAirlines = airlines;
@@ -557,6 +745,13 @@ function renderAirlines(airlines = currentAirlines) {
                 <option value="yvr">밴쿠버 (YVR)</option>
                 <option value="han">하노이 (HAN)</option>
                 <option value="sgn">호치민 (SGN)</option>
+                <option value="dad">다낭 (DAD)</option>
+                <option value="cxr">나트랑/깜란 (CXR)</option>
+                <option value="bkk">방콕 (BKK)</option>
+                <option value="hkt">푸켓 (HKT)</option>
+                <option value="sin">싱가포르 (SIN)</option>
+                <option value="kul">쿠알라룸푸르 (KUL)</option>
+                <option value="mnl">마닐라 (MNL)</option>
                 <option value="fco">로마/피우미치노 (FCO)</option>
                 <option value="cdg">파리/샤를드골 (CDG)</option>
                 <option value="lhr">런던/히드로 (LHR)</option>
@@ -682,6 +877,181 @@ function renderResultsPage() {
   }, 1200);
 }
 
+function renderDailyCarousel() {
+  if (!dailyEl) return;
+  dailyEl.innerHTML = `
+    <div class="rounded-[32px] border border-line bg-white p-8 text-ink shadow-card">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Daily themes</p>
+          <h2 class="mt-2 text-3xl font-semibold text-deep">추천 일상 테마</h2>
+          <p class="mt-2 text-sm text-slate-500">반려견과 함께 즐길 수 있는 테마를 모았어요.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="carousel-btn" data-carousel="prev">‹</button>
+          <button class="carousel-btn" data-carousel="next">›</button>
+        </div>
+      </div>
+      <div class="daily-carousel mt-6">
+        ${dailyThemes
+          .map(
+            (theme) => `
+          <article class="daily-card">
+            <div class="daily-card__media">
+              <img src="${theme.image}" alt="${theme.title}" />
+            </div>
+            <div class="daily-card__body">
+              <h3>${theme.title}</h3>
+            </div>
+          </article>
+        `
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+
+  const carousel = dailyEl.querySelector(".daily-carousel");
+  const prevBtn = dailyEl.querySelector('[data-carousel="prev"]');
+  const nextBtn = dailyEl.querySelector('[data-carousel="next"]');
+  if (!carousel || !prevBtn || !nextBtn) return;
+  prevBtn.addEventListener("click", () => {
+    carousel.scrollBy({ left: -360, behavior: "smooth" });
+  });
+  nextBtn.addEventListener("click", () => {
+    carousel.scrollBy({ left: 360, behavior: "smooth" });
+  });
+}
+
+function renderDailyPanel(targetEl) {
+  if (!targetEl) return;
+  targetEl.innerHTML = `
+    <div class="rounded-[32px] border border-line bg-white p-8 text-ink shadow-card">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Daily spots</p>
+          <h2 class="mt-2 text-3xl font-semibold text-deep">추천 일상지</h2>
+          <p class="mt-2 text-sm text-slate-500">태그를 선택하면 장소가 필터링됩니다.</p>
+        </div>
+        <div class="tag-filter">
+          ${[
+            "실내동반가능",
+            "오프리쉬가능",
+            "예스키즈/펫존",
+            "천연잔디",
+            "애견운동장",
+          ]
+            .map((tag) => `<button class="tag-chip" data-tag="${tag}">${tag}</button>`)
+            .join("")}
+        </div>
+      </div>
+      <div id="daily-grid" class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
+    </div>
+  `;
+
+  const gridEl = targetEl.querySelector("#daily-grid");
+  const tags = Array.from(targetEl.querySelectorAll(".tag-chip"));
+  const activeTags = new Set();
+
+  function renderDailyGrid() {
+    const filtered = activeTags.size
+      ? dailyPlaces.filter((place) => [...activeTags].every((tag) => place.tags.includes(tag)))
+      : dailyPlaces;
+    gridEl.innerHTML = filtered
+      .map(
+        (place) => `
+        <article class="daily-place">
+          <div class="daily-place__media">
+            <img src="${place.image}" alt="${place.title}" />
+          </div>
+          <div class="daily-place__body">
+            <p class="daily-place__location">${place.location}</p>
+            <h3>${place.title}</h3>
+            <div class="daily-place__tags">
+              ${place.tags.map((tag) => `<span>${tag}</span>`).join("")}
+            </div>
+          </div>
+        </article>
+      `
+      )
+      .join("");
+  }
+
+  tags.forEach((tagBtn) => {
+    tagBtn.addEventListener("click", () => {
+      const tag = tagBtn.dataset.tag;
+      if (activeTags.has(tag)) {
+        activeTags.delete(tag);
+        tagBtn.classList.remove("active");
+      } else {
+        activeTags.add(tag);
+        tagBtn.classList.add("active");
+      }
+      renderDailyGrid();
+    });
+  });
+
+  renderDailyGrid();
+}
+
+function renderDailyPage() {
+  renderDailyPanel(dailyPageEl);
+}
+
+function renderPlacesPage() {
+  if (!placesEl) return;
+  placesEl.innerHTML = `
+    <div class="rounded-[32px] border border-line bg-white p-8 text-ink shadow-card">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Recommended places</p>
+          <h2 class="mt-2 text-3xl font-semibold text-deep">추천 장소</h2>
+          <p class="mt-2 text-sm text-slate-500">여행지와 일상지를 탭으로 확인하세요.</p>
+        </div>
+        <div class="flex items-center gap-2 rounded-full border border-line bg-white p-1 text-xs">
+          <button class="places-tab active" data-tab="travel">여행지</button>
+          <button class="places-tab" data-tab="daily">일상지</button>
+        </div>
+      </div>
+      <div class="places-panel active" data-panel="travel">
+        <div class="mt-6 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Recommended</p>
+            <h3 class="mt-2 text-2xl font-semibold text-deep">추천 여행지</h3>
+          </div>
+          <div class="flex items-center gap-2 rounded-full border border-line bg-white p-1 text-xs">
+            <button class="travel-tab rounded-full bg-deep px-4 py-2 font-semibold text-white" data-category="domestic">
+              국내
+            </button>
+            <button class="travel-tab rounded-full px-4 py-2 font-semibold text-slate-500" data-category="overseas">
+              해외
+            </button>
+          </div>
+        </div>
+        <div id="travel-grid" class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
+      </div>
+      <div class="places-panel" data-panel="daily">
+        <div class="mt-6" id="daily-panel"></div>
+      </div>
+    </div>
+  `;
+
+  const tabs = Array.from(placesEl.querySelectorAll(".places-tab"));
+  const panels = Array.from(placesEl.querySelectorAll(".places-panel"));
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((btn) => btn.classList.remove("active"));
+      tab.classList.add("active");
+      panels.forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.panel === tab.dataset.tab);
+      });
+    });
+  });
+
+  setupTravelTabs();
+  renderDailyPanel(placesEl.querySelector("#daily-panel"));
+}
+
 function renderTravelGrid(category = "domestic") {
   const gridEl = document.getElementById("travel-grid");
   if (!gridEl) return;
@@ -725,16 +1095,19 @@ function setupTravelTabs() {
 
 // 모바일 하단 네비게이션 생성
 function renderMobileNav() {
+  const current = window.location.pathname.split("/").pop() || "index.html";
   mobileNavEl.innerHTML = `
     <!-- Mobile bottom nav -->
     <div class="fixed bottom-0 left-0 right-0 z-30 flex bg-white/90 px-4 py-3 text-xs text-slate-500 shadow-card md:hidden">
       ${bottomNav
         .map(
-          (item, idx) => `
-          <button class="flex w-full flex-col items-center gap-1 ${idx === 0 ? "text-brand" : ""}">
-            <span>${item.icon}</span>
+          (item) => `
+          <a href="${item.href}" class="flex w-full flex-col items-center gap-1 ${
+            item.href === current ? "text-brand" : ""
+          }">
+            <span class="material-icons">${item.icon}</span>
             <span>${item.label}</span>
-          </button>
+          </a>
         `
         )
         .join("")}
@@ -1147,6 +1520,7 @@ function setupShopFilters() {
 // Boot: 페이지 로드 시 실행 순서
 // ---------------------------
 if (heroEl) renderHero();
+if (dailyEl) renderDailyCarousel();
 if (airlineEl) renderAirlines();
 if (mobileNavEl) renderMobileNav();
 
@@ -1164,6 +1538,12 @@ if (airlineEl && pageType === "airline") {
 }
 if (airlineEl && pageType !== "airline" && pageType !== "results") {
   setupTravelTabs();
+}
+if (pageType === "daily") {
+  renderDailyPage();
+}
+if (pageType === "places") {
+  renderPlacesPage();
 }
 if (pageType === "shopping" && airlineEl) {
   const shopTab = airlineEl.querySelector('.view-tab[data-view="shop"]');

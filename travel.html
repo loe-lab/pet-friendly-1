@@ -3,9 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>데일리 펫, 반려견 동반 여행과 일상 큐레이션</title>
+    <title>데일리 펫, 반려견과 함께하는 프리미엄 라이프스타일 큐레이션</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link
       href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -37,23 +38,22 @@
     </script>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body class="bg-white text-ink font-body" data-page="travel">
+  <body class="bg-white text-ink font-body" data-page="places">
     <div class="min-h-screen">
       <header class="sticky top-0 z-30 border-b border-line bg-white/80 backdrop-blur-xl">
         <div class="mx-auto flex w-[min(1200px,92%)] items-center justify-between gap-6 py-4">
           <a href="index.html" class="flex items-center gap-3">
-            <div class="grid h-12 w-12 place-items-center rounded-2xl bg-brand text-white font-semibold">
-              W
-            </div>
+            <img src="Logo.png" alt="데일리펫 로고" class="h-12 w-12 rounded-2xl object-cover" />
             <div class="flex flex-col">
               <span class="text-sm font-semibold tracking-[0.2em]">데일리펫</span>
-              <span class="text-xs text-slate-500">반려견 동반 여행과 일상 큐레이션</span>
+              <span class="text-xs text-slate-500">반려견과 함께하는 프리미엄 라이프스타일 큐레이션</span>
             </div>
           </a>
           <nav class="hidden items-center gap-6 text-sm md:flex">
             <a href="index.html" class="text-slate-600 hover:text-ink">홈</a>
             <a href="airline.html" class="text-slate-600 hover:text-ink">항공정보</a>
-            <a href="travel.html" class="text-ink">추천 여행지</a>
+            <a href="travel.html" class="text-ink">추천 일상지</a>
+            <a href="travel.html" class="text-slate-600 hover:text-ink">추천 여행지</a>
           </nav>
           <div class="hidden items-center gap-3 md:flex">
             <button class="rounded-full border-1-5 border-line bg-white px-5 py-2 text-sm font-semibold text-brand shadow-soft">
@@ -64,7 +64,7 @@
       </header>
 
       <main class="mx-auto flex w-[min(1200px,92%)] flex-col gap-20 pb-28 pt-10">
-        <section id="airline"></section>
+        <section id="places"></section>
       </main>
     </div>
     <script src="app.js"></script>
