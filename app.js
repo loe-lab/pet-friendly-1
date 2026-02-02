@@ -26,6 +26,84 @@ const heroSlides = [
   },
 ];
 
+const destinationOptions = [
+  { value: "any", label: "Anywhere" },
+  { value: "icn", label: "인천 (ICN)" },
+  { value: "gmp", label: "김포 (GMP)" },
+  { value: "pus", label: "부산 (PUS)" },
+  { value: "cju", label: "제주 (CJU)" },
+  { value: "tae", label: "대구 (TAE)" },
+  { value: "kwj", label: "광주 (KWJ)" },
+  { value: "rsu", label: "여수 (RSU)" },
+  { value: "usn", label: "울산 (USN)" },
+  { value: "hin", label: "사천 (HIN)" },
+  { value: "cjj", label: "청주 (CJJ)" },
+  { value: "kpo", label: "포항경주 (KPO)" },
+  { value: "wju", label: "원주 (WJU)" },
+  { value: "kuv", label: "군산 (KUV)" },
+  { value: "nrt", label: "도쿄/나리타 (NRT)" },
+  { value: "hnd", label: "도쿄/하네다 (HND)" },
+  { value: "kix", label: "오사카/간사이 (KIX)" },
+  { value: "fuk", label: "후쿠오카 (FUK)" },
+  { value: "cts", label: "삿포로 (CTS)" },
+  { value: "oka", label: "오키나와 (OKA)" },
+  { value: "myj", label: "마쓰야마 (MYJ)" },
+  { value: "fsz", label: "시즈오카 (FSZ)" },
+  { value: "tpe", label: "타이베이 (TPE)" },
+  { value: "tsa", label: "타이베이/송산 (TSA)" },
+  { value: "hkg", label: "홍콩 (HKG)" },
+  { value: "tao", label: "칭다오 (TAO)" },
+  { value: "pvg", label: "상하이/푸동 (PVG)" },
+  { value: "bkk", label: "방콕 (BKK)" },
+  { value: "cnx", label: "치앙마이 (CNX)" },
+  { value: "dad", label: "다낭 (DAD)" },
+  { value: "cxr", label: "나트랑/깜란 (CXR)" },
+  { value: "pqc", label: "푸꾸옥 (PQC)" },
+  { value: "han", label: "하노이 (HAN)" },
+  { value: "sgn", label: "호치민 (SGN)" },
+  { value: "mnl", label: "마닐라 (MNL)" },
+  { value: "ceb", label: "세부 (CEB)" },
+  { value: "crk", label: "클락 (CRK)" },
+  { value: "sin", label: "싱가포르 (SIN)" },
+  { value: "kul", label: "쿠알라룸푸르 (KUL)" },
+  { value: "syd", label: "시드니 (SYD)" },
+  { value: "gum", label: "괌 (GUM)" },
+  { value: "spn", label: "사이판 (SPN)" },
+  { value: "khh", label: "가오슝 (KHH)" },
+  { value: "tag", label: "보홀 (TAG)" },
+  { value: "dps", label: "발리 (DPS)" },
+  { value: "lax", label: "로스앤젤레스 (LAX)" },
+  { value: "jfk", label: "뉴욕/존 F.케네디 (JFK)" },
+  { value: "ewr", label: "뉴욕/뉴어크 (EWR)" },
+  { value: "sfo", label: "샌프란시스코 (SFO)" },
+  { value: "sea", label: "시애틀 (SEA)" },
+  { value: "ord", label: "시카고/오헤어 (ORD)" },
+  { value: "atl", label: "애틀랜타 (ATL)" },
+  { value: "iad", label: "워싱턴/덜레스 (IAD)" },
+  { value: "las", label: "라스베이거스 (LAS)" },
+  { value: "hnl", label: "호놀룰루 (HNL)" },
+  { value: "yvr", label: "밴쿠버 (YVR)" },
+  { value: "yyz", label: "토론토 (YYZ)" },
+  { value: "cdg", label: "파리/샤를드골 (CDG)" },
+  { value: "lhr", label: "런던/히드로 (LHR)" },
+  { value: "fra", label: "프랑크푸르트 (FRA)" },
+  { value: "muc", label: "뮌헨 (MUC)" },
+  { value: "fco", label: "로마/피우미치노 (FCO)" },
+  { value: "mxp", label: "밀라노/말펜사 (MXP)" },
+  { value: "ams", label: "암스테르담 (AMS)" },
+  { value: "bud", label: "부다페스트 (BUD)" },
+  { value: "bcn", label: "바르셀로나 (BCN)" },
+];
+
+const destinationLabelMap = destinationOptions.reduce((acc, option) => {
+  acc[option.value] = option.label;
+  return acc;
+}, {});
+
+const destinationOptionsMarkup = destinationOptions
+  .map((option) => `<option value="${option.value}">${option.label}</option>`)
+  .join("");
+
 
 // 항공사 규정 샘플 데이터
 const airlineData = [
@@ -36,9 +114,51 @@ const airlineData = [
     cabin: {
       maxWeight: 7,
       cage: "하드 20cm 이하 · 소프트 26cm (합 115cm)",
-      note: "국내 30,000원 · 국제 150~300USD · SKYPETS",
+      note: "국내 30,000원 · 국제 200~300USD · SKYPETS",
     },
-    cargo: { maxWeight: 32, cage: "90 x 60 x 70cm", note: "화물칸 기준 별도 문의" },
+    cargo: {
+      maxWeight: 32,
+      cage: "IATA 하드 케이지 · 32kg 이하 (예외 45kg)",
+      note: "위탁 가능 (IATA 규정)",
+    },
+    reservation: "사전예약 필수",
+    contact: "1588-2001",
+    destinations: [
+      "gmp",
+      "pus",
+      "cju",
+      "tae",
+      "kwj",
+      "rsu",
+      "usn",
+      "hin",
+      "lax",
+      "jfk",
+      "sfo",
+      "sea",
+      "ord",
+      "atl",
+      "iad",
+      "las",
+      "hnl",
+      "gum",
+      "cdg",
+      "lhr",
+      "fra",
+      "fco",
+      "mxp",
+      "ams",
+      "bud",
+      "nrt",
+      "hnd",
+      "kix",
+      "fuk",
+      "hkg",
+      "tpe",
+      "bkk",
+      "dad",
+      "cxr",
+    ],
     maxCabinWeight: 7,
     maxCargoWeight: 32,
     breeds: ["small", "medium"],
@@ -48,9 +168,38 @@ const airlineData = [
     name: "아시아나",
     badge: "ASIANA",
     cabin: { maxWeight: 7, cage: "하드 21cm 이하 · 소프트 26cm (합 115cm)", note: "국내 30,000원 · 좌석 하단 수납" },
-    cargo: { maxWeight: 30, cage: "85 x 55 x 65cm", note: "국제선 예약 필수" },
+    cargo: { maxWeight: 45, cage: "3면 합 285cm · 높이 84cm", note: "위탁 가능" },
+    reservation: "예약센터 신청",
+    contact: "1588-8000",
+    destinations: [
+      "gmp",
+      "pus",
+      "cju",
+      "tae",
+      "kwj",
+      "rsu",
+      "lax",
+      "jfk",
+      "sfo",
+      "sea",
+      "hnl",
+      "lhr",
+      "fra",
+      "cdg",
+      "bcn",
+      "fco",
+      "nrt",
+      "hnd",
+      "kix",
+      "fuk",
+      "tao",
+      "bkk",
+      "dad",
+      "mnl",
+      "sin",
+    ],
     maxCabinWeight: 7,
-    maxCargoWeight: 30,
+    maxCargoWeight: 45,
     breeds: ["small", "medium"],
   },
   {
@@ -58,9 +207,35 @@ const airlineData = [
     name: "제주항공",
     badge: "JEJU AIR",
     cabin: { maxWeight: 9, cage: "하드 23cm(가로 37cm) · 소프트 26cm", note: "국내 25,000원 · 펫패스" },
-    cargo: { maxWeight: 20, cage: "80 x 50 x 55cm", note: "국제선 7~15만원" },
+    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
+    reservation: "사전예약 필수",
+    contact: "1599-1500",
+    destinations: [
+      "gmp",
+      "cju",
+      "pus",
+      "tae",
+      "cjj",
+      "kwj",
+      "nrt",
+      "kix",
+      "fuk",
+      "cts",
+      "oka",
+      "myj",
+      "fsz",
+      "tpe",
+      "hkg",
+      "dad",
+      "cxr",
+      "pqc",
+      "bkk",
+      "cnx",
+      "gum",
+      "spn",
+    ],
     maxCabinWeight: 9,
-    maxCargoWeight: 20,
+    maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
@@ -68,9 +243,35 @@ const airlineData = [
     name: "티웨이",
     badge: "T'WAY",
     cabin: { maxWeight: 9, cage: "하드 23cm(가로 37cm) · 소프트 26cm", note: "국내 30,000원 · t'pet" },
-    cargo: { maxWeight: 25, cage: "85 x 55 x 65cm", note: "국제선 10~20만원" },
+    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
+    reservation: "사전예약 필수",
+    contact: "1688-8686",
+    destinations: [
+      "gmp",
+      "cju",
+      "tae",
+      "cjj",
+      "pus",
+      "kwj",
+      "cdg",
+      "fco",
+      "bcn",
+      "fra",
+      "nrt",
+      "kix",
+      "fuk",
+      "cts",
+      "tao",
+      "dad",
+      "cxr",
+      "bkk",
+      "sin",
+      "syd",
+      "gum",
+      "spn",
+    ],
     maxCabinWeight: 9,
-    maxCargoWeight: 25,
+    maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
@@ -78,9 +279,28 @@ const airlineData = [
     name: "에어부산",
     badge: "AIR BUSAN",
     cabin: { maxWeight: 7, cage: "하드 24cm 이하 · 소프트 26cm(합 115cm)", note: "국내 20,000~30,000원" },
-    cargo: { maxWeight: 28, cage: "88 x 58 x 68cm", note: "화물칸 위탁 중단 추세" },
+    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
+    reservation: "사전예약 필수",
+    contact: "1666-3060",
+    destinations: [
+      "pus",
+      "gmp",
+      "cju",
+      "usn",
+      "nrt",
+      "kix",
+      "fuk",
+      "cts",
+      "khh",
+      "tpe",
+      "dad",
+      "cxr",
+      "bkk",
+      "tag",
+      "dps",
+    ],
     maxCabinWeight: 7,
-    maxCargoWeight: 28,
+    maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
@@ -88,9 +308,36 @@ const airlineData = [
     name: "진에어",
     badge: "JIN AIR",
     cabin: { maxWeight: 7, cage: "하드 23cm 이하 · 소프트 26cm 이하", note: "국내 20,000원" },
-    cargo: { maxWeight: 25, cage: "80 x 55 x 60cm", note: "노선별 제한" },
+    cargo: { maxWeight: 0, cage: "불가/제한", note: "고객센터 확인" },
+    reservation: "사전예약 필수",
+    contact: "1600-6200",
+    destinations: [
+      "gmp",
+      "cju",
+      "pus",
+      "tae",
+      "cjj",
+      "kwj",
+      "usn",
+      "rsu",
+      "kpo",
+      "wju",
+      "nrt",
+      "kix",
+      "fuk",
+      "cts",
+      "oka",
+      "tpe",
+      "dad",
+      "cxr",
+      "pqc",
+      "bkk",
+      "ceb",
+      "crk",
+      "gum",
+    ],
     maxCabinWeight: 7,
-    maxCargoWeight: 25,
+    maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
@@ -98,9 +345,29 @@ const airlineData = [
     name: "이스타항공",
     badge: "EASTAR",
     cabin: { maxWeight: 9, cage: "합 100cm 이하 · 높이 23cm(가로 37cm)", note: "국내 30,000원 · 국제선 일부 허용" },
-    cargo: { maxWeight: 20, cage: "80 x 50 x 55cm", note: "국내선 중심" },
+    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
+    reservation: "사전예약 필수",
+    contact: "1544-0080",
+    destinations: [
+      "gmp",
+      "cju",
+      "pus",
+      "cjj",
+      "kuv",
+      "nrt",
+      "kix",
+      "fuk",
+      "cts",
+      "tpe",
+      "tsa",
+      "pvg",
+      "dad",
+      "cxr",
+      "bkk",
+      "pqc",
+    ],
     maxCabinWeight: 9,
-    maxCargoWeight: 20,
+    maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
@@ -138,18 +405,24 @@ const airlineData = [
     name: "에어프레미아",
     badge: "AIR PREMIA",
     cabin: { maxWeight: 7, cage: "가로 37cm · 높이 20cm (소프트 26cm)", note: "미주 200~300USD" },
-    cargo: { maxWeight: 30, cage: "85 x 55 x 65cm", note: "국제선 노선별" },
+    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
+    reservation: "사전예약 필수",
+    contact: "1800-2626",
+    destinations: ["lax", "ewr", "sfo", "iad", "hnl", "nrt", "bkk", "dad", "hkg"],
     maxCabinWeight: 7,
-    maxCargoWeight: 30,
+    maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
     id: "delta",
     name: "델타항공",
     badge: "DELTA",
-    cabin: { maxWeight: 12, cage: "소프트 45 x 28 x 28cm 권장", note: "국제선 $150 · 미국행 6개월+ 제한" },
-    cargo: { maxWeight: 0, cage: "-", note: "화물 위탁은 노선별 확인" },
-    maxCabinWeight: 12,
+    cabin: { maxWeight: 99, cage: "소프트 45 x 28 x 28cm 권장", note: "무게 제한 없음 · 국제선 $150" },
+    cargo: { maxWeight: 0, cage: "불가", note: "일반 위탁 불가 (Delta Cargo 별도)" },
+    reservation: "사전예약 필수",
+    contact: "0079-8651-7538",
+    destinations: ["atl", "dtw", "sea", "msp", "slc"],
+    maxCabinWeight: 99,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
@@ -158,9 +431,12 @@ const airlineData = [
     name: "에어캐나다",
     badge: "AIR CANADA",
     cabin: { maxWeight: 10, cage: "소프트 27 x 40 x 55cm", note: "국제선 $270 CAD · 소프트만 허용" },
-    cargo: { maxWeight: 0, cage: "하드 23 x 40 x 55cm", note: "노선별 확인" },
+    cargo: { maxWeight: 45, cage: "IATA 하드 케이지 · 바퀴 제거", note: "위탁 가능 (계절 제한)" },
+    reservation: "사전예약 필수",
+    contact: "02-3788-0100",
+    destinations: ["yvr", "yyz"],
     maxCabinWeight: 10,
-    maxCargoWeight: 0,
+    maxCargoWeight: 45,
     breeds: ["small", "medium"],
   },
   {
@@ -168,7 +444,10 @@ const airlineData = [
     name: "루프트한자",
     badge: "LUFTHANSA",
     cabin: { maxWeight: 8, cage: "소프트 55 x 40 x 23cm", note: "국제선 110 EUR" },
-    cargo: { maxWeight: 0, cage: "-", note: "서류 심사 엄격" },
+    cargo: { maxWeight: 0, cage: "IATA 하드 케이지", note: "위탁 가능 · 요금 200~400 EUR" },
+    reservation: "사전예약 필수",
+    contact: "02-6022-4228",
+    destinations: ["fra", "muc"],
     maxCabinWeight: 8,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
@@ -376,29 +655,7 @@ function renderHero() {
           <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
             도착지
             <select id="hero-destination" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
-              <option value="any">Anywhere</option>
-              <option value="cju">제주 (CJU)</option>
-              <option value="pus">부산 (PUS)</option>
-              <option value="icn">인천 (ICN)</option>
-              <option value="gmp">김포 (GMP)</option>
-              <option value="tae">대구 (TAE)</option>
-              <option value="nrt">도쿄/나리타 (NRT)</option>
-              <option value="kix">오사카/간사이 (KIX)</option>
-              <option value="hnd">도쿄/하네다 (HND)</option>
-              <option value="syd">시드니 (SYD)</option>
-              <option value="yvr">밴쿠버 (YVR)</option>
-              <option value="han">하노이 (HAN)</option>
-              <option value="sgn">호치민 (SGN)</option>
-                <option value="dad">다낭 (DAD)</option>
-                <option value="cxr">나트랑/깜란 (CXR)</option>
-                <option value="bkk">방콕 (BKK)</option>
-                <option value="hkt">푸켓 (HKT)</option>
-                <option value="sin">싱가포르 (SIN)</option>
-                <option value="kul">쿠알라룸푸르 (KUL)</option>
-                <option value="mnl">마닐라 (MNL)</option>
-              <option value="fco">로마/피우미치노 (FCO)</option>
-              <option value="cdg">파리/샤를드골 (CDG)</option>
-              <option value="lhr">런던/히드로 (LHR)</option>
+              ${destinationOptionsMarkup}
             </select>
           </label>
           <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
@@ -673,29 +930,7 @@ function renderAirlines(airlines = currentAirlines) {
             <label class="grid gap-2">
               도착지
               <select id="destination-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
-                <option value="any">Anywhere</option>
-                <option value="cju">제주 (CJU)</option>
-                <option value="pus">부산 (PUS)</option>
-                <option value="icn">인천 (ICN)</option>
-                <option value="gmp">김포 (GMP)</option>
-                <option value="tae">대구 (TAE)</option>
-                <option value="nrt">도쿄/나리타 (NRT)</option>
-                <option value="kix">오사카/간사이 (KIX)</option>
-                <option value="hnd">도쿄/하네다 (HND)</option>
-                <option value="syd">시드니 (SYD)</option>
-                <option value="yvr">밴쿠버 (YVR)</option>
-                <option value="han">하노이 (HAN)</option>
-                <option value="sgn">호치민 (SGN)</option>
-                <option value="dad">다낭 (DAD)</option>
-                <option value="cxr">나트랑/깜란 (CXR)</option>
-                <option value="bkk">방콕 (BKK)</option>
-                <option value="hkt">푸켓 (HKT)</option>
-                <option value="sin">싱가포르 (SIN)</option>
-                <option value="kul">쿠알라룸푸르 (KUL)</option>
-                <option value="mnl">마닐라 (MNL)</option>
-                <option value="fco">로마/피우미치노 (FCO)</option>
-                <option value="cdg">파리/샤를드골 (CDG)</option>
-                <option value="lhr">런던/히드로 (LHR)</option>
+                ${destinationOptionsMarkup}
               </select>
             </label>
             <label class="grid gap-2">
@@ -740,14 +975,18 @@ function renderResultsPage() {
   const breed = params.get("breed") || "small";
   const weight = Number(params.get("weight") || 5);
   const age = params.get("age") || "puppy";
+  const destination = params.get("destination") || "any";
   const eligible = currentAirlines.filter((airline) => {
     const cabinOk =
       airline.maxCabinWeight >= weight && airline.breeds.includes(breed) && breed !== "large";
-    return cabinOk;
+    const destinationOk =
+      destination === "any" || (airline.destinations || []).includes(destination);
+    return cabinOk && destinationOk;
   });
 
   const breedLabel = breed === "small" ? "소형견" : breed === "medium" ? "중형견" : "대형견";
   const ageLabel = age === "puppy" ? "1살 이하" : age === "senior" ? "7살 이상" : "1~7살";
+  const destinationLabel = destinationLabelMap[destination] || destination.toUpperCase();
 
   rootEl.innerHTML = `
     <main class="mx-auto flex w-[min(1000px,92%)] flex-col gap-8 pb-20 pt-10">
@@ -755,7 +994,7 @@ function renderResultsPage() {
         <div>
           <p class="text-xs uppercase tracking-[0.35em] text-slate-400">Search Results</p>
           <h1 class="mt-2 text-3xl font-semibold text-deep">탑승 가능 항공사</h1>
-          <p class="mt-2 text-sm text-slate-500">${breedLabel} · ${weight}kg · ${ageLabel}</p>
+          <p class="mt-2 text-sm text-slate-500">${breedLabel} · ${weight}kg · ${ageLabel} · ${destinationLabel}</p>
         </div>
       </div>
 
@@ -776,7 +1015,7 @@ function renderResultsPage() {
   const airlinesEl = rootEl.querySelector("#results-airlines");
   const listEl = rootEl.querySelector("#results-list");
 
-  airlinesEl.innerHTML = currentAirlines
+  airlinesEl.innerHTML = (eligible.length ? eligible : currentAirlines)
     .map(
       (airline, idx) =>
         `<span class="results-airline" style="--delay:${idx * 0.12}s">${airline.name}</span>`
@@ -797,11 +1036,14 @@ function renderResultsPage() {
               <p class="font-semibold text-deep">기내 동반</p>
               <p class="mt-1">무게: ${airline.cabin.maxWeight}kg 미만</p>
               <p class="mt-1">케이지: ${airline.cabin.cage}</p>
+              ${airline.reservation ? `<p class="mt-1">사전예약: ${airline.reservation}</p>` : ""}
+              ${airline.contact ? `<p class="mt-1">안내번호: ${airline.contact}</p>` : ""}
             </div>
             <div class="rounded-xl bg-slate-50 p-3">
               <p class="font-semibold text-deep">화물칸 동반</p>
               <p class="mt-1">무게: ${airline.cargo.maxWeight}kg 이하</p>
               <p class="mt-1">케이지: ${airline.cargo.cage}</p>
+              ${airline.cargo?.note ? `<p class="mt-1 text-xs text-slate-500">${airline.cargo.note}</p>` : ""}
             </div>
           </div>
         </article>
@@ -1068,6 +1310,7 @@ function setupEligibilityFilter() {
   const breedSelect = document.getElementById("breed-select");
   const weightSelect = document.getElementById("weight-select");
   const ageSelect = document.getElementById("age-select");
+  const destinationSelect = document.getElementById("destination-select");
   const rulesSearchBtn = document.getElementById("rules-search");
 
   renderEligibleList = function () {
@@ -1076,10 +1319,13 @@ function setupEligibilityFilter() {
     const breed = breedSelect?.value || "small";
     const weight = Number(weightSelect?.value || 5);
     const age = ageSelect?.value || "adult";
+    const destination = destinationSelect?.value || "any";
     const eligible = currentAirlines.filter((airline) => {
       const cabinOk =
         airline.maxCabinWeight >= weight && airline.breeds.includes(breed) && breed !== "large";
-      return cabinOk;
+      const destinationOk =
+        destination === "any" || (airline.destinations || []).includes(destination);
+      return cabinOk && destinationOk;
     });
     cardsEl.innerHTML = eligible.length
       ? eligible
@@ -1095,11 +1341,14 @@ function setupEligibilityFilter() {
                   <p class="font-semibold text-deep">기내 동반</p>
                   <p class="mt-1">무게: ${airline.cabin.maxWeight}kg 미만</p>
                   <p class="mt-1">케이지: ${airline.cabin.cage}</p>
+                  ${airline.reservation ? `<p class="mt-1">사전예약: ${airline.reservation}</p>` : ""}
+                  ${airline.contact ? `<p class="mt-1">안내번호: ${airline.contact}</p>` : ""}
                 </div>
                 <div class="rounded-xl bg-slate-50 p-3">
                   <p class="font-semibold text-deep">화물칸 동반</p>
                   <p class="mt-1">무게: ${airline.cargo.maxWeight}kg 이하</p>
                   <p class="mt-1">케이지: ${airline.cargo.cage}</p>
+                  ${airline.cargo?.note ? `<p class="mt-1 text-xs text-slate-500">${airline.cargo.note}</p>` : ""}
                 </div>
               </div>
             </article>
@@ -1112,11 +1361,13 @@ function setupEligibilityFilter() {
   breedSelect?.addEventListener("change", renderEligibleList);
   weightSelect?.addEventListener("change", renderEligibleList);
   ageSelect?.addEventListener("change", renderEligibleList);
+  destinationSelect?.addEventListener("change", renderEligibleList);
   rulesSearchBtn?.addEventListener("click", () => {
     const params = new URLSearchParams({
       breed: breedSelect?.value || "small",
       weight: weightSelect?.value || "5",
       age: ageSelect?.value || "adult",
+      destination: destinationSelect?.value || "any",
     });
     window.location.href = `results.html?${params.toString()}`;
   });
@@ -1168,6 +1419,7 @@ function setupBottomSheet() {
 // 히어로 영역에서 선택한 값을 규정 필터에 반영
 function setupHeroSearch() {
   const heroWeight = document.getElementById("hero-weight");
+  const heroDestination = document.getElementById("hero-destination");
   const heroBtn = document.getElementById("hero-search");
 
   if (!heroBtn) return;
@@ -1191,6 +1443,7 @@ function setupHeroSearch() {
       breed: "small",
       weight: heroWeight?.value || "5",
       age: "adult",
+      destination: heroDestination?.value || "any",
     });
     setTimeout(() => {
       window.location.href = `results.html?${params.toString()}`;
