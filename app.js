@@ -184,80 +184,10 @@ const airlineData = [
     breeds: ["small", "medium"],
   },
   {
-    id: "vietjet",
-    name: "비엣젯",
-    badge: "VIETJET",
-    cabin: { maxWeight: 7, cage: "소프트 40 x 30 x 20cm", note: "저비용항공 · 정책 변동 가능" },
-    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
-    maxCabinWeight: 7,
-    maxCargoWeight: 0,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "thai",
-    name: "타이항공",
-    badge: "THAI",
-    cabin: { maxWeight: 7, cage: "소프트 45 x 30 x 20cm", note: "국제선 $150~200" },
-    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
-    maxCabinWeight: 7,
-    maxCargoWeight: 0,
-    breeds: ["small", "medium"],
-  },
-  {
     id: "airasia",
     name: "에어아시아",
     badge: "AIRASIA",
     cabin: { maxWeight: 7, cage: "소프트 40 x 30 x 20cm", note: "저비용항공 · 노선별 확인" },
-    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
-    maxCabinWeight: 7,
-    maxCargoWeight: 0,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "singapore",
-    name: "싱가포르항공",
-    badge: "SIA",
-    cabin: { maxWeight: 7, cage: "소프트 45 x 30 x 20cm", note: "국제선 $150~200" },
-    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
-    maxCabinWeight: 7,
-    maxCargoWeight: 0,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "scoot",
-    name: "스쿠트",
-    badge: "SCOOT",
-    cabin: { maxWeight: 7, cage: "소프트 40 x 30 x 20cm", note: "저비용항공 · 제한 확인" },
-    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
-    maxCabinWeight: 7,
-    maxCargoWeight: 0,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "malaysia",
-    name: "말레이시아항공",
-    badge: "MALAYSIA",
-    cabin: { maxWeight: 7, cage: "소프트 45 x 30 x 20cm", note: "국제선 $150~200" },
-    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
-    maxCabinWeight: 7,
-    maxCargoWeight: 0,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "cebu",
-    name: "세부퍼시픽",
-    badge: "CEBU",
-    cabin: { maxWeight: 7, cage: "소프트 40 x 30 x 20cm", note: "저비용항공 · 제한 확인" },
-    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
-    maxCabinWeight: 7,
-    maxCargoWeight: 0,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "pal",
-    name: "필리핀항공",
-    badge: "PAL",
-    cabin: { maxWeight: 7, cage: "소프트 45 x 30 x 20cm", note: "국제선 $150 내외" },
     cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
     maxCabinWeight: 7,
     maxCargoWeight: 0,
@@ -394,7 +324,7 @@ const bottomNav = [
   { label: "홈", icon: "home", href: "index.html" },
   { label: "검색", icon: "search", href: "#" },
   { label: "항공정보", icon: "flight_takeoff", href: "airline.html" },
-  { label: "추천장소", icon: "place", href: "travel.html" },
+  { label: "추천장소", icon: "place", href: "daily.html" },
   { label: "마이페이지", icon: "person", href: "#" },
 ];
 
@@ -472,7 +402,7 @@ function renderHero() {
             </select>
           </label>
           <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
-            몸무게
+            몸무게(기내탑승 기준)
             <select id="hero-weight" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
               <option value="5">5kg 이하</option>
               <option value="7">7kg 이하</option>
@@ -591,32 +521,38 @@ const dailyThemes = [
   {
     title: "실내동반 가능! 더위/추위 걱정없는 애견동반 카페",
     image:
-      "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=900&q=80",
-    tags: ["실내동반가능"],
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=900&q=80",
+    tags: ["실내동반 가능"],
   },
   {
     title: "애견동반 가능한 축제/전시회",
     image:
-      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
-    tags: ["예스키즈/펫존"],
+      "https://images.unsplash.com/photo-1472653431158-6364773b2a56?auto=format&fit=crop&w=900&q=80",
+    tags: ["축제/전시"],
   },
   {
     title: "카공족을 위한 추천 애견동반 카페",
     image:
-      "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=900&q=80",
-    tags: ["카공족", "실내동반가능"],
+      "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?auto=format&fit=crop&w=900&q=80",
+    tags: ["카공족", "실내동반 가능"],
   },
   {
     title: "아이와 강아지가 함께! 즐길 수 있는 곳",
     image:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-    tags: ["예스키즈/펫존", "천연잔디"],
+    tags: ["아이와 함께", "천연잔디", "자연과 함께"],
   },
   {
     title: "꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장",
     image:
-      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
-    tags: ["애견운동장", "천연잔디", "오프리쉬가능"],
+      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80",
+    tags: ["오프리쉬 가능", "천연잔디", "자연과 함께"],
+  },
+  {
+    title: "강아지와 함께 자연을 즐길 수 있는 곳",
+    image:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80",
+    tags: ["천연잔디", "자연과 함께", "오프리쉬 가능"],
   },
 ];
 
@@ -624,56 +560,56 @@ const dailyPlaces = [
   {
     title: "스테이포레스트 카페",
     location: "서울 · 성수",
-    tags: ["실내동반가능", "예스키즈/펫존"],
+    tags: ["실내동반 가능", "카공족"],
     image:
       "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "햇살 실내 펫카페",
     location: "서울 · 합정",
-    tags: ["실내동반가능", "카공족", "예스키즈/펫존"],
+    tags: ["실내동반 가능", "카공족"],
     image:
       "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "펫프렌들리 아트페어",
     location: "서울 · 용산",
-    tags: ["예스키즈/펫존"],
+    tags: ["축제/전시", "아이와 함께"],
     image:
       "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "아이와 함께 놀이터 파크",
     location: "경기 · 하남",
-    tags: ["예스키즈/펫존", "천연잔디"],
+    tags: ["아이와 함께", "천연잔디", "자연과 함께"],
     image:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "천연잔디 애견운동장",
     location: "경기 · 가평",
-    tags: ["천연잔디", "애견운동장", "오프리쉬가능"],
+    tags: ["천연잔디", "자연과 함께", "오프리쉬 가능"],
     image:
       "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "오프리쉬 펫런 파크",
     location: "강원 · 강릉",
-    tags: ["오프리쉬가능", "애견운동장", "천연잔디"],
+    tags: ["자연과 함께", "천연잔디", "오프리쉬 가능"],
     image:
       "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "루프탑 펫존 카페",
     location: "부산 · 해운대",
-    tags: ["예스키즈/펫존", "카공족"],
+    tags: ["카공족", "실내동반 가능"],
     image:
       "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "리빙 전시 & 펫마켓",
     location: "대전 · 유성",
-    tags: ["예스키즈/펫존", "실내동반가능"],
+    tags: ["실내동반 가능", "축제/전시", "아이와 함께"],
     image:
       "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
   },
@@ -763,7 +699,7 @@ function renderAirlines(airlines = currentAirlines) {
               </select>
             </label>
             <label class="grid gap-2">
-              몸무게
+              몸무게(기내탑승 기준)
               <select id="weight-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
                 <option value="5">5kg 이하</option>
                 <option value="7">7kg 이하</option>
@@ -807,8 +743,7 @@ function renderResultsPage() {
   const eligible = currentAirlines.filter((airline) => {
     const cabinOk =
       airline.maxCabinWeight >= weight && airline.breeds.includes(breed) && breed !== "large";
-    const cargoOk = airline.maxCargoWeight >= weight;
-    return cabinOk || cargoOk;
+    return cabinOk;
   });
 
   const breedLabel = breed === "small" ? "소형견" : breed === "medium" ? "중형견" : "대형견";
@@ -913,115 +848,83 @@ function renderDailyCarousel() {
 
 function renderDailyPanel(targetEl) {
   if (!targetEl) return;
+  const filterTags = [
+    "실내동반 가능",
+    "오프리쉬 가능",
+    "카공족",
+    "아이와 함께",
+    "천연잔디",
+    "자연과 함께",
+    "축제/전시",
+  ];
+
   targetEl.innerHTML = `
     <div class="rounded-[32px] bg-white p-8 text-ink shadow-card">
-      <div class="flex flex-wrap items-center justify-between gap-4">
+      <div class="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Daily spots</p>
           <h2 class="mt-2 text-3xl font-semibold text-deep">추천 일상지</h2>
-          <p class="mt-2 text-sm text-slate-500">테마별 장소를 모아 보여드립니다.</p>
+          <p class="mt-2 text-sm text-slate-500">필터를 선택하면 장소가 정렬됩니다.</p>
+        </div>
+        <div class="tag-filter">
+          ${filterTags.map((tag) => `<button class="tag-chip" data-tag="${tag}">${tag}</button>`).join("")}
         </div>
       </div>
-      <div class="daily-section-wrap mt-6">
-        ${dailyThemes
-          .map((theme) => {
-            const items = dailyPlaces.filter((place) =>
-              theme.tags.every((tag) => place.tags.includes(tag))
-            );
-            return `
-            <section class="daily-section">
-              <div class="daily-banner">
-                <img src="${theme.image}" alt="${theme.title}" />
-                <div class="daily-banner__overlay">
-                  <h3>${theme.title}</h3>
-                </div>
-              </div>
-              <div class="daily-grid mt-5">
-                ${items
-                  .map(
-                    (place) => `
-                  <article class="daily-place">
-                    <div class="daily-place__media">
-                      <img src="${place.image}" alt="${place.title}" />
-                    </div>
-                    <div class="daily-place__body">
-                      <p class="daily-place__location">${place.location}</p>
-                      <h3>${place.title}</h3>
-                      <div class="daily-place__tags">
-                        ${place.tags.map((tag) => `<span>${tag}</span>`).join("")}
-                      </div>
-                    </div>
-                  </article>
-                `
-                  )
-                  .join("")}
-              </div>
-            </section>
-          `;
-          })
-          .join("")}
-      </div>
+      <div id="daily-grid" class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
     </div>
   `;
+
+  const gridEl = targetEl.querySelector("#daily-grid");
+  const tags = Array.from(targetEl.querySelectorAll(".tag-chip"));
+  const activeTags = new Set();
+
+  function renderDailyGrid() {
+    const filtered = activeTags.size
+      ? dailyPlaces.filter((place) => [...activeTags].every((tag) => place.tags.includes(tag)))
+      : dailyPlaces;
+    gridEl.innerHTML = filtered
+      .map(
+        (place) => `
+        <article class="daily-place">
+          <div class="daily-place__media">
+            <img src="${place.image}" alt="${place.title}" />
+          </div>
+          <div class="daily-place__body">
+            <p class="daily-place__location">${place.location}</p>
+            <h3>${place.title}</h3>
+            <div class="daily-place__tags">
+              ${place.tags.map((tag) => `<span>${tag}</span>`).join("")}
+            </div>
+          </div>
+        </article>
+      `
+      )
+      .join("");
+  }
+
+  tags.forEach((tagBtn) => {
+    tagBtn.addEventListener("click", () => {
+      const tag = tagBtn.dataset.tag;
+      if (activeTags.has(tag)) {
+        activeTags.clear();
+        tags.forEach((btn) => btn.classList.remove("active"));
+      } else {
+        activeTags.clear();
+        tags.forEach((btn) => btn.classList.remove("active"));
+        activeTags.add(tag);
+        tagBtn.classList.add("active");
+      }
+      renderDailyGrid();
+    });
+  });
+
+  renderDailyGrid();
 }
 
 function renderDailyPage() {
   renderDailyPanel(dailyPageEl);
 }
 
-function renderPlacesPage() {
-  if (!placesEl) return;
-  placesEl.innerHTML = `
-    <div class="rounded-[32px] border border-line bg-white p-8 text-ink shadow-card">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Recommended places</p>
-          <h2 class="mt-2 text-3xl font-semibold text-deep">추천 장소</h2>
-          <p class="mt-2 text-sm text-slate-500">여행지와 일상지를 탭으로 확인하세요.</p>
-        </div>
-        <div class="flex items-center gap-2 rounded-full border border-line bg-white p-1 text-xs">
-          <button class="places-tab active" data-tab="travel">여행지</button>
-          <button class="places-tab" data-tab="daily">일상지</button>
-        </div>
-      </div>
-      <div class="places-panel active" data-panel="travel">
-        <div class="mt-6 flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Recommended</p>
-            <h3 class="mt-2 text-2xl font-semibold text-deep">추천 여행지</h3>
-          </div>
-          <div class="flex items-center gap-2 rounded-full border border-line bg-white p-1 text-xs">
-            <button class="travel-tab rounded-full bg-deep px-4 py-2 font-semibold text-white" data-category="domestic">
-              국내
-            </button>
-            <button class="travel-tab rounded-full px-4 py-2 font-semibold text-slate-500" data-category="overseas">
-              해외
-            </button>
-          </div>
-        </div>
-        <div id="travel-grid" class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
-      </div>
-      <div class="places-panel" data-panel="daily">
-        <div class="mt-6" id="daily-panel"></div>
-      </div>
-    </div>
-  `;
-
-  const tabs = Array.from(placesEl.querySelectorAll(".places-tab"));
-  const panels = Array.from(placesEl.querySelectorAll(".places-panel"));
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      tabs.forEach((btn) => btn.classList.remove("active"));
-      tab.classList.add("active");
-      panels.forEach((panel) => {
-        panel.classList.toggle("active", panel.dataset.panel === tab.dataset.tab);
-      });
-    });
-  });
-
-  setupTravelTabs();
-  renderDailyPanel(placesEl.querySelector("#daily-panel"));
-}
 
 function renderTravelGrid(category = "domestic") {
   const gridEl = document.getElementById("travel-grid");
@@ -1176,8 +1079,7 @@ function setupEligibilityFilter() {
     const eligible = currentAirlines.filter((airline) => {
       const cabinOk =
         airline.maxCabinWeight >= weight && airline.breeds.includes(breed) && breed !== "large";
-      const cargoOk = airline.maxCargoWeight >= weight;
-      return cabinOk || cargoOk;
+      return cabinOk;
     });
     cardsEl.innerHTML = eligible.length
       ? eligible
@@ -1512,9 +1414,6 @@ if (airlineEl && pageType !== "airline" && pageType !== "results") {
 }
 if (pageType === "daily") {
   renderDailyPage();
-}
-if (pageType === "places") {
-  renderPlacesPage();
 }
 if (pageType === "shopping" && airlineEl) {
   const shopTab = airlineEl.querySelector('.view-tab[data-view="shop"]');
