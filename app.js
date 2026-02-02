@@ -33,8 +33,12 @@ const airlineData = [
     id: "korean",
     name: "대한항공",
     badge: "KOREAN AIR",
-    cabin: { maxWeight: 7, cage: "32 x 45 x 25cm", note: "좌석 아래 배치, 사전 예약 필수" },
-    cargo: { maxWeight: 32, cage: "90 x 60 x 70cm", note: "화물칸 전용 케이지, 건강 확인서 필요" },
+    cabin: {
+      maxWeight: 7,
+      cage: "하드 20cm 이하 · 소프트 26cm (합 115cm)",
+      note: "국내 30,000원 · 국제 150~300USD · SKYPETS",
+    },
+    cargo: { maxWeight: 32, cage: "90 x 60 x 70cm", note: "화물칸 기준 별도 문의" },
     maxCabinWeight: 7,
     maxCargoWeight: 32,
     breeds: ["small", "medium"],
@@ -43,7 +47,7 @@ const airlineData = [
     id: "asiana",
     name: "아시아나",
     badge: "ASIANA",
-    cabin: { maxWeight: 7, cage: "45 x 30 x 20cm", note: "국내선 최대 2마리" },
+    cabin: { maxWeight: 7, cage: "하드 21cm 이하 · 소프트 26cm (합 115cm)", note: "국내 30,000원 · 좌석 하단 수납" },
     cargo: { maxWeight: 30, cage: "85 x 55 x 65cm", note: "국제선 예약 필수" },
     maxCabinWeight: 7,
     maxCargoWeight: 30,
@@ -53,8 +57,8 @@ const airlineData = [
     id: "jeju",
     name: "제주항공",
     badge: "JEJU AIR",
-    cabin: { maxWeight: 9, cage: "40 x 30 x 20cm", note: "케이지 포함 9kg 미만" },
-    cargo: { maxWeight: 20, cage: "80 x 50 x 55cm", note: "국제선 제한 노선" },
+    cabin: { maxWeight: 9, cage: "하드 23cm(가로 37cm) · 소프트 26cm", note: "국내 25,000원 · 펫패스" },
+    cargo: { maxWeight: 20, cage: "80 x 50 x 55cm", note: "국제선 7~15만원" },
     maxCabinWeight: 9,
     maxCargoWeight: 20,
     breeds: ["small", "medium"],
@@ -63,8 +67,8 @@ const airlineData = [
     id: "tway",
     name: "티웨이",
     badge: "T'WAY",
-    cabin: { maxWeight: 9, cage: "45 x 35 x 25cm", note: "기내 반입 좌석 수 제한" },
-    cargo: { maxWeight: 25, cage: "85 x 55 x 65cm", note: "사전 접수 필수" },
+    cabin: { maxWeight: 9, cage: "하드 23cm(가로 37cm) · 소프트 26cm", note: "국내 30,000원 · t'pet" },
+    cargo: { maxWeight: 25, cage: "85 x 55 x 65cm", note: "국제선 10~20만원" },
     maxCabinWeight: 9,
     maxCargoWeight: 25,
     breeds: ["small", "medium"],
@@ -73,9 +77,9 @@ const airlineData = [
     id: "airbusan",
     name: "에어부산",
     badge: "AIR BUSAN",
-    cabin: { maxWeight: 8, cage: "35 x 45 x 20cm", note: "사전 예약 필수, 국제선 유료" },
-    cargo: { maxWeight: 28, cage: "88 x 58 x 68cm", note: "케이지 별도 확인" },
-    maxCabinWeight: 8,
+    cabin: { maxWeight: 7, cage: "하드 24cm 이하 · 소프트 26cm(합 115cm)", note: "국내 20,000~30,000원" },
+    cargo: { maxWeight: 28, cage: "88 x 58 x 68cm", note: "화물칸 위탁 중단 추세" },
+    maxCabinWeight: 7,
     maxCargoWeight: 28,
     breeds: ["small", "medium"],
   },
@@ -83,7 +87,7 @@ const airlineData = [
     id: "jinair",
     name: "진에어",
     badge: "JIN AIR",
-    cabin: { maxWeight: 7, cage: "40 x 30 x 20cm", note: "기내 반입 사전 예약" },
+    cabin: { maxWeight: 7, cage: "하드 23cm 이하 · 소프트 26cm 이하", note: "국내 20,000원" },
     cargo: { maxWeight: 25, cage: "80 x 55 x 60cm", note: "노선별 제한" },
     maxCabinWeight: 7,
     maxCargoWeight: 25,
@@ -93,7 +97,7 @@ const airlineData = [
     id: "eastar",
     name: "이스타항공",
     badge: "EASTAR",
-    cabin: { maxWeight: 9, cage: "45 x 30 x 20cm", note: "케이지 포함 9kg 미만" },
+    cabin: { maxWeight: 9, cage: "합 100cm 이하 · 높이 23cm(가로 37cm)", note: "국내 30,000원 · 국제선 일부 허용" },
     cargo: { maxWeight: 20, cage: "80 x 50 x 55cm", note: "국내선 중심" },
     maxCabinWeight: 9,
     maxCargoWeight: 20,
@@ -133,10 +137,40 @@ const airlineData = [
     id: "airpremia",
     name: "에어프레미아",
     badge: "AIR PREMIA",
-    cabin: { maxWeight: 7, cage: "40 x 30 x 20cm", note: "기내 반입 사전 예약" },
-    cargo: { maxWeight: 30, cage: "85 x 55 x 65cm", note: "노선별 제한" },
+    cabin: { maxWeight: 7, cage: "가로 37cm · 높이 20cm (소프트 26cm)", note: "미주 200~300USD" },
+    cargo: { maxWeight: 30, cage: "85 x 55 x 65cm", note: "국제선 노선별" },
     maxCabinWeight: 7,
     maxCargoWeight: 30,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "delta",
+    name: "델타항공",
+    badge: "DELTA",
+    cabin: { maxWeight: 12, cage: "소프트 45 x 28 x 28cm 권장", note: "국제선 $150 · 미국행 6개월+ 제한" },
+    cargo: { maxWeight: 0, cage: "-", note: "화물 위탁은 노선별 확인" },
+    maxCabinWeight: 12,
+    maxCargoWeight: 0,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "aircanada",
+    name: "에어캐나다",
+    badge: "AIR CANADA",
+    cabin: { maxWeight: 10, cage: "소프트 27 x 40 x 55cm", note: "국제선 $270 CAD · 소프트만 허용" },
+    cargo: { maxWeight: 0, cage: "하드 23 x 40 x 55cm", note: "노선별 확인" },
+    maxCabinWeight: 10,
+    maxCargoWeight: 0,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "lufthansa",
+    name: "루프트한자",
+    badge: "LUFTHANSA",
+    cabin: { maxWeight: 8, cage: "소프트 55 x 40 x 23cm", note: "국제선 110 EUR" },
+    cargo: { maxWeight: 0, cage: "-", note: "서류 심사 엄격" },
+    maxCabinWeight: 8,
+    maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
 ];
@@ -337,14 +371,6 @@ function renderHero() {
             </select>
           </label>
           <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
-            견종 크기
-            <select id="hero-breed" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
-              <option value="small">소형견</option>
-              <option value="medium">중형견</option>
-              <option value="large">대형견</option>
-            </select>
-          </label>
-          <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
             몸무게
             <select id="hero-weight" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
               <option value="5">5kg 이하</option>
@@ -352,14 +378,6 @@ function renderHero() {
               <option value="9">9kg 이하</option>
               <option value="12">12kg 이하</option>
               <option value="20">20kg 이하</option>
-            </select>
-          </label>
-          <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
-            나이
-            <select id="hero-age" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
-              <option value="puppy">1살 이하</option>
-              <option value="adult">1~7살</option>
-              <option value="senior">7살 이상</option>
             </select>
           </label>
         </div>
@@ -545,14 +563,6 @@ function renderAirlines(airlines = currentAirlines) {
               </select>
             </label>
             <label class="grid gap-2">
-              견종 크기
-              <select id="breed-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
-                <option value="small">소형견</option>
-                <option value="medium">중형견</option>
-                <option value="large">대형견</option>
-              </select>
-            </label>
-            <label class="grid gap-2">
               몸무게
               <select id="weight-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
                 <option value="5">5kg 이하</option>
@@ -560,14 +570,6 @@ function renderAirlines(airlines = currentAirlines) {
                 <option value="9">9kg 이하</option>
                 <option value="12">12kg 이하</option>
                 <option value="20">20kg 이하</option>
-              </select>
-            </label>
-            <label class="grid gap-2">
-              나이
-              <select id="age-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
-                <option value="puppy">1살 이하</option>
-                <option value="adult">1~7살</option>
-                <option value="senior">7살 이상</option>
               </select>
             </label>
             <button
@@ -824,9 +826,9 @@ function setupEligibilityFilter() {
   renderEligibleList = function () {
     const cardsEl = document.getElementById("eligible-cards");
     if (!cardsEl) return;
-    const breed = breedSelect.value;
-    const weight = Number(weightSelect.value);
-    const age = ageSelect.value;
+    const breed = breedSelect?.value || "small";
+    const weight = Number(weightSelect?.value || 5);
+    const age = ageSelect?.value || "adult";
     const eligible = currentAirlines.filter((airline) => {
       const cabinOk =
         airline.maxCabinWeight >= weight && airline.breeds.includes(breed) && breed !== "large";
@@ -861,14 +863,14 @@ function setupEligibilityFilter() {
       : `<div class="rounded-2xl border border-line bg-slate-50 p-4 text-sm text-slate-400">조건에 맞는 항공사가 없습니다.</div>`;
   };
 
-  breedSelect.addEventListener("change", renderEligibleList);
-  weightSelect.addEventListener("change", renderEligibleList);
-  ageSelect.addEventListener("change", renderEligibleList);
+  breedSelect?.addEventListener("change", renderEligibleList);
+  weightSelect?.addEventListener("change", renderEligibleList);
+  ageSelect?.addEventListener("change", renderEligibleList);
   rulesSearchBtn?.addEventListener("click", () => {
     const params = new URLSearchParams({
-      breed: breedSelect.value,
-      weight: weightSelect.value,
-      age: ageSelect.value,
+      breed: breedSelect?.value || "small",
+      weight: weightSelect?.value || "5",
+      age: ageSelect?.value || "adult",
     });
     window.location.href = `results.html?${params.toString()}`;
   });
@@ -885,13 +887,14 @@ function setupBottomSheet() {
   const sheetWeight = document.getElementById("sheet-weight");
   const sheetAge = document.getElementById("sheet-age");
   const ageSelect = document.getElementById("age-select");
+  if (!weightSelect || !sheetWeight) return;
 
   // 바텀시트 열기: 현재 필터 값을 복사해서 보여줌
   function openSheet() {
     bottomSheetEl.classList.remove("hidden");
-    sheetBreed.value = breedSelect.value;
+    if (sheetBreed && breedSelect) sheetBreed.value = breedSelect.value;
     sheetWeight.value = weightSelect.value;
-    sheetAge.value = ageSelect.value;
+    if (sheetAge && ageSelect) sheetAge.value = ageSelect.value;
   }
 
   // 바텀시트 닫기
@@ -908,9 +911,9 @@ function setupBottomSheet() {
     if (event.target === bottomSheetEl) closeSheet();
   });
   applyBtn?.addEventListener("click", () => {
-    breedSelect.value = sheetBreed.value;
+    if (sheetBreed && breedSelect) breedSelect.value = sheetBreed.value;
     weightSelect.value = sheetWeight.value;
-    ageSelect.value = sheetAge.value;
+    if (sheetAge && ageSelect) ageSelect.value = sheetAge.value;
     closeSheet();
     renderEligibleList();
   });
@@ -918,9 +921,7 @@ function setupBottomSheet() {
 
 // 히어로 영역에서 선택한 값을 규정 필터에 반영
 function setupHeroSearch() {
-  const heroBreed = document.getElementById("hero-breed");
   const heroWeight = document.getElementById("hero-weight");
-  const heroAge = document.getElementById("hero-age");
   const heroBtn = document.getElementById("hero-search");
 
   if (!heroBtn) return;
@@ -941,9 +942,9 @@ function setupHeroSearch() {
     }
     heroBtn.setAttribute("disabled", "true");
     const params = new URLSearchParams({
-      breed: heroBreed.value,
-      weight: heroWeight.value,
-      age: heroAge.value,
+      breed: "small",
+      weight: heroWeight?.value || "5",
+      age: "adult",
     });
     setTimeout(() => {
       window.location.href = `results.html?${params.toString()}`;
