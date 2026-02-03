@@ -121,7 +121,6 @@ const airlineData = [
       cage: "IATA 하드 케이지 · 32kg 이하 (예외 45kg)",
       note: "위탁 가능 (IATA 규정)",
     },
-    reservation: "사전예약 필수",
     contact: "1588-2001",
     destinations: [
       "gmp",
@@ -169,7 +168,6 @@ const airlineData = [
     badge: "ASIANA",
     cabin: { maxWeight: 7, cage: "하드 21cm 이하 · 소프트 26cm (합 115cm)", note: "국내 30,000원 · 좌석 하단 수납" },
     cargo: { maxWeight: 45, cage: "3면 합 285cm · 높이 84cm", note: "위탁 가능" },
-    reservation: "예약센터 신청",
     contact: "1588-8000",
     destinations: [
       "gmp",
@@ -208,7 +206,6 @@ const airlineData = [
     badge: "JEJU AIR",
     cabin: { maxWeight: 9, cage: "하드 23cm(가로 37cm) · 소프트 26cm", note: "국내 25,000원 · 펫패스" },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
-    reservation: "사전예약 필수",
     contact: "1599-1500",
     destinations: [
       "gmp",
@@ -244,7 +241,6 @@ const airlineData = [
     badge: "T'WAY",
     cabin: { maxWeight: 9, cage: "하드 23cm(가로 37cm) · 소프트 26cm", note: "국내 30,000원 · t'pet" },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
-    reservation: "사전예약 필수",
     contact: "1688-8686",
     destinations: [
       "gmp",
@@ -280,7 +276,6 @@ const airlineData = [
     badge: "AIR BUSAN",
     cabin: { maxWeight: 7, cage: "하드 24cm 이하 · 소프트 26cm(합 115cm)", note: "국내 20,000~30,000원" },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
-    reservation: "사전예약 필수",
     contact: "1666-3060",
     destinations: [
       "pus",
@@ -309,7 +304,6 @@ const airlineData = [
     badge: "JIN AIR",
     cabin: { maxWeight: 7, cage: "하드 23cm 이하 · 소프트 26cm 이하", note: "국내 20,000원" },
     cargo: { maxWeight: 0, cage: "불가/제한", note: "고객센터 확인" },
-    reservation: "사전예약 필수",
     contact: "1600-6200",
     destinations: [
       "gmp",
@@ -346,7 +340,6 @@ const airlineData = [
     badge: "EASTAR",
     cabin: { maxWeight: 9, cage: "합 100cm 이하 · 높이 23cm(가로 37cm)", note: "국내 30,000원 · 국제선 일부 허용" },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
-    reservation: "사전예약 필수",
     contact: "1544-0080",
     destinations: [
       "gmp",
@@ -406,7 +399,6 @@ const airlineData = [
     badge: "AIR PREMIA",
     cabin: { maxWeight: 7, cage: "가로 37cm · 높이 20cm (소프트 26cm)", note: "미주 200~300USD" },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
-    reservation: "사전예약 필수",
     contact: "1800-2626",
     destinations: ["lax", "ewr", "sfo", "iad", "hnl", "nrt", "bkk", "dad", "hkg"],
     maxCabinWeight: 7,
@@ -419,7 +411,6 @@ const airlineData = [
     badge: "DELTA",
     cabin: { maxWeight: 99, cage: "소프트 45 x 28 x 28cm 권장", note: "무게 제한 없음 · 국제선 $150" },
     cargo: { maxWeight: 0, cage: "불가", note: "일반 위탁 불가 (Delta Cargo 별도)" },
-    reservation: "사전예약 필수",
     contact: "0079-8651-7538",
     destinations: ["atl", "dtw", "sea", "msp", "slc"],
     maxCabinWeight: 99,
@@ -432,7 +423,6 @@ const airlineData = [
     badge: "AIR CANADA",
     cabin: { maxWeight: 10, cage: "소프트 27 x 40 x 55cm", note: "국제선 $270 CAD · 소프트만 허용" },
     cargo: { maxWeight: 45, cage: "IATA 하드 케이지 · 바퀴 제거", note: "위탁 가능 (계절 제한)" },
-    reservation: "사전예약 필수",
     contact: "02-3788-0100",
     destinations: ["yvr", "yyz"],
     maxCabinWeight: 10,
@@ -444,31 +434,21 @@ const airlineData = [
     name: "루프트한자",
     badge: "LUFTHANSA",
     cabin: { maxWeight: 8, cage: "소프트 55 x 40 x 23cm", note: "국제선 110 EUR" },
-    cargo: { maxWeight: 0, cage: "IATA 하드 케이지", note: "위탁 가능 · 요금 200~400 EUR" },
-    reservation: "사전예약 필수",
+    cargo: { maxWeight: 32, cage: "IATA 표준 준수 하드케이지 필수", note: "위탁 가능 · 요금 200~400 EUR" },
     contact: "02-6022-4228",
     destinations: ["fra", "muc"],
     maxCabinWeight: 8,
-    maxCargoWeight: 0,
+    maxCargoWeight: 32,
     breeds: ["small", "medium"],
   },
   {
     id: "vietnam",
     name: "베트남항공",
     badge: "VIETNAM",
-    cabin: { maxWeight: 7, cage: "소프트 45 x 30 x 20cm", note: "국제선 $150 내외" },
+    cabin: { maxWeight: 6, cage: "가로 35cm x 세로 30cm x 높이 20cm 이하", note: "국제선 $150 내외" },
     cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
-    maxCabinWeight: 7,
-    maxCargoWeight: 0,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "airasia",
-    name: "에어아시아",
-    badge: "AIRASIA",
-    cabin: { maxWeight: 7, cage: "소프트 40 x 30 x 20cm", note: "저비용항공 · 노선별 확인" },
-    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
-    maxCabinWeight: 7,
+    contact: "02-757-8920",
+    maxCabinWeight: 6,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
@@ -776,40 +756,34 @@ const travelSpots = [
 
 const dailyThemes = [
   {
-    title: "실내동반 가능! 더위/추위 걱정없는 애견동반 카페",
-    image:
-      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=900&q=80",
-    tags: ["실내동반 가능"],
-  },
-  {
-    title: "애견동반 가능한 축제/전시회",
-    image:
-      "https://images.unsplash.com/photo-1472653431158-6364773b2a56?auto=format&fit=crop&w=900&q=80",
-    tags: ["축제/전시"],
-  },
-  {
-    title: "카공족을 위한 추천 애견동반 카페",
-    image:
-      "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?auto=format&fit=crop&w=900&q=80",
+    title: "날씨 걱정 No! 실내 애견동반 카페",
+    image: "3.thumbnail_notebook.png",
     tags: ["카공족", "실내동반 가능"],
   },
   {
-    title: "아이와 강아지가 함께! 즐길 수 있는 곳",
-    image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+    title: "실내동반 가능! 애견동반 식당",
+    image: "0.thumbnail_food.png",
+    tags: ["실내동반 가능"],
+  },
+  {
+    title: "애견동반 가능한 축제 | 전시회",
+    image: "2.thumbnail_festival.png",
+    tags: ["축제/전시"],
+  },
+  {
+    title: "아이와 강아지가 함께 즐길 수 있는 곳",
+    image: "4.thumbnail_kids.png",
     tags: ["아이와 함께", "천연잔디", "자연과 함께"],
   },
   {
-    title: "꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장",
-    image:
-      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80",
+    title: "꼼꼼한 관리와 천연잔디는 기본!<br/>추천 애견운동장",
+    image: "5.thumbnail_play.png",
     tags: ["오프리쉬 가능", "천연잔디", "자연과 함께"],
   },
   {
-    title: "강아지와 함께 자연을 즐길 수 있는 곳",
-    image:
-      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80",
-    tags: ["천연잔디", "자연과 함께", "오프리쉬 가능"],
+    title: "강아지와 함께 자연 즐기기",
+    image: "6.thumbnail_hiking.png",
+    tags: ["천연잔디", "자연과 함께"],
   },
 ];
 
@@ -909,6 +883,7 @@ function renderAirlines(airlines = currentAirlines) {
           <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Flight rules</p>
           <h2 class="mt-2 text-3xl font-semibold text-deep">항공사별 탑승 규정</h2>
           <p class="mt-2 text-sm text-slate-500">견종 · 나이 · 무게를 선택하면 가능한 항공사를 안내합니다.</p>
+          <p class="mt-2 text-xs text-slate-400">반려동물 탑승 규정은 달라질 수 있으므로, 각 항공사에 사전 문의 바랍니다.</p>
         </div>
         <div class="flex gap-2"></div>
       </div>
@@ -967,6 +942,33 @@ function renderAirlines(airlines = currentAirlines) {
 }
 
 // 검색 결과 페이지 렌더
+function renderCargoBlock(airline) {
+  const cargo = airline?.cargo;
+  const cargoBlocked =
+    !cargo ||
+    !cargo.maxWeight ||
+    cargo.maxWeight <= 0 ||
+    (typeof cargo.cage === "string" && cargo.cage.includes("불가"));
+
+  if (cargoBlocked) {
+    return `
+      <div class="rounded-xl bg-slate-50 p-3">
+        <p class="font-semibold text-deep">화물칸 동반</p>
+        <p class="mt-1">화물칸 동반 불가</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="rounded-xl bg-slate-50 p-3">
+      <p class="font-semibold text-deep">화물칸 동반</p>
+      <p class="mt-1">무게: ${cargo.maxWeight}kg 이하</p>
+      <p class="mt-1">케이지: ${cargo.cage}</p>
+      ${cargo?.note ? `<p class="mt-1 text-xs text-slate-500">${cargo.note}</p>` : ""}
+    </div>
+  `;
+}
+
 function renderResultsPage() {
   const rootEl = document.getElementById("results-root");
   if (!rootEl) return;
@@ -995,6 +997,7 @@ function renderResultsPage() {
           <p class="text-xs uppercase tracking-[0.35em] text-slate-400">Search Results</p>
           <h1 class="mt-2 text-3xl font-semibold text-deep">탑승 가능 항공사</h1>
           <p class="mt-2 text-sm text-slate-500">${breedLabel} · ${weight}kg · ${ageLabel} · ${destinationLabel}</p>
+          <p class="mt-2 text-xs text-slate-400">반려동물 탑승 규정은 달라질 수 있으므로, 각 항공사에 사전 문의 바랍니다.</p>
         </div>
       </div>
 
@@ -1036,15 +1039,9 @@ function renderResultsPage() {
               <p class="font-semibold text-deep">기내 동반</p>
               <p class="mt-1">무게: ${airline.cabin.maxWeight}kg 미만</p>
               <p class="mt-1">케이지: ${airline.cabin.cage}</p>
-              ${airline.reservation ? `<p class="mt-1">사전예약: ${airline.reservation}</p>` : ""}
-              ${airline.contact ? `<p class="mt-1">안내번호: ${airline.contact}</p>` : ""}
+              ${airline.contact ? `<p class="mt-1">사전예약 및 안내: ${airline.contact}</p>` : ""}
             </div>
-            <div class="rounded-xl bg-slate-50 p-3">
-              <p class="font-semibold text-deep">화물칸 동반</p>
-              <p class="mt-1">무게: ${airline.cargo.maxWeight}kg 이하</p>
-              <p class="mt-1">케이지: ${airline.cargo.cage}</p>
-              ${airline.cargo?.note ? `<p class="mt-1 text-xs text-slate-500">${airline.cargo.note}</p>` : ""}
-            </div>
+            ${renderCargoBlock(airline)}
           </div>
         </article>
       `
@@ -1341,15 +1338,9 @@ function setupEligibilityFilter() {
                   <p class="font-semibold text-deep">기내 동반</p>
                   <p class="mt-1">무게: ${airline.cabin.maxWeight}kg 미만</p>
                   <p class="mt-1">케이지: ${airline.cabin.cage}</p>
-                  ${airline.reservation ? `<p class="mt-1">사전예약: ${airline.reservation}</p>` : ""}
-                  ${airline.contact ? `<p class="mt-1">안내번호: ${airline.contact}</p>` : ""}
+                  ${airline.contact ? `<p class="mt-1">사전예약 및 안내: ${airline.contact}</p>` : ""}
                 </div>
-                <div class="rounded-xl bg-slate-50 p-3">
-                  <p class="font-semibold text-deep">화물칸 동반</p>
-                  <p class="mt-1">무게: ${airline.cargo.maxWeight}kg 이하</p>
-                  <p class="mt-1">케이지: ${airline.cargo.cage}</p>
-                  ${airline.cargo?.note ? `<p class="mt-1 text-xs text-slate-500">${airline.cargo.note}</p>` : ""}
-                </div>
+                ${renderCargoBlock(airline)}
               </div>
             </article>
           `
