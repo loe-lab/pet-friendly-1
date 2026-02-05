@@ -396,6 +396,15 @@
           window.location.href = 'detail.html?' + params.toString();
         });
       });
+
+      // 좋아요 아이콘 클릭 시 상태 토글
+      document.querySelectorAll('.theme-card__like-icon').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isSelected = icon.src.includes('selected');
+          icon.src = isSelected ? 'base-icon-heart.svg' : 'base-icon-heart-selected.svg';
+        });
+      });
     </script>
   </body>
 </html>
