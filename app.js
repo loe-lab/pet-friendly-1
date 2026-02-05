@@ -1168,15 +1168,13 @@ function renderDailyPanel(targetEl) {
 
   targetEl.innerHTML = `
     <div class="rounded-[32px] bg-white p-8 text-ink">
-      <div class="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Daily spots</p>
-          <h2 class="mt-2 text-3xl font-semibold text-deep">찐 반려인들이 검증한 추천 장소</h2>
-          <p class="mt-2 text-sm text-slate-500">반려동물과 함께 행복한 일상을 만들어보세요.</p>
-        </div>
-        <div class="tag-filter">
-          ${filterTags.map((tag) => `<button class="tag-chip" data-tag="${tag}">${tag}</button>`).join("")}
-        </div>
+      <div>
+        <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Daily spots</p>
+        <h2 class="mt-2 text-3xl font-semibold text-deep">찐 반려인들이 검증한 추천 장소</h2>
+        <p class="mt-2 text-sm text-slate-500">반려동물과 함께 행복한 일상을 만들어보세요.</p>
+      </div>
+      <div class="tag-filter mt-5">
+        ${filterTags.map((tag) => `<button class="tag-chip" data-tag="${tag}">${tag}</button>`).join("")}
       </div>
       <div id="daily-grid" class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
     </div>
