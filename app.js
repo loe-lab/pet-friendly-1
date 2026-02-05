@@ -1171,8 +1171,8 @@ function renderDailyPanel(targetEl) {
       <div class="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Daily spots</p>
-          <h2 class="mt-2 text-3xl font-semibold text-deep">찐 반려인들이 추천하는 반려동물 동반 장소</h2>
-          <p class="mt-2 text-sm text-slate-500">반려동물과의 행복한 일상을 누려보세요.</p>
+          <h2 class="mt-2 text-3xl font-semibold text-deep">찐 반려인들이 검증한 추천 장소</h2>
+          <p class="mt-2 text-sm text-slate-500">반려동물과 함께 행복한 일상을 만들어보세요.</p>
         </div>
         <div class="tag-filter">
           ${filterTags.map((tag) => `<button class="tag-chip" data-tag="${tag}">${tag}</button>`).join("")}
@@ -1195,6 +1195,7 @@ function renderDailyPanel(targetEl) {
         (place) => `
         <article class="daily-place" data-title="${place.title}" data-image="${place.image}" data-location="${place.location}">
           <div class="daily-place__media">
+            <img class="daily-place__like-icon" src="base-icon-heart.svg" alt="좋아요" />
             <img src="${place.image}" alt="${place.title}" />
           </div>
           <div class="daily-place__body">
@@ -1209,10 +1210,21 @@ function renderDailyPanel(targetEl) {
       )
       .join("");
 
+    // 좋아요 아이콘 클릭 이벤트
+    gridEl.querySelectorAll('.daily-place__like-icon').forEach(icon => {
+      icon.addEventListener('click', (e) => {
+        e.stopPropagation(); // 카드 클릭 이벤트 방지
+        const isSelected = icon.src.includes('selected');
+        icon.src = isSelected ? 'base-icon-heart.svg' : 'base-icon-heart-selected.svg';
+      });
+    });
+
     // 카드 클릭 시 상세페이지로 이동
     gridEl.querySelectorAll('.daily-place').forEach(card => {
       card.style.cursor = 'pointer';
-      card.addEventListener('click', () => {
+      card.addEventListener('click', (e) => {
+        // 좋아요 아이콘 클릭은 제외
+        if (e.target.classList.contains('daily-place__like-icon')) return;
         const title = card.dataset.title;
         const image = card.dataset.image;
         const location = card.dataset.location;
