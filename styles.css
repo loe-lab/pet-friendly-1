@@ -410,8 +410,7 @@ body {
 }
 
 .theme-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(18, 39, 59, 0.12);
+  box-shadow: 0 8px 20px rgba(18, 39, 59, 0.15);
 }
 
 .theme-card img:not(.theme-card__like-icon) {
@@ -559,7 +558,7 @@ body {
 }
 
 .daily-place:hover {
-  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(18, 39, 59, 0.15);
 }
 
 .daily-place:hover img {
