@@ -52,18 +52,18 @@
         <div class="mx-auto flex w-[min(1200px,92%)] items-center justify-between gap-6 py-4">
           <!-- 브랜드 영역: 로고 + 브랜드명 + 슬로건 -->
           <a href="index.html" class="flex items-center gap-3">
-            <img src="Logo.png" alt="데일리펫 로고" class="h-12 w-12 rounded-2xl object-cover" />
             <div class="flex flex-col">
-              <span class="text-sm font-semibold tracking-[0.2em]">데일리펫</span>
+              <span class="text-lg font-semibold tracking-[0.2em] text-brand" style="font-family: 'Ria Sans', sans-serif;">
+                데일리펫
+              </span>
               <span class="text-xs text-slate-500">반려견과 함께하는 프리미엄 라이프스타일 큐레이션</span>
             </div>
           </a>
           <!-- GNB 메뉴: 데스크톱에서만 보임 -->
           <nav class="hidden items-center gap-6 text-sm md:flex">
-            <a href="index.html" class="text-slate-600 hover:text-ink">홈</a>
+            <a href="index.html" class="text-brand font-semibold">어디갈까</a>
             <a href="airline.html" class="text-slate-600 hover:text-ink">항공정보</a>
-            <a href="travel.html" class="text-slate-600 hover:text-ink">추천 여행지</a>
-            <a href="daily.html" class="text-slate-600 hover:text-ink">추천 일상지</a>
+            <a href="daily.html" class="text-slate-600 hover:text-ink">장소 큐레이션</a>
           </nav>
           <!-- 검색 및 액션: 데스크톱에서만 보임 -->
           <div class="hidden items-center gap-3 md:flex">
@@ -87,11 +87,224 @@
         <!-- 히어로 섹션 (JS 렌더): app.js에서 카드/검색 UI 생성 -->
         <section id="hero"></section>
 
+        <!-- 추천 일상 테마 캐로셀 (임시) -->
+        <section class="theme-rows">
+          <div>
+            <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Daily picks</p>
+            <h2 class="mt-2 text-3xl font-semibold text-deep">일상을 함께, 만족도 높은 추천 장소</h2>
+            <p class="mt-2 text-sm text-slate-500">각 주제별로 가로 스와이프가 가능합니다.</p>
+          </div>
+
+          <article class="theme-row">
+            <div class="theme-row__head">
+              <h3>날씨걱정 No! 실내 애견동반 식당</h3>
+              <button class="theme-row__cta">더보기</button>
+            </div>
+            <div class="theme-row__track no-scrollbar">
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="0.thumbnail_food.png" alt="날씨걱정 No! 실내 애견동반 식당" />
+                <div class="theme-card__body">
+                  <h4>따뜻한 조명 실내 다이닝</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="0.thumbnail_food.png" alt="실내 애견동반 식당 추천" />
+                <div class="theme-card__body">
+                  <h4>강아지 동반 테이블 존</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="0.thumbnail_food.png" alt="실내 애견동반 식당 추천" />
+                <div class="theme-card__body">
+                  <h4>반려견 동반 브런치</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="0.thumbnail_food.png" alt="실내 애견동반 식당 추천" />
+                <div class="theme-card__body">
+                  <h4>아늑한 실내 레스토랑</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+              <img src="0.thumbnail_food.png" alt="실내 애견동반 식당 추천" />
+              <div class="theme-card__body">
+                <h4>따뜻한 홈다이닝 스타일</h4>
+              </div>
+            </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+              <img src="0.thumbnail_food.png" alt="실내 애견동반 식당 추천" />
+              <div class="theme-card__body">
+                <h4>예약제 프라이빗 테이블</h4>
+              </div>
+            </div>
+            </div>
+          </article>
+
+          <article class="theme-row">
+            <div class="theme-row__head">
+              <h3>노트북 하기 좋은 실내 애견동반 카페</h3>
+              <button class="theme-row__cta">더보기</button>
+            </div>
+            <div class="theme-row__track no-scrollbar">
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
+                <div class="theme-card__body">
+                  <h4>집중하기 좋은 작업 카페</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
+                <div class="theme-card__body">
+                  <h4>콘센트 많은 공간</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
+                <div class="theme-card__body">
+                  <h4>넓은 테이블 카페</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
+                <div class="theme-card__body">
+                  <h4>창가 뷰 카페</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+              <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
+              <div class="theme-card__body">
+                <h4>장시간 머물기 좋은 카페</h4>
+              </div>
+            </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+              <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
+              <div class="theme-card__body">
+                <h4>조용한 분위기 공간</h4>
+              </div>
+            </div>
+            </div>
+          </article>
+
+          <article class="theme-row">
+            <div class="theme-row__head">
+              <h3>아이와 강아지가 함께 즐길 수 있는 곳</h3>
+              <button class="theme-row__cta">더보기</button>
+            </div>
+            <div class="theme-row__track no-scrollbar">
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
+                <div class="theme-card__body">
+                  <h4>패밀리 산책 코스</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
+                <div class="theme-card__body">
+                  <h4>아이와 반려견 놀이터</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
+                <div class="theme-card__body">
+                  <h4>주말 피크닉 스팟</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
+                <div class="theme-card__body">
+                  <h4>온가족 체험 공간</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+              <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
+              <div class="theme-card__body">
+                <h4>아이 친화적 힐링존</h4>
+              </div>
+            </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+              <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
+              <div class="theme-card__body">
+                <h4>자연 체험형 코스</h4>
+              </div>
+            </div>
+            </div>
+          </article>
+
+          <article class="theme-row">
+            <div class="theme-row__head">
+              <h3>꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장</h3>
+              <button class="theme-row__cta">더보기</button>
+            </div>
+            <div class="theme-row__track no-scrollbar">
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
+                <div class="theme-card__body">
+                  <h4>오프리쉬 플레이존</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
+                <div class="theme-card__body">
+                  <h4>넓은 천연잔디 구장</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
+                <div class="theme-card__body">
+                  <h4>관리 잘 된 데이케어</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
+                <div class="theme-card__body">
+                  <h4>주말 인기 운동장</h4>
+                </div>
+              </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+              <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
+              <div class="theme-card__body">
+                <h4>놀이시설 다양한 공간</h4>
+              </div>
+            </div>
+            <div class="theme-card">
+              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+              <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
+              <div class="theme-card__body">
+                <h4>쾌적한 샤워 시설</h4>
+              </div>
+            </div>
+            </div>
+          </article>
+        </section>
+
         <!-- 추천 일상 테마 캐로셀 (JS 렌더) -->
-        <section id="daily"></section>
+        <section id="daily" class="hidden"></section>
 
         <!-- 추천 여행지 (JS 렌더) -->
-        <section id="airline"></section>
+        <section id="airline" class="hidden"></section>
       </main>
 
       <!-- 푸터: 사이트 하단 정보 -->
@@ -158,5 +371,31 @@
 
     <!-- 앱 스크립트 -->
     <script src="app.js"></script>
+    <script>
+      // 썸네일 카드 클릭 시 상세페이지로 이동
+      document.querySelectorAll('.theme-card').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', (e) => {
+          // 좋아요 아이콘 클릭은 제외
+          if (e.target.classList.contains('theme-card__like-icon')) return;
+          
+          const titleEl = card.querySelector('h4');
+          const imgEl = card.querySelector('img:not(.theme-card__like-icon)');
+          const categoryEl = card.closest('.theme-row')?.querySelector('h3');
+          
+          const title = titleEl ? titleEl.textContent : '';
+          const image = imgEl ? imgEl.src : '';
+          const category = categoryEl ? categoryEl.textContent : '';
+          
+          const params = new URLSearchParams({
+            title: title,
+            image: image,
+            category: category
+          });
+          
+          window.location.href = 'detail.html?' + params.toString();
+        });
+      });
+    </script>
   </body>
 </html>

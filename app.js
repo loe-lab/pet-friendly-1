@@ -113,13 +113,13 @@ const airlineData = [
     badge: "KOREAN AIR",
     cabin: {
       maxWeight: 7,
-      cage: "하드 20cm 이하 · 소프트 26cm (합 115cm)",
-      note: "국내 30,000원 · 국제 200~300USD · SKYPETS",
+      cage: "가로 32cm x 세로 45cm x 높이 19cm (소프트 25cm)",
+      note: "생후 8주 이상 · 국제 200~300USD",
     },
     cargo: {
-      maxWeight: 32,
-      cage: "IATA 하드 케이지 · 32kg 이하 (예외 45kg)",
-      note: "위탁 가능 (IATA 규정)",
+      maxWeight: 45,
+      cage: "3면 합 291cm 이하 · 높이 84cm 이하",
+      note: "생후 16주 이상",
     },
     contact: "1588-2001",
     destinations: [
@@ -166,8 +166,12 @@ const airlineData = [
     id: "asiana",
     name: "아시아나",
     badge: "ASIANA",
-    cabin: { maxWeight: 7, cage: "하드 21cm 이하 · 소프트 26cm (합 115cm)", note: "국내 30,000원 · 좌석 하단 수납" },
-    cargo: { maxWeight: 45, cage: "3면 합 285cm · 높이 84cm", note: "위탁 가능" },
+    cabin: {
+      maxWeight: 7,
+      cage: "가로 32cm x 세로 45cm x 높이 21cm (소프트 26cm)",
+      note: "생후 8주 이상 · 좌석 하단 수납",
+    },
+    cargo: { maxWeight: 45, cage: "3면 합 285cm 이하 · 높이 84cm 이하", note: "생후 16주 이상" },
     contact: "1588-8000",
     destinations: [
       "gmp",
@@ -204,7 +208,11 @@ const airlineData = [
     id: "jeju",
     name: "제주항공",
     badge: "JEJU AIR",
-    cabin: { maxWeight: 9, cage: "하드 23cm(가로 37cm) · 소프트 26cm", note: "국내 25,000원 · 펫패스" },
+    cabin: {
+      maxWeight: 9,
+      cage: "가로 37cm x 세로 23cm x 높이 23cm (소프트 26cm)",
+      note: "생후 8주 이상",
+    },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
     contact: "1599-1500",
     destinations: [
@@ -239,7 +247,11 @@ const airlineData = [
     id: "tway",
     name: "티웨이",
     badge: "T'WAY",
-    cabin: { maxWeight: 9, cage: "하드 23cm(가로 37cm) · 소프트 26cm", note: "국내 30,000원 · t'pet" },
+    cabin: {
+      maxWeight: 9,
+      cage: "가로 37cm x 세로 23cm x 높이 23cm (소프트 26cm)",
+      note: "생후 8주 이상",
+    },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
     contact: "1688-8686",
     destinations: [
@@ -274,7 +286,11 @@ const airlineData = [
     id: "airbusan",
     name: "에어부산",
     badge: "AIR BUSAN",
-    cabin: { maxWeight: 7, cage: "하드 24cm 이하 · 소프트 26cm(합 115cm)", note: "국내 20,000~30,000원" },
+    cabin: {
+      maxWeight: 7,
+      cage: "가로 37cm x 세로 23cm x 높이 24cm (소프트 26cm)",
+      note: "생후 8주 이상",
+    },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
     contact: "1666-3060",
     destinations: [
@@ -302,8 +318,12 @@ const airlineData = [
     id: "jinair",
     name: "진에어",
     badge: "JIN AIR",
-    cabin: { maxWeight: 7, cage: "하드 23cm 이하 · 소프트 26cm 이하", note: "국내 20,000원" },
-    cargo: { maxWeight: 0, cage: "불가/제한", note: "고객센터 확인" },
+    cabin: {
+      maxWeight: 7,
+      cage: "가로 37cm x 세로 23cm x 높이 23cm (소프트 26cm)",
+      note: "생후 8주 이상",
+    },
+    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
     contact: "1600-6200",
     destinations: [
       "gmp",
@@ -338,7 +358,11 @@ const airlineData = [
     id: "eastar",
     name: "이스타항공",
     badge: "EASTAR",
-    cabin: { maxWeight: 9, cage: "합 100cm 이하 · 높이 23cm(가로 37cm)", note: "국내 30,000원 · 국제선 일부 허용" },
+    cabin: {
+      maxWeight: 9,
+      cage: "가로 35cm x 세로 25cm x 높이 23cm (소프트 26cm)",
+      note: "생후 8주 이상",
+    },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
     contact: "1544-0080",
     destinations: [
@@ -367,37 +391,41 @@ const airlineData = [
     id: "airseoul",
     name: "에어서울",
     badge: "AIR SEOUL",
-    cabin: { maxWeight: 7, cage: "40 x 30 x 20cm", note: "기내 좌석 수 제한" },
-    cargo: { maxWeight: 25, cage: "85 x 55 x 65cm", note: "국제선 예약 필수" },
+    cabin: { maxWeight: 7, cage: "가로 37cm x 세로 23cm x 높이 23cm", note: "생후 8주 이상" },
+    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
     maxCabinWeight: 7,
-    maxCargoWeight: 25,
+    maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
     id: "twaye",
     name: "플라이강원",
     badge: "FLY GANGWON",
-    cabin: { maxWeight: 9, cage: "45 x 35 x 25cm", note: "기내 반입 제한" },
-    cargo: { maxWeight: 20, cage: "80 x 50 x 55cm", note: "노선별 확인" },
+    cabin: { maxWeight: 9, cage: "가로 37cm x 세로 23cm x 높이 23cm", note: "생후 8주 이상" },
+    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
     maxCabinWeight: 9,
-    maxCargoWeight: 20,
+    maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
     id: "aerok",
     name: "에어로케이",
     badge: "AERO K",
-    cabin: { maxWeight: 9, cage: "45 x 30 x 20cm", note: "케이지 포함 9kg 미만" },
-    cargo: { maxWeight: 20, cage: "80 x 50 x 55cm", note: "국내선 중심" },
+    cabin: { maxWeight: 9, cage: "가로 37cm x 세로 23cm x 높이 23cm", note: "생후 8주 이상" },
+    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
     maxCabinWeight: 9,
-    maxCargoWeight: 20,
+    maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
     id: "airpremia",
     name: "에어프레미아",
     badge: "AIR PREMIA",
-    cabin: { maxWeight: 7, cage: "가로 37cm · 높이 20cm (소프트 26cm)", note: "미주 200~300USD" },
+    cabin: {
+      maxWeight: 7,
+      cage: "가로 37cm x 세로 23cm x 높이 20cm (소프트 26cm)",
+      note: "생후 8주 이상",
+    },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
     contact: "1800-2626",
     destinations: ["lax", "ewr", "sfo", "iad", "hnl", "nrt", "bkk", "dad", "hkg"],
@@ -409,8 +437,12 @@ const airlineData = [
     id: "delta",
     name: "델타항공",
     badge: "DELTA",
-    cabin: { maxWeight: 99, cage: "소프트 45 x 28 x 28cm 권장", note: "무게 제한 없음 · 국제선 $150" },
-    cargo: { maxWeight: 0, cage: "불가", note: "일반 위탁 불가 (Delta Cargo 별도)" },
+    cabin: {
+      maxWeight: 99,
+      cage: "가로 45cm x 세로 28cm x 높이 28cm 권장",
+      note: "국제선 생후 16주 이상 · 무게 제한 없음",
+    },
+    cargo: { maxWeight: 0, cage: "불가", note: "위탁 수하물 불가 (카고만 가능)" },
     contact: "0079-8651-7538",
     destinations: ["atl", "dtw", "sea", "msp", "slc"],
     maxCabinWeight: 99,
@@ -421,8 +453,12 @@ const airlineData = [
     id: "aircanada",
     name: "에어캐나다",
     badge: "AIR CANADA",
-    cabin: { maxWeight: 10, cage: "소프트 27 x 40 x 55cm", note: "국제선 $270 CAD · 소프트만 허용" },
-    cargo: { maxWeight: 45, cage: "IATA 하드 케이지 · 바퀴 제거", note: "위탁 가능 (계절 제한)" },
+    cabin: {
+      maxWeight: 10,
+      cage: "가로 40cm x 세로 55cm x 높이 21cm (소프트 27cm)",
+      note: "생후 10주 이상",
+    },
+    cargo: { maxWeight: 45, cage: "IATA 하드 케이지", note: "생후 12주 이상" },
     contact: "02-3788-0100",
     destinations: ["yvr", "yyz"],
     maxCabinWeight: 10,
@@ -433,8 +469,12 @@ const airlineData = [
     id: "lufthansa",
     name: "루프트한자",
     badge: "LUFTHANSA",
-    cabin: { maxWeight: 8, cage: "소프트 55 x 40 x 23cm", note: "국제선 110 EUR" },
-    cargo: { maxWeight: 32, cage: "IATA 표준 준수 하드케이지 필수", note: "위탁 가능 · 요금 200~400 EUR" },
+    cabin: {
+      maxWeight: 8,
+      cage: "가로 55cm x 세로 40cm x 높이 23cm",
+      note: "생후 12주 이상",
+    },
+    cargo: { maxWeight: 32, cage: "IATA 표준 준수 하드케이지 필수", note: "위탁 가능" },
     contact: "02-6022-4228",
     destinations: ["fra", "muc"],
     maxCabinWeight: 8,
@@ -445,11 +485,37 @@ const airlineData = [
     id: "vietnam",
     name: "베트남항공",
     badge: "VIETNAM",
-    cabin: { maxWeight: 6, cage: "가로 35cm x 세로 30cm x 높이 20cm 이하", note: "국제선 $150 내외" },
-    cargo: { maxWeight: 0, cage: "-", note: "노선별 확인" },
+    cabin: {
+      maxWeight: 6,
+      cage: "가로 35cm x 세로 30cm x 높이 20cm 이하",
+      note: "생후 10주 이상",
+    },
+    cargo: { maxWeight: 32, cage: "IATA 표준 하드 케이지", note: "생후 10~12주 이상" },
     contact: "02-757-8920",
     maxCabinWeight: 6,
-    maxCargoWeight: 0,
+    maxCargoWeight: 32,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "finnair",
+    name: "핀에어",
+    badge: "FINNAIR",
+    cabin: { maxWeight: 8, cage: "가로 42cm x 세로 30cm x 높이 24cm 이하", note: "생후 12주 이상" },
+    cargo: { maxWeight: 50, cage: "IATA 표준 하드 케이지", note: "위탁 가능" },
+    contact: "02-3455-8000",
+    maxCabinWeight: 8,
+    maxCargoWeight: 50,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "turkish",
+    name: "터키항공",
+    badge: "TURKISH",
+    cabin: { maxWeight: 8, cage: "가로 40cm x 세로 30cm x 높이 23cm 이하", note: "생후 10~12주 이상" },
+    cargo: { maxWeight: 50, cage: "IATA 표준 하드 케이지", note: "위탁 가능" },
+    contact: "02-6022-4270",
+    maxCabinWeight: 8,
+    maxCargoWeight: 50,
     breeds: ["small", "medium"],
   },
 ];
@@ -1069,16 +1135,19 @@ function renderDailyCarousel() {
       </div>
       <div class="daily-banners mt-6">
         ${dailyThemes
-          .map(
-            (theme) => `
+          .map((theme) => {
+            const imageSrc = theme.image.startsWith("http")
+              ? theme.image
+              : `${theme.image}?v=2026`;
+            return `
           <article class="daily-banner">
-            <img src="${theme.image}" alt="${theme.title}" />
+            <img src="${imageSrc}" alt="${theme.title}" />
             <div class="daily-banner__overlay">
               <h3>${theme.title}</h3>
             </div>
           </article>
-        `
-          )
+        `;
+          })
           .join("")}
       </div>
     </div>
@@ -1098,12 +1167,12 @@ function renderDailyPanel(targetEl) {
   ];
 
   targetEl.innerHTML = `
-    <div class="rounded-[32px] bg-white p-8 text-ink shadow-card">
+    <div class="rounded-[32px] bg-white p-8 text-ink">
       <div class="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Daily spots</p>
-          <h2 class="mt-2 text-3xl font-semibold text-deep">추천 일상지</h2>
-          <p class="mt-2 text-sm text-slate-500">필터를 선택하면 장소가 정렬됩니다.</p>
+          <h2 class="mt-2 text-3xl font-semibold text-deep">찐 반려인들이 추천하는 반려동물 동반 장소</h2>
+          <p class="mt-2 text-sm text-slate-500">반려동물과의 행복한 일상을 누려보세요.</p>
         </div>
         <div class="tag-filter">
           ${filterTags.map((tag) => `<button class="tag-chip" data-tag="${tag}">${tag}</button>`).join("")}
@@ -1124,7 +1193,7 @@ function renderDailyPanel(targetEl) {
     gridEl.innerHTML = filtered
       .map(
         (place) => `
-        <article class="daily-place">
+        <article class="daily-place" data-title="${place.title}" data-image="${place.image}" data-location="${place.location}">
           <div class="daily-place__media">
             <img src="${place.image}" alt="${place.title}" />
           </div>
@@ -1139,6 +1208,18 @@ function renderDailyPanel(targetEl) {
       `
       )
       .join("");
+
+    // 카드 클릭 시 상세페이지로 이동
+    gridEl.querySelectorAll('.daily-place').forEach(card => {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', () => {
+        const title = card.dataset.title;
+        const image = card.dataset.image;
+        const location = card.dataset.location;
+        const params = new URLSearchParams({ title, image, category: location });
+        window.location.href = 'detail.html?' + params.toString();
+      });
+    });
   }
 
   tags.forEach((tagBtn) => {
@@ -1442,6 +1523,23 @@ function setupHeroSearch() {
   });
 }
 
+function setupThemeRowScroll() {
+  const tracks = document.querySelectorAll(".theme-row__track");
+  if (!tracks.length) return;
+  tracks.forEach((track) => {
+    track.addEventListener(
+      "wheel",
+      (event) => {
+        if (Math.abs(event.deltaX) < Math.abs(event.deltaY)) {
+          event.preventDefault();
+          track.scrollLeft += event.deltaY;
+        }
+      },
+      { passive: false }
+    );
+  });
+}
+
 // (옵션) 외부 API에서 항공사 데이터 가져오기
 async function fetchAirlinesFromApi() {
   try {
@@ -1653,6 +1751,7 @@ if (airlineEl && pageType === "airline") {
   setupBottomSheet();
   setupShopFilters();
 }
+setupThemeRowScroll();
 if (airlineEl && pageType !== "airline" && pageType !== "results") {
   setupTravelTabs();
 }
