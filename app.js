@@ -856,59 +856,99 @@ const dailyThemes = [
 const dailyPlaces = [
   {
     title: "스테이포레스트 카페",
-    location: "서울 · 성수",
-    tags: ["실내동반 가능", "카공족"],
+    location: "서울 · 강남",
+    region: "서울",
+    tags: ["실내동반 가능", "가족촉"],
     image:
       "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "햇살 실내 펫카페",
-    location: "서울 · 합정",
-    tags: ["실내동반 가능", "카공족"],
+    location: "서울 · 송파",
+    region: "서울",
+    tags: ["실내동반 가능", "가족촉"],
     image:
       "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "펫프렌들리 아트페어",
-    location: "서울 · 용산",
+    location: "서울 · 마포",
+    region: "서울",
     tags: ["축제/전시", "아이와 함께"],
     image:
       "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "아이와 함께 놀이터 파크",
-    location: "경기 · 하남",
-    tags: ["아이와 함께", "천연잔디", "자연과 함께"],
+    location: "경기 · 수원",
+    region: "경기남부",
+    tags: ["아이와 함께", "천연잔디", "자연체험"],
     image:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "천연잔디 애견운동장",
-    location: "경기 · 가평",
-    tags: ["천연잔디", "자연과 함께", "오프리쉬 가능"],
+    location: "경기 · 고양",
+    region: "경기북부",
+    tags: ["천연잔디", "자연체험", "오프리쉬 가능"],
     image:
       "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "오프리쉬 펫런 파크",
-    location: "강원 · 강릉",
-    tags: ["자연과 함께", "천연잔디", "오프리쉬 가능"],
+    location: "경기 · 광주",
+    region: "경기남부",
+    tags: ["자연체험", "오프리쉬 가능"],
     image:
       "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "루프탑 펫존 카페",
     location: "부산 · 해운대",
-    tags: ["카공족", "실내동반 가능"],
+    region: "부산",
+    tags: ["가족촉", "실내동반 가능"],
     image:
       "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "리빙 전시 & 펫마켓",
-    location: "대전 · 유성",
+    location: "서울 · 목동",
+    region: "서울",
     tags: ["실내동반 가능", "축제/전시", "아이와 함께"],
     image:
       "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "자연 힐링 캠핑장",
+    location: "경기 · 가평",
+    region: "경기북부",
+    tags: ["캠핑장", "자연체험"],
+    image:
+      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "별빛 글램핑 파크",
+    location: "춘천",
+    region: "춘천",
+    tags: ["캠핑장", "자연체험", "오프리쉬 가능"],
+    image:
+      "https://images.unsplash.com/photo-1487730116445-4e6b5b74a6e4?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "제주 펫프렌들리 카페",
+    location: "제주 · 애월",
+    region: "제주",
+    tags: ["실내동반 가능", "자연체험"],
+    image:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "남양주 힐링 캠프",
+    location: "남양주",
+    region: "남양주",
+    tags: ["캠핑장", "자연체험", "천연잔디"],
+    image:
+      "https://images.unsplash.com/photo-1533873984035-25970ab07461?auto=format&fit=crop&w=900&q=80",
   },
 ];
 
@@ -1159,11 +1199,28 @@ function renderDailyPanel(targetEl) {
   const filterTags = [
     "실내동반 가능",
     "오프리쉬 가능",
-    "카공족",
+    "가족촉",
     "아이와 함께",
     "천연잔디",
-    "자연과 함께",
+    "자연체험",
+    "캠핑장",
     "축제/전시",
+  ];
+  const regionOptions = [
+    "전체",
+    "서울",
+    "경기북부",
+    "경기남부",
+    "인천",
+    "남양주",
+    "여주",
+    "춘천",
+    "대구",
+    "대전",
+    "목포",
+    "부산",
+    "제주",
+    "해외",
   ];
 
   targetEl.innerHTML = `
@@ -1175,6 +1232,11 @@ function renderDailyPanel(targetEl) {
       </div>
       <div class="tag-filter mt-5">
         ${filterTags.map((tag) => `<button class="tag-chip" data-tag="${tag}">${tag}</button>`).join("")}
+        <div class="relative inline-block">
+          <select id="region-filter" class="tag-chip-select rounded-full border border-line bg-white px-4 py-2 text-sm cursor-pointer appearance-none pr-8">
+            ${regionOptions.map((region) => `<option value="${region}">${region === "전체" ? "지역 ▼" : region}</option>`).join("")}
+          </select>
+        </div>
       </div>
       <div id="daily-grid" class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
     </div>
@@ -1182,12 +1244,23 @@ function renderDailyPanel(targetEl) {
 
   const gridEl = targetEl.querySelector("#daily-grid");
   const tags = Array.from(targetEl.querySelectorAll(".tag-chip"));
+  const regionSelect = targetEl.querySelector("#region-filter");
   const activeTags = new Set();
+  let activeRegion = "전체";
 
   function renderDailyGrid() {
-    const filtered = activeTags.size
-      ? dailyPlaces.filter((place) => [...activeTags].every((tag) => place.tags.includes(tag)))
-      : dailyPlaces;
+    let filtered = dailyPlaces;
+    
+    // 태그 필터링
+    if (activeTags.size) {
+      filtered = filtered.filter((place) => [...activeTags].every((tag) => place.tags.includes(tag)));
+    }
+    
+    // 지역 필터링
+    if (activeRegion && activeRegion !== "전체") {
+      filtered = filtered.filter((place) => place.region === activeRegion);
+    }
+    
     gridEl.innerHTML = filtered
       .map(
         (place) => `
@@ -1247,6 +1320,14 @@ function renderDailyPanel(targetEl) {
       renderDailyGrid();
     });
   });
+
+  // 지역 필터 이벤트
+  if (regionSelect) {
+    regionSelect.addEventListener("change", (e) => {
+      activeRegion = e.target.value;
+      renderDailyGrid();
+    });
+  }
 
   renderDailyGrid();
 }
@@ -1744,12 +1825,13 @@ function setupShopFilters() {
 // ---------------------------
 // Boot: 페이지 로드 시 실행 순서
 // ---------------------------
-if (heroEl) renderHero();
+// 히어로는 airline 페이지에서만 렌더링
+if (heroEl && pageType === "airline") renderHero();
 if (dailyEl) renderDailyCarousel();
 if (airlineEl) renderAirlines();
 if (mobileNavEl) renderMobileNav();
 
-if (heroEl) {
+if (heroEl && pageType === "airline") {
   setupCountdown();
   setupHeroSearch();
 }

@@ -62,8 +62,8 @@
           <!-- GNB 메뉴: 데스크톱에서만 보임 -->
           <nav class="hidden items-center gap-6 text-sm md:flex">
             <a href="index.html" class="text-brand font-semibold">어디갈까</a>
-            <a href="airline.html" class="text-slate-600 hover:text-ink">항공정보</a>
-            <a href="daily.html" class="text-slate-600 hover:text-ink">행복한 일상</a>
+            <a href="airline.html" class="text-slate-600 hover:text-ink">비행기 타볼까</a>
+            <a href="daily.html" class="text-slate-600 hover:text-ink">일상을 함께해</a>
           </nav>
           <!-- 검색 및 액션: 데스크톱에서만 보임 -->
           <div class="hidden items-center gap-3 md:flex">
@@ -84,218 +84,305 @@
             class="relative z-10 w-full max-w-[900px] md:max-w-[1000px]"
           />
         </figure>
-        <!-- 히어로 섹션 (JS 렌더): app.js에서 카드/검색 UI 생성 -->
-        <section id="hero"></section>
+        <!-- 히어로 섹션 숨김 처리 -->
+        <section id="hero" class="hidden"></section>
+        
+        <!-- 와이드 배너 캐로셀 -->
+        <section id="banner-carousel" class="mb-10">
+          <div class="relative overflow-hidden rounded-2xl">
+            <div id="banner-slides" class="flex transition-transform duration-500">
+              <div class="banner-slide min-w-full">
+                <div class="relative h-[300px] bg-cover bg-center rounded-2xl" style="background-image: url('banner1.jpg')">
+                  <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl"></div>
+                  <div class="absolute inset-0 flex flex-col justify-center px-10 text-white">
+                    <p class="text-sm tracking-wider mb-2">LET'S TRAVEL!</p>
+                    <h2 class="text-3xl font-bold mb-2">찾았다!<br>나만의 자유 아지트</h2>
+                    <p class="text-sm opacity-80">우리집 아이와 함께, 새로운 여행지!</p>
+                  </div>
+                </div>
+              </div>
+              <div class="banner-slide min-w-full">
+                <div class="relative h-[300px] bg-cover bg-center rounded-2xl" style="background-image: url('banner2.jpg')">
+                  <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl"></div>
+                  <div class="absolute inset-0 flex flex-col justify-center px-10 text-white">
+                    <p class="text-sm tracking-wider mb-2">DAILY PET</p>
+                    <h2 class="text-3xl font-bold mb-2">반려동물과 함께하는<br>특별한 일상</h2>
+                    <p class="text-sm opacity-80">어디든 함께라면 행복해요</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 인디케이터 -->
+            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              <button class="banner-dot w-2 h-2 rounded-full bg-white opacity-100" data-index="0"></button>
+              <button class="banner-dot w-2 h-2 rounded-full bg-white opacity-50" data-index="1"></button>
+            </div>
+            <!-- 화살표 -->
+            <button id="banner-prev" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 flex items-center justify-center shadow-lg hover:bg-white transition">
+              <span class="material-icons text-gray-700">chevron_left</span>
+            </button>
+            <button id="banner-next" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 flex items-center justify-center shadow-lg hover:bg-white transition">
+              <span class="material-icons text-gray-700">chevron_right</span>
+            </button>
+          </div>
+        </section>
 
-        <!-- 추천 일상 테마 캐로셀 (임시) -->
+        <!-- 데일리펫 Pick! 베스트 장소 -->
         <section class="theme-rows">
           <div>
             <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Daily picks</p>
-            <h2 class="mt-2 text-3xl font-semibold text-deep">데일리펫이 엄선한 베스트 추천장소</h2>
+            <h2 class="mt-2 text-3xl font-semibold text-deep">데일리펫 Pick! 베스트 장소</h2>
             <p class="mt-2 text-sm text-slate-500">눈치 보지 않고, 마음 편히 함께해요</p>
           </div>
 
+          <!-- 좋아요 TOP 10 장소 -->
           <article class="theme-row">
+            <div class="theme-row__head">
+              <h3>좋아요 TOP 10 장소</h3>
+              <button class="theme-row__cta">더보기</button>
+            </div>
+            <div class="theme-row__track no-scrollbar">
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="0.thumbnail_food.png" alt="스테이포레스트 카페" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">서울 · 강남</p>
+                  <h4>스테이포레스트 카페</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">실내동반 가능</span>
+                    <span class="theme-card__tag">가족촉</span>
+                  </div>
+                </div>
+              </div>
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="3.thumbnail_notebook.png" alt="햇살 실내 펫카페" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">서울 · 송파</p>
+                  <h4>햇살 실내 펫카페</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">실내동반 가능</span>
+                    <span class="theme-card__tag">가족촉</span>
+                  </div>
+                </div>
+              </div>
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="4.thumbnail_kids.png" alt="펫프렌들리 아트페어" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">서울 · 마포</p>
+                  <h4>펫프렌들리 아트페어</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">축제/전시</span>
+                    <span class="theme-card__tag">아이와 함께</span>
+                  </div>
+                </div>
+              </div>
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="5.thumbnail_play.png" alt="아이와 함께 놀이터 파크" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">경기 · 수원</p>
+                  <h4>아이와 함께 놀이터 파크</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">아이와 함께</span>
+                    <span class="theme-card__tag">천연잔디</span>
+                    <span class="theme-card__tag">자연과 함께</span>
+                  </div>
+                </div>
+              </div>
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="0.thumbnail_food.png" alt="천연잔디 애견운동장" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">경기 · 고양</p>
+                  <h4>천연잔디 애견운동장</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">천연잔디</span>
+                    <span class="theme-card__tag">자연과 함께</span>
+                    <span class="theme-card__tag">오프리쉬 가능</span>
+                  </div>
+                </div>
+              </div>
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="3.thumbnail_notebook.png" alt="오프리쉬 펫런 파크" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">경기 · 광주</p>
+                  <h4>오프리쉬 펫런 파크</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">자연과 함께</span>
+                    <span class="theme-card__tag">오프리쉬 가능</span>
+                  </div>
+                </div>
+              </div>
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="4.thumbnail_kids.png" alt="루프탑 펫존 카페" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">부산 · 해운대</p>
+                  <h4>루프탑 펫존 카페</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">가족촉</span>
+                    <span class="theme-card__tag">실내동반 가능</span>
+                  </div>
+                </div>
+              </div>
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="5.thumbnail_play.png" alt="리빙 전시 & 펫마켓" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">서울 · 목동</p>
+                  <h4>리빙 전시 & 펫마켓</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">실내동반 가능</span>
+                    <span class="theme-card__tag">축제/전시</span>
+                    <span class="theme-card__tag">아이와 함께</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 신규 애견동반 장소 -->
+          <article class="theme-row">
+            <div class="theme-row__head">
+              <h3>신규 애견동반 장소</h3>
+              <button class="theme-row__cta">더보기</button>
+            </div>
+            <div class="theme-row__track no-scrollbar">
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="0.thumbnail_food.png" alt="나이스펫 카페" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">서울 · 강남</p>
+                  <h4>나이스펫 카페</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">실내동반 가능</span>
+                    <span class="theme-card__tag">가족촉</span>
+                  </div>
+                </div>
+              </div>
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="3.thumbnail_notebook.png" alt="펫프렌들리 브런치" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">서울 · 성수</p>
+                  <h4>펫프렌들리 브런치</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">실내동반 가능</span>
+                  </div>
+                </div>
+              </div>
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="4.thumbnail_kids.png" alt="자연 힐링 캠핑장" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">경기 · 가평</p>
+                  <h4>자연 힐링 캠핑장</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">캠핑장</span>
+                    <span class="theme-card__tag">자연체험</span>
+                  </div>
+                </div>
+              </div>
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="5.thumbnail_play.png" alt="그린필드 운동장" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">경기 · 용인</p>
+                  <h4>그린필드 운동장</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">천연잔디</span>
+                    <span class="theme-card__tag">오프리쉬 가능</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 날씨걱정 No! 실내 애견동반 식당 (숨김 처리) -->
+          <article class="theme-row hidden">
             <div class="theme-row__head">
               <h3>날씨걱정 No! 실내 애견동반 식당</h3>
               <button class="theme-row__cta">더보기</button>
             </div>
             <div class="theme-row__track no-scrollbar">
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="0.thumbnail_food.png" alt="날씨걱정 No! 실내 애견동반 식당" />
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="0.thumbnail_food.png" alt="실내 애견동반 식당" />
                 <div class="theme-card__body">
+                  <p class="theme-card__location">서울 · 강남</p>
                   <h4>따뜻한 조명 실내 다이닝</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">실내동반 가능</span>
+                  </div>
                 </div>
               </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="0.thumbnail_food.png" alt="실내 애견동반 식당 추천" />
-                <div class="theme-card__body">
-                  <h4>강아지 동반 테이블 존</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="0.thumbnail_food.png" alt="실내 애견동반 식당 추천" />
-                <div class="theme-card__body">
-                  <h4>반려견 동반 브런치</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="0.thumbnail_food.png" alt="실내 애견동반 식당 추천" />
-                <div class="theme-card__body">
-                  <h4>아늑한 실내 레스토랑</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-              <img src="0.thumbnail_food.png" alt="실내 애견동반 식당 추천" />
-              <div class="theme-card__body">
-                <h4>따뜻한 홈다이닝 스타일</h4>
-              </div>
-            </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-              <img src="0.thumbnail_food.png" alt="실내 애견동반 식당 추천" />
-              <div class="theme-card__body">
-                <h4>예약제 프라이빗 테이블</h4>
-              </div>
-            </div>
             </div>
           </article>
 
-          <article class="theme-row">
+          <!-- 노트북 하기 좋은 실내 애견동반 카페 (숨김 처리) -->
+          <article class="theme-row hidden">
             <div class="theme-row__head">
               <h3>노트북 하기 좋은 실내 애견동반 카페</h3>
               <button class="theme-row__cta">더보기</button>
             </div>
             <div class="theme-row__track no-scrollbar">
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="3.thumbnail_notebook.png" alt="노트북 카페" />
                 <div class="theme-card__body">
+                  <p class="theme-card__location">서울 · 마포</p>
                   <h4>집중하기 좋은 작업 카페</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">실내동반 가능</span>
+                  </div>
                 </div>
               </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
-                <div class="theme-card__body">
-                  <h4>콘센트 많은 공간</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
-                <div class="theme-card__body">
-                  <h4>넓은 테이블 카페</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
-                <div class="theme-card__body">
-                  <h4>창가 뷰 카페</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-              <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
-              <div class="theme-card__body">
-                <h4>장시간 머물기 좋은 카페</h4>
-              </div>
-            </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-              <img src="3.thumbnail_notebook.png" alt="노트북 하기 좋은 실내 애견동반 카페" />
-              <div class="theme-card__body">
-                <h4>조용한 분위기 공간</h4>
-              </div>
-            </div>
             </div>
           </article>
 
-          <article class="theme-row">
+          <!-- 아이와 강아지가 함께 즐길 수 있는 곳 (숨김 처리) -->
+          <article class="theme-row hidden">
             <div class="theme-row__head">
               <h3>아이와 강아지가 함께 즐길 수 있는 곳</h3>
               <button class="theme-row__cta">더보기</button>
             </div>
             <div class="theme-row__track no-scrollbar">
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="4.thumbnail_kids.png" alt="아이와 함께" />
                 <div class="theme-card__body">
+                  <p class="theme-card__location">경기 · 수원</p>
                   <h4>패밀리 산책 코스</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">아이와 함께</span>
+                  </div>
                 </div>
               </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
-                <div class="theme-card__body">
-                  <h4>아이와 반려견 놀이터</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
-                <div class="theme-card__body">
-                  <h4>주말 피크닉 스팟</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
-                <div class="theme-card__body">
-                  <h4>온가족 체험 공간</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-              <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
-              <div class="theme-card__body">
-                <h4>아이 친화적 힐링존</h4>
-              </div>
-            </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-              <img src="4.thumbnail_kids.png" alt="아이와 강아지가 함께 즐길 수 있는 곳" />
-              <div class="theme-card__body">
-                <h4>자연 체험형 코스</h4>
-              </div>
-            </div>
             </div>
           </article>
 
-          <article class="theme-row">
+          <!-- 꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장 (숨김 처리) -->
+          <article class="theme-row hidden">
             <div class="theme-row__head">
               <h3>꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장</h3>
               <button class="theme-row__cta">더보기</button>
             </div>
             <div class="theme-row__track no-scrollbar">
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
+              <div class="theme-card">
+                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+                <img src="5.thumbnail_play.png" alt="애견운동장" />
                 <div class="theme-card__body">
+                  <p class="theme-card__location">경기 · 고양</p>
                   <h4>오프리쉬 플레이존</h4>
+                  <div class="theme-card__tags">
+                    <span class="theme-card__tag">천연잔디</span>
+                    <span class="theme-card__tag">오프리쉬 가능</span>
+                  </div>
                 </div>
               </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
-                <div class="theme-card__body">
-                  <h4>넓은 천연잔디 구장</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
-                <div class="theme-card__body">
-                  <h4>관리 잘 된 데이케어</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
-                <div class="theme-card__body">
-                  <h4>주말 인기 운동장</h4>
-                </div>
-              </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-              <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
-              <div class="theme-card__body">
-                <h4>놀이시설 다양한 공간</h4>
-              </div>
-            </div>
-            <div class="theme-card">
-              <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-              <img src="5.thumbnail_play.png" alt="꼼꼼한 관리와 천연잔디는 기본! 추천 애견운동장" />
-              <div class="theme-card__body">
-                <h4>쾌적한 샤워 시설</h4>
-              </div>
-            </div>
             </div>
           </article>
         </section>
@@ -405,6 +492,35 @@
           icon.src = isSelected ? 'base-icon-heart.svg' : 'base-icon-heart-selected.svg';
         });
       });
+
+      // 배너 캐로셀
+      (function() {
+        const slides = document.getElementById('banner-slides');
+        const dots = document.querySelectorAll('.banner-dot');
+        const prevBtn = document.getElementById('banner-prev');
+        const nextBtn = document.getElementById('banner-next');
+        let currentIndex = 0;
+        const totalSlides = 2;
+
+        function goToSlide(index) {
+          if (index < 0) index = totalSlides - 1;
+          if (index >= totalSlides) index = 0;
+          currentIndex = index;
+          slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+          dots.forEach((dot, i) => {
+            dot.style.opacity = i === currentIndex ? '1' : '0.5';
+          });
+        }
+
+        prevBtn?.addEventListener('click', () => goToSlide(currentIndex - 1));
+        nextBtn?.addEventListener('click', () => goToSlide(currentIndex + 1));
+        dots.forEach(dot => {
+          dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
+        });
+
+        // 자동 슬라이드 (5초)
+        setInterval(() => goToSlide(currentIndex + 1), 5000);
+      })();
     </script>
   </body>
 </html>
