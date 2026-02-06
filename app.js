@@ -681,39 +681,42 @@ function renderHero() {
     <div class="hero-stage shadow-soft" style="background-image:url('${heroSlides[0].image}')">
       <div class="relative z-10 flex h-full flex-col justify-start gap-6 px-8 py-[50px] text-ink">
         <span class="hero-tag inline-flex w-fit max-w-[1136px] items-center gap-2 rounded-full bg-white/80 px-4 py-1 text-[10px] uppercase tracking-[0.35em] text-deep">
-          DAILY PET CURATION
+          FLIGHT RULES
         </span>
         <div>
-          <h1 class="hero-title text-3xl font-semibold md:text-4xl">${heroSlides[0].title}</h1>
-          <p class="mt-2 max-w-xl text-sm text-slate-600">${heroSlides[0].subtitle}</p>
+          <h1 class="hero-title text-3xl font-semibold md:text-4xl">항공사별 탑승 규정</h1>
+          <p class="mt-2 max-w-xl text-sm text-slate-600">견종 · 나이 · 무게를 선택하면 가능한 항공사를 안내합니다.</p>
         </div>
-        <div class="mx-auto flex w-full flex-wrap items-center justify-center gap-3 rounded-2xl bg-white/90 px-4 py-4 text-ink">
-          <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
-            출발지
-            <select id="hero-departure" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
-              <option value="icn">인천 (ICN)</option>
-              <option value="gmp">김포 (GMP)</option>
-              <option value="pus">부산 (PUS)</option>
-              <option value="cju">제주 (CJU)</option>
-              <option value="tae">대구 (TAE)</option>
-            </select>
-          </label>
-          <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
-            도착지
-            <select id="hero-destination" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
-              ${destinationOptionsMarkup}
-            </select>
-          </label>
-          <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
-            몸무게(기내탑승 기준)
-            <select id="hero-weight" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
-              <option value="5">5kg 이하</option>
-              <option value="7">7kg 이하</option>
-              <option value="9">9kg 이하</option>
-              <option value="12">12kg 이하</option>
-              <option value="20">20kg 이하</option>
-            </select>
-          </label>
+        <div class="mx-auto flex w-full flex-col gap-3 rounded-2xl bg-white/90 px-4 py-4 text-ink">
+          <div class="flex flex-wrap items-center justify-center gap-3">
+            <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
+              출발지
+              <select id="hero-departure" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
+                <option value="icn">인천 (ICN)</option>
+                <option value="gmp">김포 (GMP)</option>
+                <option value="pus">부산 (PUS)</option>
+                <option value="cju">제주 (CJU)</option>
+                <option value="tae">대구 (TAE)</option>
+              </select>
+            </label>
+            <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
+              도착지
+              <select id="hero-destination" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
+                ${destinationOptionsMarkup}
+              </select>
+            </label>
+            <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
+              몸무게(기내탑승 기준)
+              <select id="hero-weight" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
+                <option value="5">5kg 이하</option>
+                <option value="7">7kg 이하</option>
+                <option value="9">9kg 이하</option>
+                <option value="12">12kg 이하</option>
+                <option value="20">20kg 이하</option>
+              </select>
+            </label>
+          </div>
+          <p class="text-center text-xs text-slate-400">반려동물 탑승 규정은 달라질 수 있으므로, 각 항공사에 사전 문의 바랍니다.</p>
         </div>
         <div class="flex w-full flex-wrap justify-center gap-3">
           <button id="hero-search" class="float-cta rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-soft">
@@ -858,7 +861,8 @@ const dailyPlaces = [
     title: "스테이포레스트 카페",
     location: "서울 · 강남",
     region: "서울",
-    tags: ["실내동반 가능", "가족촉"],
+    category: "카페",
+    tags: ["실내동반 가능", "카공족"],
     image:
       "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=900&q=80",
   },
@@ -866,7 +870,8 @@ const dailyPlaces = [
     title: "햇살 실내 펫카페",
     location: "서울 · 송파",
     region: "서울",
-    tags: ["실내동반 가능", "가족촉"],
+    category: "카페",
+    tags: ["실내동반 가능", "카공족"],
     image:
       "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80",
   },
@@ -874,6 +879,7 @@ const dailyPlaces = [
     title: "펫프렌들리 아트페어",
     location: "서울 · 마포",
     region: "서울",
+    category: "카페",
     tags: ["축제/전시", "아이와 함께"],
     image:
       "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80",
@@ -882,6 +888,7 @@ const dailyPlaces = [
     title: "아이와 함께 놀이터 파크",
     location: "경기 · 수원",
     region: "경기남부",
+    category: "리조트/펜션",
     tags: ["아이와 함께", "천연잔디", "자연체험"],
     image:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
@@ -890,6 +897,7 @@ const dailyPlaces = [
     title: "천연잔디 애견운동장",
     location: "경기 · 고양",
     region: "경기북부",
+    category: "리조트/펜션",
     tags: ["천연잔디", "자연체험", "오프리쉬 가능"],
     image:
       "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80",
@@ -898,6 +906,7 @@ const dailyPlaces = [
     title: "오프리쉬 펫런 파크",
     location: "경기 · 광주",
     region: "경기남부",
+    category: "리조트/펜션",
     tags: ["자연체험", "오프리쉬 가능"],
     image:
       "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80",
@@ -906,7 +915,8 @@ const dailyPlaces = [
     title: "루프탑 펫존 카페",
     location: "부산 · 해운대",
     region: "부산",
-    tags: ["가족촉", "실내동반 가능"],
+    category: "카페",
+    tags: ["카공족", "실내동반 가능"],
     image:
       "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
   },
@@ -914,6 +924,7 @@ const dailyPlaces = [
     title: "리빙 전시 & 펫마켓",
     location: "서울 · 목동",
     region: "서울",
+    category: "카페",
     tags: ["실내동반 가능", "축제/전시", "아이와 함께"],
     image:
       "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
@@ -922,6 +933,7 @@ const dailyPlaces = [
     title: "자연 힐링 캠핑장",
     location: "경기 · 가평",
     region: "경기북부",
+    category: "리조트/펜션",
     tags: ["캠핑장", "자연체험"],
     image:
       "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=900&q=80",
@@ -930,6 +942,7 @@ const dailyPlaces = [
     title: "별빛 글램핑 파크",
     location: "춘천",
     region: "춘천",
+    category: "리조트/펜션",
     tags: ["캠핑장", "자연체험", "오프리쉬 가능"],
     image:
       "https://images.unsplash.com/photo-1487730116445-4e6b5b74a6e4?auto=format&fit=crop&w=900&q=80",
@@ -938,6 +951,7 @@ const dailyPlaces = [
     title: "제주 펫프렌들리 카페",
     location: "제주 · 애월",
     region: "제주",
+    category: "카페",
     tags: ["실내동반 가능", "자연체험"],
     image:
       "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80",
@@ -946,9 +960,28 @@ const dailyPlaces = [
     title: "남양주 힐링 캠프",
     location: "남양주",
     region: "남양주",
+    category: "리조트/펜션",
     tags: ["캠핑장", "자연체험", "천연잔디"],
     image:
       "https://images.unsplash.com/photo-1533873984035-25970ab07461?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "펫프렌들리 브런치 레스토랑",
+    location: "서울 · 성수",
+    region: "서울",
+    category: "식당",
+    tags: ["실내동반 가능", "아이와 함께"],
+    image:
+      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "가든 테라스 식당",
+    location: "경기 · 용인",
+    region: "경기남부",
+    category: "식당",
+    tags: ["실내동반 가능", "자연체험"],
+    image:
+      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=900&q=80",
   },
 ];
 
@@ -958,8 +991,8 @@ function renderAirlines(airlines = currentAirlines) {
 
   if (pageType !== "airline") {
     airlineEl.innerHTML = `
-      <!-- Travel recommendations -->
-      <div class="rounded-[32px] border border-line bg-white p-8 text-ink shadow-card" id="shopping">
+      <!-- Travel recommendations (숨김 처리) -->
+      <div class="hidden rounded-[32px] border border-line bg-white p-8 text-ink shadow-card" id="shopping">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Recommended</p>
@@ -982,8 +1015,8 @@ function renderAirlines(airlines = currentAirlines) {
   }
 
   airlineEl.innerHTML = `
-    <!-- Airline + Shopping section: 규정 + 쇼핑 -->
-    <div class="rounded-[32px] border border-line bg-white p-8 text-ink shadow-card" id="shopping">
+    <!-- Airline + Shopping section: 규정 + 쇼핑 (숨김 처리) -->
+    <div class="hidden rounded-[32px] border border-line bg-white p-8 text-ink shadow-card" id="shopping">
       <div class="flex flex-wrap items-start justify-between gap-6">
         <div>
           <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Flight rules</p>
@@ -1199,12 +1232,19 @@ function renderDailyPanel(targetEl) {
   const filterTags = [
     "실내동반 가능",
     "오프리쉬 가능",
-    "가족촉",
+    "카공족",
     "아이와 함께",
     "천연잔디",
     "자연체험",
     "캠핑장",
     "축제/전시",
+  ];
+  const categoryOptions = [
+    "전체",
+    "카페",
+    "호텔",
+    "리조트/펜션",
+    "식당",
   ];
   const regionOptions = [
     "전체",
@@ -1231,12 +1271,19 @@ function renderDailyPanel(targetEl) {
         <p class="mt-2 text-sm text-slate-500">반려동물과 함께 행복한 일상을 만들어보세요.</p>
       </div>
       <div class="tag-filter mt-5">
-        ${filterTags.map((tag) => `<button class="tag-chip" data-tag="${tag}">${tag}</button>`).join("")}
-        <div class="relative inline-block">
-          <select id="region-filter" class="tag-chip-select rounded-full border border-line bg-white px-4 py-2 text-sm cursor-pointer appearance-none pr-8">
-            ${regionOptions.map((region) => `<option value="${region}">${region === "전체" ? "지역 ▼" : region}</option>`).join("")}
+        <div class="filter-dropdown">
+          <select id="category-filter" class="tag-chip-select">
+            ${categoryOptions.map((cat) => `<option value="${cat}">${cat === "전체" ? "카테고리" : cat}</option>`).join("")}
           </select>
+          <img src="Chevron down.png" alt="" class="filter-dropdown__icon" />
         </div>
+        <div class="filter-dropdown">
+          <select id="region-filter" class="tag-chip-select">
+            ${regionOptions.map((region) => `<option value="${region}">${region === "전체" ? "지역" : region}</option>`).join("")}
+          </select>
+          <img src="Chevron down.png" alt="" class="filter-dropdown__icon" />
+        </div>
+        ${filterTags.map((tag) => `<button class="tag-chip" data-tag="${tag}">${tag}</button>`).join("")}
       </div>
       <div id="daily-grid" class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
     </div>
@@ -1244,8 +1291,10 @@ function renderDailyPanel(targetEl) {
 
   const gridEl = targetEl.querySelector("#daily-grid");
   const tags = Array.from(targetEl.querySelectorAll(".tag-chip"));
+  const categorySelect = targetEl.querySelector("#category-filter");
   const regionSelect = targetEl.querySelector("#region-filter");
   const activeTags = new Set();
+  let activeCategory = "전체";
   let activeRegion = "전체";
 
   function renderDailyGrid() {
@@ -1254,6 +1303,11 @@ function renderDailyPanel(targetEl) {
     // 태그 필터링
     if (activeTags.size) {
       filtered = filtered.filter((place) => [...activeTags].every((tag) => place.tags.includes(tag)));
+    }
+    
+    // 카테고리 필터링
+    if (activeCategory && activeCategory !== "전체") {
+      filtered = filtered.filter((place) => place.category === activeCategory);
     }
     
     // 지역 필터링
@@ -1321,10 +1375,28 @@ function renderDailyPanel(targetEl) {
     });
   });
 
+  // 카테고리 필터 이벤트
+  if (categorySelect) {
+    categorySelect.addEventListener("change", (e) => {
+      activeCategory = e.target.value;
+      if (activeCategory !== "전체") {
+        categorySelect.classList.add("active");
+      } else {
+        categorySelect.classList.remove("active");
+      }
+      renderDailyGrid();
+    });
+  }
+
   // 지역 필터 이벤트
   if (regionSelect) {
     regionSelect.addEventListener("change", (e) => {
       activeRegion = e.target.value;
+      if (activeRegion !== "전체") {
+        regionSelect.classList.add("active");
+      } else {
+        regionSelect.classList.remove("active");
+      }
       renderDailyGrid();
     });
   }
