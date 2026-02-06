@@ -111,6 +111,17 @@
         </div>
 
         <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">테마 (메인 페이지 섹션) *</label>
+          <select id="place-theme" class="input-field" required>
+            <option value="">테마 선택</option>
+            <option value="실내 애견동반 식당">날씨걱정 No! 실내 애견동반 식당</option>
+            <option value="노트북 카페">노트북 하기 좋은 실내 애견동반 카페</option>
+            <option value="아이와 함께">아이와 강아지가 함께 즐길 수 있는 곳</option>
+            <option value="애견운동장">꼼꼼한 관리와 천연잔디! 추천 애견운동장</option>
+          </select>
+        </div>
+
+        <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">설명</label>
           <textarea id="place-description" class="input-field h-24" placeholder="장소에 대한 설명을 입력하세요"></textarea>
         </div>
@@ -259,6 +270,7 @@
           <div class="flex-1 min-w-0">
             <h3 class="font-semibold text-gray-800 truncate">${place.title}</h3>
             <p class="text-sm text-gray-500">${place.location || ''}</p>
+            ${place.theme ? `<p class="text-xs text-blue-600 mt-1">${place.theme}</p>` : ''}
             <div class="flex flex-wrap gap-1 mt-2">
               ${(place.tags || []).map(tag => `<span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">${tag}</span>`).join('')}
             </div>
@@ -285,6 +297,7 @@
         document.getElementById('place-title').value = place.title || '';
         document.getElementById('place-location').value = place.location || '';
         document.getElementById('place-category').value = place.category || '카페';
+        document.getElementById('place-theme').value = place.theme || '';
         document.getElementById('place-description').value = place.description || '';
         document.getElementById('place-tags').value = (place.tags || []).join(', ');
         document.getElementById('place-image-url').value = place.image_url || '';
@@ -342,6 +355,7 @@
           title: document.getElementById('place-title').value,
           location: document.getElementById('place-location').value,
           category: document.getElementById('place-category').value,
+          theme: document.getElementById('place-theme').value,
           description: document.getElementById('place-description').value,
           tags: document.getElementById('place-tags').value.split(',').map(t => t.trim()).filter(t => t),
           image_url: imageUrl
