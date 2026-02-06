@@ -3,11 +3,11 @@ const SUPABASE_URL = 'https://gxyqxdciuskrxdmprpfc.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_DsNr2yYZKvnqTrtYkRSDnA__iRSAEI5';
 
 // Supabase 클라이언트 초기화
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // 인증 관련 함수
 async function signIn(email, password) {
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
     email,
     password
   });
@@ -16,18 +16,18 @@ async function signIn(email, password) {
 }
 
 async function signOut() {
-  const { error } = await supabase.auth.signOut();
+  const { error } = await supabaseClient.auth.signOut();
   if (error) throw error;
 }
 
 async function getUser() {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabaseClient.auth.getUser();
   return user;
 }
 
 // Places CRUD 함수
 async function getPlaces() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('places')
     .select('*')
     .order('created_at', { ascending: false });
@@ -36,7 +36,7 @@ async function getPlaces() {
 }
 
 async function getPlaceById(id) {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('places')
     .select('*')
     .eq('id', id)
@@ -46,7 +46,7 @@ async function getPlaceById(id) {
 }
 
 async function createPlace(place) {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('places')
     .insert([place])
     .select()
@@ -56,7 +56,7 @@ async function createPlace(place) {
 }
 
 async function updatePlace(id, updates) {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('places')
     .update(updates)
     .eq('id', id)
@@ -67,7 +67,7 @@ async function updatePlace(id, updates) {
 }
 
 async function deletePlace(id) {
-  const { error } = await supabase
+  const { error } = await supabaseClient
     .from('places')
     .delete()
     .eq('id', id);
@@ -79,14 +79,14 @@ async function uploadImage(file) {
   const fileExt = file.name.split('.').pop();
   const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
   
-  const { data, error } = await supabase.storage
+  const { data, error } = await supabaseClient.storage
     .from('place-images')
     .upload(fileName, file);
   
   if (error) throw error;
   
   // 공개 URL 가져오기
-  const { data: { publicUrl } } = supabase.storage
+  const { data: { publicUrl } } = supabaseClient.storage
     .from('place-images')
     .getPublicUrl(fileName);
   
@@ -95,7 +95,7 @@ async function uploadImage(file) {
 
 async function deleteImage(imageUrl) {
   const fileName = imageUrl.split('/').pop();
-  const { error } = await supabase.storage
+  const { error } = await supabaseClient.storage
     .from('place-images')
     .remove([fileName]);
   if (error) throw error;
