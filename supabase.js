@@ -100,3 +100,52 @@ async function deleteImage(imageUrl) {
     .remove([fileName]);
   if (error) throw error;
 }
+
+// Tags CRUD 함수
+async function getTags() {
+  const { data, error } = await supabaseClient
+    .from('tags')
+    .select('*')
+    .order('id', { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
+async function getActiveTags() {
+  const { data, error } = await supabaseClient
+    .from('tags')
+    .select('*')
+    .eq('is_active', true)
+    .order('id', { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
+async function createTag(name) {
+  const { data, error } = await supabaseClient
+    .from('tags')
+    .insert([{ name, is_active: true }])
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+async function updateTag(id, updates) {
+  const { data, error } = await supabaseClient
+    .from('tags')
+    .update(updates)
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+async function deleteTag(id) {
+  const { error } = await supabaseClient
+    .from('tags')
+    .delete()
+    .eq('id', id);
+  if (error) throw error;
+}

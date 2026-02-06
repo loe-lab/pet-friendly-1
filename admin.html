@@ -52,29 +52,57 @@
 
     <!-- 메인 콘텐츠 -->
     <main class="max-w-6xl mx-auto p-6">
-      <!-- 상단 액션 -->
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">추천 장소 관리</h2>
-        <button id="add-place-btn" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-          새 장소 추가
-        </button>
+      <!-- 탭 메뉴 -->
+      <div class="flex gap-4 mb-6 border-b border-gray-200">
+        <button id="tab-places" class="tab-btn px-4 py-3 font-semibold text-blue-600 border-b-2 border-blue-600" onclick="switchTab('places')">장소 관리</button>
+        <button id="tab-tags" class="tab-btn px-4 py-3 font-semibold text-gray-500 hover:text-gray-700" onclick="switchTab('tags')">태그 관리</button>
       </div>
 
-      <!-- 장소 목록 -->
-      <div id="places-list" class="grid gap-4">
-        <!-- 동적으로 채워짐 -->
+      <!-- 장소 관리 섹션 -->
+      <div id="section-places">
+        <!-- 상단 액션 -->
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">추천 장소 관리</h2>
+          <button id="add-place-btn" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            새 장소 추가
+          </button>
+        </div>
+
+        <!-- 장소 목록 -->
+        <div id="places-list" class="grid gap-4">
+          <!-- 동적으로 채워짐 -->
+        </div>
+
+        <!-- 로딩 -->
+        <div id="loading" class="text-center py-12 text-gray-500">
+          불러오는 중...
+        </div>
+
+        <!-- 빈 상태 -->
+        <div id="empty-state" class="hidden text-center py-12">
+          <p class="text-gray-500 mb-4">등록된 장소가 없습니다.</p>
+          <button class="text-blue-600 hover:underline" onclick="openModal()">첫 장소를 추가해보세요</button>
+        </div>
       </div>
 
-      <!-- 로딩 -->
-      <div id="loading" class="text-center py-12 text-gray-500">
-        불러오는 중...
-      </div>
+      <!-- 태그 관리 섹션 -->
+      <div id="section-tags" class="hidden">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">태그 관리</h2>
+          <button id="add-tag-btn" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            새 태그 추가
+          </button>
+        </div>
 
-      <!-- 빈 상태 -->
-      <div id="empty-state" class="hidden text-center py-12">
-        <p class="text-gray-500 mb-4">등록된 장소가 없습니다.</p>
-        <button class="text-blue-600 hover:underline" onclick="openModal()">첫 장소를 추가해보세요</button>
+        <div id="tags-list" class="grid gap-3">
+          <!-- 동적으로 채워짐 -->
+        </div>
+
+        <div id="tags-loading" class="text-center py-12 text-gray-500">
+          불러오는 중...
+        </div>
       </div>
     </main>
   </div>
@@ -127,8 +155,10 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">태그 (쉼표로 구분)</label>
-          <input type="text" id="place-tags" class="input-field" placeholder="실내동반 가능, 카공족, 주차가능" />
+          <label class="block text-sm font-medium text-gray-700 mb-2">태그 선택</label>
+          <div id="tag-checkboxes" class="flex flex-wrap gap-2">
+            <!-- 동적으로 채워짐 -->
+          </div>
         </div>
 
         <div>
@@ -168,6 +198,28 @@
     </div>
   </div>
 
+  <!-- 태그 추가/수정 모달 -->
+  <div id="tag-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl w-full max-w-md m-4 p-6">
+      <h3 id="tag-modal-title" class="text-xl font-bold mb-4">새 태그 추가</h3>
+      <form id="tag-form">
+        <input type="hidden" id="tag-id" />
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">태그 이름</label>
+          <input type="text" id="tag-name" class="input-field" placeholder="새 태그 이름" required />
+        </div>
+        <div class="flex gap-3">
+          <button type="button" id="tag-cancel-btn" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
+            취소
+          </button>
+          <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+            저장
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="supabase.js"></script>
   <script>
     // DOM 요소
@@ -189,7 +241,25 @@
     const deleteConfirm = document.getElementById('delete-confirm');
 
     let currentPlaces = [];
+    let currentTags = [];
     let deleteTargetId = null;
+
+    // 탭 전환
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+        btn.classList.add('text-gray-500');
+      });
+      document.getElementById(`tab-${tab}`).classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+      document.getElementById(`tab-${tab}`).classList.remove('text-gray-500');
+      
+      document.getElementById('section-places').classList.toggle('hidden', tab !== 'places');
+      document.getElementById('section-tags').classList.toggle('hidden', tab !== 'tags');
+      
+      if (tab === 'tags') {
+        loadTagsList();
+      }
+    }
 
     // 초기화
     async function init() {
@@ -197,6 +267,7 @@
       if (user) {
         showAdmin(user);
         loadPlaces();
+        loadTagsForCheckboxes();
       } else {
         showLogin();
       }
@@ -299,8 +370,13 @@
         document.getElementById('place-category').value = place.category || '카페';
         document.getElementById('place-theme').value = place.theme || '';
         document.getElementById('place-description').value = place.description || '';
-        document.getElementById('place-tags').value = (place.tags || []).join(', ');
         document.getElementById('place-image-url').value = place.image_url || '';
+        
+        // 태그 체크박스 설정
+        const placeTags = place.tags || [];
+        document.querySelectorAll('#tag-checkboxes input').forEach(cb => {
+          cb.checked = placeTags.includes(cb.value);
+        });
         
         if (place.image_url) {
           document.getElementById('preview-img').src = place.image_url;
@@ -313,6 +389,10 @@
         document.getElementById('place-id').value = '';
         document.getElementById('place-image-url').value = '';
         document.getElementById('image-preview').classList.add('hidden');
+        // 체크박스 초기화
+        document.querySelectorAll('#tag-checkboxes input').forEach(cb => {
+          cb.checked = false;
+        });
       }
     }
 
@@ -351,13 +431,19 @@
           imageUrl = await uploadImage(imageFile);
         }
 
+        // 선택된 태그 수집
+        const selectedTags = [];
+        document.querySelectorAll('#tag-checkboxes input:checked').forEach(cb => {
+          selectedTags.push(cb.value);
+        });
+
         const placeData = {
           title: document.getElementById('place-title').value,
           location: document.getElementById('place-location').value,
           category: document.getElementById('place-category').value,
           theme: document.getElementById('place-theme').value,
           description: document.getElementById('place-description').value,
-          tags: document.getElementById('place-tags').value.split(',').map(t => t.trim()).filter(t => t),
+          tags: selectedTags,
           image_url: imageUrl
         };
 
@@ -415,6 +501,142 @@
         deleteTargetId = null;
       }
     });
+
+    // ============ 태그 관리 ============
+    
+    // 태그 체크박스 로드 (장소 추가/수정 폼용)
+    async function loadTagsForCheckboxes() {
+      try {
+        currentTags = await getActiveTags();
+        renderTagCheckboxes();
+      } catch (error) {
+        console.error('태그 로드 실패:', error);
+      }
+    }
+
+    function renderTagCheckboxes(selectedTags = []) {
+      const container = document.getElementById('tag-checkboxes');
+      container.innerHTML = currentTags.map(tag => `
+        <label class="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition">
+          <input type="checkbox" value="${tag.name}" ${selectedTags.includes(tag.name) ? 'checked' : ''} class="w-4 h-4 text-blue-600 rounded" />
+          <span class="text-sm text-gray-700">${tag.name}</span>
+        </label>
+      `).join('');
+    }
+
+    // 태그 목록 로드 (태그 관리용)
+    async function loadTagsList() {
+      const tagsListEl = document.getElementById('tags-list');
+      const tagsLoadingEl = document.getElementById('tags-loading');
+      
+      tagsLoadingEl.classList.remove('hidden');
+      tagsListEl.innerHTML = '';
+
+      try {
+        const tags = await getTags();
+        tagsLoadingEl.classList.add('hidden');
+        
+        tagsListEl.innerHTML = tags.map(tag => `
+          <div class="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="text-gray-800 font-medium">${tag.name}</span>
+              <span class="text-xs px-2 py-1 rounded ${tag.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">
+                ${tag.is_active ? '활성' : '숨김'}
+              </span>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="toggleTagActive(${tag.id}, ${!tag.is_active})" class="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="${tag.is_active ? '숨기기' : '활성화'}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  ${tag.is_active 
+                    ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>'
+                    : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>'
+                  }
+                </svg>
+              </button>
+              <button onclick="editTag(${tag.id}, '${tag.name}')" class="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+              </button>
+              <button onclick="confirmDeleteTag(${tag.id})" class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              </button>
+            </div>
+          </div>
+        `).join('');
+      } catch (error) {
+        tagsLoadingEl.textContent = '오류: ' + error.message;
+      }
+    }
+
+    // 태그 활성/비활성 토글
+    async function toggleTagActive(id, isActive) {
+      try {
+        await updateTag(id, { is_active: isActive });
+        loadTagsList();
+        loadTagsForCheckboxes();
+      } catch (error) {
+        alert('상태 변경 실패: ' + error.message);
+      }
+    }
+
+    // 태그 모달
+    const tagModal = document.getElementById('tag-modal');
+    const tagForm = document.getElementById('tag-form');
+    const addTagBtn = document.getElementById('add-tag-btn');
+    const tagCancelBtn = document.getElementById('tag-cancel-btn');
+
+    function openTagModal(id = null, name = '') {
+      tagModal.classList.remove('hidden');
+      document.getElementById('tag-modal-title').textContent = id ? '태그 수정' : '새 태그 추가';
+      document.getElementById('tag-id').value = id || '';
+      document.getElementById('tag-name').value = name;
+    }
+
+    function closeTagModal() {
+      tagModal.classList.add('hidden');
+      tagForm.reset();
+    }
+
+    addTagBtn.addEventListener('click', () => openTagModal());
+    tagCancelBtn.addEventListener('click', closeTagModal);
+
+    tagModal.addEventListener('click', (e) => {
+      if (e.target === tagModal) closeTagModal();
+    });
+
+    function editTag(id, name) {
+      openTagModal(id, name);
+    }
+
+    tagForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('tag-id').value;
+      const name = document.getElementById('tag-name').value;
+
+      try {
+        if (id) {
+          await updateTag(parseInt(id), { name });
+        } else {
+          await createTag(name);
+        }
+        closeTagModal();
+        loadTagsList();
+        loadTagsForCheckboxes();
+      } catch (error) {
+        alert('저장 실패: ' + error.message);
+      }
+    });
+
+    async function confirmDeleteTag(id) {
+      if (confirm('정말 이 태그를 삭제하시겠습니까?')) {
+        try {
+          await deleteTag(id);
+          loadTagsList();
+          loadTagsForCheckboxes();
+        } catch (error) {
+          alert('삭제 실패: ' + error.message);
+        }
+      }
+    }
 
     // 초기화 실행
     init();
