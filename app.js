@@ -1135,7 +1135,7 @@ function renderResultsPage() {
         <div>
           <p class="text-xs uppercase tracking-[0.35em] text-slate-400">Search Results</p>
           <h1 class="mt-2 text-3xl font-semibold text-deep">탑승 가능 항공사</h1>
-          <p class="mt-2 text-sm text-slate-500">${breedLabel} · ${weight}kg · ${ageLabel} · ${destinationLabel}</p>
+          <p class="mt-2 text-sm text-slate-500">${weight}kg · ${ageLabel} · ${destinationLabel}</p>
           <p class="mt-2 text-xs text-slate-400">반려동물 탑승 규정은 달라질 수 있으므로, 각 항공사에 사전 문의 바랍니다.</p>
         </div>
       </div>
