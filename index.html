@@ -457,6 +457,7 @@
     </div>
 
     <!-- 앱 스크립트 -->
+    <script src="likes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase.js"></script>
     <script src="app.js"></script>
@@ -487,12 +488,36 @@
         });
       });
 
-      // 좋아요 아이콘 클릭 시 상태 토글
+      // 페이지 로드 시 좋아요 상태 복원
+      document.querySelectorAll('.theme-card').forEach(card => {
+        const titleEl = card.querySelector('h4');
+        if (!titleEl) return;
+        const title = titleEl.textContent.trim();
+        const icon = card.querySelector('.theme-card__like-icon');
+        if (icon && LikesManager.isLiked(title)) {
+          icon.src = 'base-icon-heart-selected.svg';
+        }
+      });
+
+      // 좋아요 아이콘 클릭 시 상태 토글 + localStorage 저장
       document.querySelectorAll('.theme-card__like-icon').forEach(icon => {
         icon.addEventListener('click', (e) => {
           e.stopPropagation();
-          const isSelected = icon.src.includes('selected');
-          icon.src = isSelected ? 'base-icon-heart.svg' : 'base-icon-heart-selected.svg';
+          const card = icon.closest('.theme-card');
+          const titleEl = card.querySelector('h4');
+          const imgEl = card.querySelector('img:not(.theme-card__like-icon)');
+          const locationEl = card.querySelector('.theme-card__location');
+          const tagEls = card.querySelectorAll('.theme-card__tag');
+
+          const placeData = {
+            title: titleEl ? titleEl.textContent.trim() : '',
+            image: imgEl ? imgEl.src : '',
+            location: locationEl ? locationEl.textContent.trim() : '',
+            tags: Array.from(tagEls).map(t => t.textContent.trim()),
+          };
+
+          const liked = LikesManager.toggle(placeData);
+          icon.src = liked ? 'base-icon-heart-selected.svg' : 'base-icon-heart.svg';
         });
       });
 

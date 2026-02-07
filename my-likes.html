@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>좋아요 - 데일리펫</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: "#DD0035",
+              deep: "#12273B",
+              sand: "#F4EDE2",
+              warm: "#FFB27A",
+              ink: "#0F172A",
+              line: "#E2E8F0",
+            },
+            fontFamily: {
+              display: ["Work Sans", "sans-serif"],
+              body: ["Work Sans", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 24px 60px rgba(16, 24, 40, 0.12)",
+              card: "0 14px 30px rgba(18, 39, 59, 0.08)",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .likes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+      }
+      .like-card {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+        cursor: pointer;
+      }
+      .like-card:hover {
+        box-shadow: 0 6px 30px 0 rgba(18, 39, 59, 0.06);
+        transform: translateY(-2px);
+      }
+      .like-card__media {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+      }
+      .like-card__media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .like-card__remove {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.9);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 2;
+      }
+      .like-card__remove:hover {
+        background: rgba(255,255,255,1);
+      }
+      .like-card__body {
+        padding: 16px;
+      }
+      .like-card__location {
+        font-size: 12px;
+        color: #94a3b8;
+        margin-bottom: 4px;
+      }
+      .like-card__body h3 {
+        font-size: 15px;
+        font-weight: 600;
+        color: #0F172A;
+        margin-bottom: 8px;
+      }
+      .like-card__tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .like-card__tag {
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        color: #64748b;
+        background: #f1f5f9;
+      }
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 20px;
+        text-align: center;
+      }
+      .empty-state__icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #fef2f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+      .empty-state h2 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #0F172A;
+        margin-bottom: 8px;
+      }
+      .empty-state p {
+        font-size: 14px;
+        color: #94a3b8;
+        margin-bottom: 24px;
+      }
+    </style>
+  </head>
+  <body class="bg-white text-ink font-body">
+    <div class="min-h-screen">
+      <!-- 헤더 -->
+      <header class="sticky top-0 z-30 border-b border-line bg-white/80 backdrop-blur-xl">
+        <div class="mx-auto flex w-[min(1200px,92%)] items-center justify-between gap-6 py-4">
+          <a href="index.html" class="flex items-center gap-3">
+            <div class="flex flex-col">
+              <span class="text-lg font-semibold tracking-[0.2em] text-brand" style="font-family: 'Ria Sans', sans-serif;">
+                데일리펫
+              </span>
+              <span class="text-xs text-slate-500">반려견과 함께하는 프리미엄 라이프스타일 큐레이션</span>
+            </div>
+          </a>
+          <nav class="hidden items-center gap-6 text-sm md:flex">
+            <a href="index.html" class="text-slate-600 hover:text-ink">어디갈까</a>
+            <a href="airline.html" class="text-slate-600 hover:text-ink">비행기 타볼까</a>
+            <a href="daily.html" class="text-slate-600 hover:text-ink">일상을 함께해</a>
+          </nav>
+          <div class="hidden items-center gap-3 md:flex">
+            <a href="auth.html" id="auth-btn" class="rounded-full border-1-5 border-line bg-white px-5 py-2 text-sm font-semibold text-brand shadow-soft">
+              로그인/회원가입
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <!-- 메인 -->
+      <main class="mx-auto w-[min(1200px,92%)] py-10">
+        <!-- 페이지 타이틀 -->
+        <div class="mb-8">
+          <h1 class="text-2xl font-semibold text-ink">좋아요</h1>
+          <p class="mt-2 text-sm text-slate-500">내가 좋아요한 장소를 모아봤어요</p>
+        </div>
+
+        <!-- 좋아요 리스트 -->
+        <div id="likes-container"></div>
+      </main>
+    </div>
+
+    <script src="likes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="auth-header.js"></script>
+    <script>
+      function renderLikes() {
+        const container = document.getElementById('likes-container');
+        const likes = LikesManager.getAll();
+
+        if (likes.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state__icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21s-7-4.5-7-10c0-2.5 1.5-5 4-5 1.5 0 2.5.5 3 2 .5-1.5 1.5-2 3-2 2.5 0 4 2.5 4 5 0 5.5-7 10-7 10z" stroke="#DD0035" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <h2>아직 좋아요한 장소가 없어요</h2>
+              <p>마음에 드는 장소의 하트를 눌러보세요!</p>
+              <a href="index.html" class="rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-soft hover:opacity-90 transition">
+                장소 둘러보기
+              </a>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = `
+          <p class="text-sm text-slate-400 mb-5">총 <strong class="text-ink">${likes.length}</strong>개의 장소</p>
+          <div class="likes-grid">
+            ${likes.map((place, idx) => `
+              <div class="like-card" data-index="${idx}" data-title="${place.title}">
+                <div class="like-card__media">
+                  <button class="like-card__remove" data-title="${place.title}" title="좋아요 취소">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M8 14s-5.5-3.5-5.5-7.5C2.5 4 4 2.5 5.5 2.5c1 0 2 .5 2.5 1.5.5-1 1.5-1.5 2.5-1.5C12 2.5 13.5 4 13.5 6.5 13.5 10.5 8 14 8 14z" fill="#DD0035" stroke="#DD0035" stroke-width="1"/>
+                    </svg>
+                  </button>
+                  <img src="${place.image}" alt="${place.title}" />
+                </div>
+                <div class="like-card__body">
+                  <p class="like-card__location">${place.location || ''}</p>
+                  <h3>${place.title}</h3>
+                  <div class="like-card__tags">
+                    ${(place.tags || []).map(tag => `<span class="like-card__tag">${tag}</span>`).join('')}
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+
+        // 좋아요 취소 버튼
+        container.querySelectorAll('.like-card__remove').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const title = btn.dataset.title;
+            LikesManager.remove(title);
+            renderLikes();
+          });
+        });
+
+        // 카드 클릭 시 상세페이지로 이동
+        container.querySelectorAll('.like-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const title = card.dataset.title;
+            const likes = LikesManager.getAll();
+            const place = likes.find(p => p.title === title);
+            if (place) {
+              const params = new URLSearchParams({
+                title: place.title,
+                image: place.image,
+                category: place.location || ''
+              });
+              window.location.href = 'detail.html?' + params.toString();
+            }
+          });
+        });
+      }
+
+      renderLikes();
+    </script>
+  </body>
+</html>

@@ -23,7 +23,7 @@
             좋아요
           </a>
           <a href="mailto:uixstudio.official@gmail.com" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition flex items-center gap-2 border-t border-gray-100">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4l6 4 6-4M2 4v8h12V4" stroke="#64748b" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="#64748b" stroke-width="1.2"/><path d="M2 4.5l6 4.5 6-4.5" stroke="#64748b" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             문의하기
           </a>
           <button id="logout-header-btn" class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition flex items-center gap-2 border-t border-gray-100">

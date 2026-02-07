@@ -1318,9 +1318,9 @@ function renderDailyPanel(targetEl) {
     gridEl.innerHTML = filtered
       .map(
         (place) => `
-        <article class="daily-place" data-title="${place.title}" data-image="${place.image}" data-location="${place.location}">
+        <article class="daily-place" data-title="${place.title}" data-image="${place.image}" data-location="${place.location}" data-category="${place.category || ''}" data-tags="${(place.tags || []).join(',')}">
           <div class="daily-place__media">
-            <img class="daily-place__like-icon" src="base-icon-heart.svg" alt="좋아요" />
+            <img class="daily-place__like-icon" src="${typeof LikesManager !== 'undefined' && LikesManager.isLiked(place.title) ? 'base-icon-heart-selected.svg' : 'base-icon-heart.svg'}" alt="좋아요" />
             <img src="${place.image}" alt="${place.title}" />
           </div>
           <div class="daily-place__body">
@@ -1335,12 +1335,25 @@ function renderDailyPanel(targetEl) {
       )
       .join("");
 
-    // 좋아요 아이콘 클릭 이벤트
+    // 좋아요 아이콘 클릭 이벤트 + localStorage 저장
     gridEl.querySelectorAll('.daily-place__like-icon').forEach(icon => {
       icon.addEventListener('click', (e) => {
-        e.stopPropagation(); // 카드 클릭 이벤트 방지
-        const isSelected = icon.src.includes('selected');
-        icon.src = isSelected ? 'base-icon-heart.svg' : 'base-icon-heart-selected.svg';
+        e.stopPropagation();
+        const card = icon.closest('.daily-place');
+        const placeData = {
+          title: card.dataset.title || '',
+          image: card.dataset.image || '',
+          location: card.dataset.location || '',
+          tags: (card.dataset.tags || '').split(',').filter(Boolean),
+          category: card.dataset.category || '',
+        };
+        if (typeof LikesManager !== 'undefined') {
+          const liked = LikesManager.toggle(placeData);
+          icon.src = liked ? 'base-icon-heart-selected.svg' : 'base-icon-heart.svg';
+        } else {
+          const isSelected = icon.src.includes('selected');
+          icon.src = isSelected ? 'base-icon-heart.svg' : 'base-icon-heart-selected.svg';
+        }
       });
     });
 
