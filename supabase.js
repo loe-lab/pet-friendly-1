@@ -15,6 +15,26 @@ async function signIn(email, password) {
   return data;
 }
 
+async function signUp(email, password) {
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password
+  });
+  if (error) throw error;
+  return data;
+}
+
+async function signInWithKakao() {
+  const { data, error } = await supabaseClient.auth.signInWithOAuth({
+    provider: 'kakao',
+    options: {
+      redirectTo: window.location.origin + '/index.html'
+    }
+  });
+  if (error) throw error;
+  return data;
+}
+
 async function signOut() {
   const { error } = await supabaseClient.auth.signOut();
   if (error) throw error;
@@ -23,6 +43,76 @@ async function signOut() {
 async function getUser() {
   const { data: { user } } = await supabaseClient.auth.getUser();
   return user;
+}
+
+// 프로필 관련 함수
+async function createProfile(profile) {
+  const { data, error } = await supabaseClient
+    .from('profiles')
+    .insert([profile])
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+async function getProfile(userId) {
+  const { data, error } = await supabaseClient
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+async function updateProfile(userId, updates) {
+  const { data, error } = await supabaseClient
+    .from('profiles')
+    .update(updates)
+    .eq('id', userId)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+// 좋아요 관련 함수
+async function addLike(userId, placeId) {
+  const { data, error } = await supabaseClient
+    .from('likes')
+    .insert([{ user_id: userId, place_id: placeId }])
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+async function removeLike(userId, placeId) {
+  const { error } = await supabaseClient
+    .from('likes')
+    .delete()
+    .eq('user_id', userId)
+    .eq('place_id', placeId);
+  if (error) throw error;
+}
+
+async function getUserLikes(userId) {
+  const { data, error } = await supabaseClient
+    .from('likes')
+    .select('place_id')
+    .eq('user_id', userId);
+  if (error) throw error;
+  return data.map(l => l.place_id);
+}
+
+async function getLikeCount(placeId) {
+  const { count, error } = await supabaseClient
+    .from('likes')
+    .select('*', { count: 'exact', head: true })
+    .eq('place_id', placeId);
+  if (error) throw error;
+  return count;
 }
 
 // Places CRUD 함수
