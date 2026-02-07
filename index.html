@@ -67,7 +67,7 @@
           </nav>
           <!-- 검색 및 액션: 데스크톱에서만 보임 -->
           <div class="hidden items-center gap-3 md:flex">
-            <a href="auth.html" class="rounded-full border-1-5 border-line bg-white px-5 py-2 text-sm font-semibold text-brand shadow-soft">
+            <a href="auth.html" id="auth-btn" class="rounded-full border-1-5 border-line bg-white px-5 py-2 text-sm font-semibold text-brand shadow-soft">
               로그인/회원가입
             </a>
           </div>
@@ -457,7 +457,10 @@
     </div>
 
     <!-- 앱 스크립트 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
     <script src="app.js"></script>
+    <script src="auth-header.js"></script>
     <script>
       // 썸네일 카드 클릭 시 상세페이지로 이동
       document.querySelectorAll('.theme-card').forEach(card => {
