@@ -19,7 +19,7 @@
         </button>
         <div id="mypage-menu" class="hidden absolute right-0 top-full mt-2 w-44 bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden z-50">
           <a href="my-likes.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition flex items-center gap-2">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 14s-5.5-3.5-5.5-7.5C2.5 4 4 2.5 5.5 2.5c1 0 2 .5 2.5 1.5.5-1 1.5-1.5 2.5-1.5C12 2.5 13.5 4 13.5 6.5 13.5 10.5 8 14 8 14z" stroke="#DD0035" stroke-width="1.2" fill="none"/></svg>
+            <img src="base-icon-heart-selected.svg" alt="좋아요" width="16" height="16" />
             좋아요
           </a>
           <a href="mailto:uixstudio.official@gmail.com" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition flex items-center gap-2 border-t border-gray-100">
