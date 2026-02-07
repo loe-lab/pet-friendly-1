@@ -317,6 +317,20 @@
 
         try {
           await signIn(email, password);
+          // 로그인 후 프로필 없으면 자동 생성
+          const user = await getUser();
+          if (user) {
+            const existing = await getProfile(user.id).catch(() => null);
+            if (!existing) {
+              await createProfile({
+                id: user.id,
+                name: user.user_metadata?.name || '',
+                nickname: user.user_metadata?.preferred_username || '',
+                email: user.email || email,
+                marketing_agreed: false
+              }).catch(e => console.error('자동 프로필 생성 실패:', e));
+            }
+          }
           window.location.href = 'index.html';
         } catch (err) {
           errorEl.textContent = '이메일 또는 비밀번호가 올바르지 않습니다.';
@@ -353,28 +367,38 @@
         }
 
         try {
-          const { user } = await signUp(email, password);
+          const signUpData = await signUp(email, password);
+          console.log('signUp 결과:', signUpData);
+          const user = signUpData?.user;
 
-          if (user) {
-            await createProfile({
-              id: user.id,
-              name,
-              nickname,
-              email,
-              birthdate,
-              marketing_agreed: marketingAgreed
-            });
+          if (user && user.id) {
+            try {
+              await createProfile({
+                id: user.id,
+                name,
+                nickname,
+                email,
+                birthdate,
+                marketing_agreed: marketingAgreed
+              });
+            } catch (profileErr) {
+              console.error('프로필 생성 실패:', profileErr);
+              // 프로필 생성 실패해도 회원가입은 완료로 처리
+            }
+          } else {
+            console.warn('signUp 후 user 객체 없음:', signUpData);
           }
 
           successEl.textContent = '회원가입이 완료되었습니다! 이메일을 확인해주세요.';
           successEl.classList.remove('hidden');
 
-          // 3초 후 로그인 탭으로 전환
+          // 2초 후 로그인 탭으로 전환
           setTimeout(() => {
             switchTab('login');
             document.getElementById('login-email').value = email;
           }, 2000);
         } catch (err) {
+          console.error('회원가입 에러:', err);
           errorEl.textContent = err.message || '회원가입 중 오류가 발생했습니다.';
           errorEl.classList.remove('hidden');
         }
@@ -405,10 +429,22 @@
         switchTab('signup');
       }
 
-      // 이미 로그인된 경우 안내 (admin 계정은 제외)
+      // 이미 로그인된 경우 안내 + 프로필 자동 생성
       (async () => {
         const user = await getUser();
         if (user) {
+          // 프로필이 없으면 자동 생성 (카카오 로그인 등)
+          const existing = await getProfile(user.id).catch(() => null);
+          if (!existing) {
+            await createProfile({
+              id: user.id,
+              name: user.user_metadata?.name || user.user_metadata?.full_name || '',
+              nickname: user.user_metadata?.preferred_username || user.user_metadata?.name || '',
+              email: user.email || '',
+              marketing_agreed: false
+            }).catch(e => console.error('자동 프로필 생성 실패:', e));
+          }
+
           // 로그인 상태면 로그아웃 옵션 표시
           const loginPanel = document.getElementById('login-panel');
           const signupPanel = document.getElementById('signup-panel');

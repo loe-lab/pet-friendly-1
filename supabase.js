@@ -49,10 +49,14 @@ async function getUser() {
 async function createProfile(profile) {
   const { data, error } = await supabaseClient
     .from('profiles')
-    .insert([profile])
+    .upsert([profile], { onConflict: 'id' })
     .select()
     .single();
-  if (error) throw error;
+  if (error) {
+    console.error('createProfile 에러:', error);
+    throw error;
+  }
+  console.log('createProfile 성공:', data);
   return data;
 }
 
