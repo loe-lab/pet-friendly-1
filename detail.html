@@ -71,12 +71,6 @@
         color: #DD0035;
         border-color: #DD0035;
       }
-      .review-card {
-        background: #f8fafc;
-        border-radius: 16px;
-        padding: 16px;
-        min-width: 280px;
-      }
       .gallery-thumb {
         width: 80px;
         height: 80px;
@@ -89,6 +83,9 @@
       .gallery-thumb:hover,
       .gallery-thumb.active {
         opacity: 1;
+      }
+      .info-section {
+        scroll-margin-top: 100px;
       }
     </style>
   </head>
@@ -156,71 +153,11 @@
           </div>
         </div>
 
-        <!-- 직접 다녀온 후기 미리보기 -->
-        <div class="mb-10">
-          <div class="flex items-center justify-between mb-5">
-            <h3 class="font-semibold text-deep text-lg">직접 다녀온 후기</h3>
-            <span class="text-sm text-slate-400">총 3건</span>
-          </div>
-          <div class="grid gap-4 md:grid-cols-3">
-            <div class="bg-white border border-line rounded-2xl p-5 hover:shadow-card transition-shadow">
-              <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-2">
-                  <div class="w-9 h-9 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center text-white text-xs font-medium">류</div>
-                  <div>
-                    <p class="text-sm font-semibold text-deep">류**</p>
-                    <p class="text-[11px] text-slate-400">2026.01.28</p>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1 bg-brand/10 px-2.5 py-1 rounded-full">
-                  <span class="text-brand text-xs">★</span>
-                  <span class="text-xs font-semibold text-brand">5.0</span>
-                </div>
-              </div>
-              <p class="text-sm text-slate-600 leading-relaxed">강아지와 함께 방문했는데 너무 좋았어요. 직원분들도 친절하시고 음식도 맛있었습니다 :)</p>
-            </div>
-            <div class="bg-white border border-line rounded-2xl p-5 hover:shadow-card transition-shadow">
-              <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-2">
-                  <div class="w-9 h-9 bg-gradient-to-br from-pink-200 to-pink-300 rounded-full flex items-center justify-center text-white text-xs font-medium">송</div>
-                  <div>
-                    <p class="text-sm font-semibold text-deep">송**</p>
-                    <p class="text-[11px] text-slate-400">2026.01.25</p>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1 bg-brand/10 px-2.5 py-1 rounded-full">
-                  <span class="text-brand text-xs">★</span>
-                  <span class="text-xs font-semibold text-brand">5.0</span>
-                </div>
-              </div>
-              <p class="text-sm text-slate-600 leading-relaxed">분위기가 너무 좋고 반려견 동반이 편해요. 다음에 또 방문할 예정입니다!</p>
-            </div>
-            <div class="bg-white border border-line rounded-2xl p-5 hover:shadow-card transition-shadow">
-              <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-2">
-                  <div class="w-9 h-9 bg-gradient-to-br from-blue-200 to-blue-300 rounded-full flex items-center justify-center text-white text-xs font-medium">김</div>
-                  <div>
-                    <p class="text-sm font-semibold text-deep">김**</p>
-                    <p class="text-[11px] text-slate-400">2026.01.20</p>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1 bg-brand/10 px-2.5 py-1 rounded-full">
-                  <span class="text-brand text-xs">★</span>
-                  <span class="text-xs font-semibold text-brand">4.8</span>
-                </div>
-              </div>
-              <p class="text-sm text-slate-600 leading-relaxed">음식도 맛있고 강아지 간식도 주셔서 감동받았어요. 추천합니다!</p>
-            </div>
-          </div>
-        </div>
-
         <!-- 탭 메뉴 -->
         <div class="border-b border-line mb-6">
           <div class="flex gap-8">
             <button class="detail-tab active" data-tab="story">상세정보</button>
-            <!-- <button class="detail-tab" data-tab="review">후기 <span class="text-brand ml-1">19</span></button> -->
             <button class="detail-tab" data-tab="qna">Q&A</button>
-            <button class="detail-tab" data-tab="edit-request">수정 요청하기</button>
           </div>
         </div>
 
@@ -230,9 +167,8 @@
           <div id="story" class="detail-tab-panel active">
             <!-- 서브 태그 -->
             <div class="flex flex-wrap gap-2 mb-8">
-              <button class="sub-tag active">매력 포인트</button>
-              <button class="sub-tag">운영 안내</button>
-              <button class="sub-tag">동반규정</button>
+              <button class="sub-tag active" data-target="section-usage">이용안내</button>
+              <button class="sub-tag" data-target="section-companion">동반안내</button>
             </div>
             
             <!-- 스토리 콘텐츠 -->
@@ -240,186 +176,29 @@
               <img src="0.thumbnail_food.png" alt="스토리 이미지" class="w-full rounded-2xl mb-6" />
               
               <h3 class="text-lg font-semibold text-deep mb-4">반려견과 함께하는 특별한 다이닝</h3>
-              <p class="text-slate-600 mb-6 leading-relaxed">
+              <p class="text-slate-600 mb-10 leading-relaxed">
                 따뜻한 조명 아래에서 반려견과 함께 식사를 즐길 수 있는 공간입니다. 
                 넓은 테이블 간격과 편안한 분위기로 반려견과 보호자 모두 편안하게 식사할 수 있어요.
               </p>
               
-              <h3 class="text-lg font-semibold text-deep mb-4">이용 안내</h3>
-              <ul class="text-slate-600 space-y-2 mb-6">
-                <li>• 영업시간: 11:00 - 22:00 (브레이크타임 15:00 - 17:00)</li>
-                <li>• 주소: 서울 강남구 테헤란로 123</li>
-                <li>• 전화: 02-1234-5678</li>
-                <li>• 주차: 건물 내 주차장 이용 가능 (2시간 무료)</li>
-              </ul>
+              <div id="section-usage" class="info-section mb-10">
+                <h3 class="text-lg font-semibold text-deep mb-4">이용안내</h3>
+                <ul class="text-slate-600 space-y-2">
+                  <li>• 영업시간: 11:00 - 22:00 (브레이크타임 15:00 - 17:00)</li>
+                  <li>• 주소: 서울 강남구 테헤란로 123</li>
+                  <li>• 전화: 02-1234-5678</li>
+                  <li>• 주차: 건물 내 주차장 이용 가능 (2시간 무료)</li>
+                </ul>
+              </div>
               
-              <h3 class="text-lg font-semibold text-deep mb-4">반려견 동반 안내</h3>
-              <ul class="text-slate-600 space-y-2">
-                <li>• 모든 크기의 반려견 입장 가능</li>
-                <li>• 리드줄 필수 착용</li>
-                <li>• 반려견 전용 물그릇 제공</li>
-                <li>• 야외 테라스석 우선 배정</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- 후기 탭 -->
-          <div id="review" class="detail-tab-panel">
-            <div class="mb-6">
-              <div class="flex items-center gap-4 mb-6">
-                <div class="text-center">
-                  <p class="text-3xl font-bold text-deep">4.9</p>
-                  <p class="text-sm text-slate-500">평점</p>
-                </div>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 text-sm">
-                    <span class="w-8">5점</span>
-                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div class="h-full bg-brand rounded-full" style="width: 85%"></div>
-                    </div>
-                    <span class="w-8 text-slate-500">17</span>
-                  </div>
-                  <div class="flex items-center gap-2 text-sm">
-                    <span class="w-8">4점</span>
-                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div class="h-full bg-brand rounded-full" style="width: 10%"></div>
-                    </div>
-                    <span class="w-8 text-slate-500">2</span>
-                  </div>
-                  <div class="flex items-center gap-2 text-sm">
-                    <span class="w-8">3점</span>
-                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div class="h-full bg-brand rounded-full" style="width: 0%"></div>
-                    </div>
-                    <span class="w-8 text-slate-500">0</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 후기 카드 목록 -->
-            <div class="grid md:grid-cols-2 gap-4">
-              <!-- 후기 카드 1 -->
-              <div class="bg-white border border-line rounded-2xl p-5 hover:shadow-card transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-11 h-11 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center text-white font-medium">류</div>
-                  <div class="flex-1">
-                    <p class="font-semibold text-deep">류**</p>
-                    <p class="text-xs text-slate-400">2026.01.28</p>
-                  </div>
-                  <div class="flex items-center gap-1 bg-brand/10 px-3 py-1 rounded-full">
-                    <span class="text-brand text-sm">★</span>
-                    <span class="text-sm font-semibold text-brand">5.0</span>
-                  </div>
-                </div>
-                <p class="text-slate-600 text-sm leading-relaxed mb-4">
-                  강아지와 함께 방문했는데 너무 좋았어요. 직원분들도 친절하시고 음식도 맛있었습니다. 특히 파스타가 정말 맛있었어요 :)
-                </p>
-                <div class="flex gap-2">
-                  <img src="0.thumbnail_food.png" alt="후기 이미지" class="w-16 h-16 rounded-lg object-cover" />
-                  <img src="3.thumbnail_notebook.png" alt="후기 이미지" class="w-16 h-16 rounded-lg object-cover" />
-                </div>
-              </div>
-
-              <!-- 후기 카드 2 -->
-              <div class="bg-white border border-line rounded-2xl p-5 hover:shadow-card transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-11 h-11 bg-gradient-to-br from-pink-200 to-pink-300 rounded-full flex items-center justify-center text-white font-medium">송</div>
-                  <div class="flex-1">
-                    <p class="font-semibold text-deep">송**</p>
-                    <p class="text-xs text-slate-400">2026.01.25</p>
-                  </div>
-                  <div class="flex items-center gap-1 bg-brand/10 px-3 py-1 rounded-full">
-                    <span class="text-brand text-sm">★</span>
-                    <span class="text-sm font-semibold text-brand">5.0</span>
-                  </div>
-                </div>
-                <p class="text-slate-600 text-sm leading-relaxed mb-4">
-                  분위기가 너무 좋고 반려견 동반이 편해요. 테라스 자리가 넓어서 좋았습니다. 강아지 물그릇도 바로 가져다 주시고 서비스가 좋아요!
-                </p>
-                <div class="flex gap-2">
-                  <img src="4.thumbnail_kids.png" alt="후기 이미지" class="w-16 h-16 rounded-lg object-cover" />
-                </div>
-              </div>
-
-              <!-- 후기 카드 3 -->
-              <div class="bg-white border border-line rounded-2xl p-5 hover:shadow-card transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-11 h-11 bg-gradient-to-br from-blue-200 to-blue-300 rounded-full flex items-center justify-center text-white font-medium">김</div>
-                  <div class="flex-1">
-                    <p class="font-semibold text-deep">김**</p>
-                    <p class="text-xs text-slate-400">2026.01.20</p>
-                  </div>
-                  <div class="flex items-center gap-1 bg-brand/10 px-3 py-1 rounded-full">
-                    <span class="text-brand text-sm">★</span>
-                    <span class="text-sm font-semibold text-brand">4.8</span>
-                  </div>
-                </div>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                  음식도 맛있고 강아지 간식도 주셔서 감동받았어요. 주차가 조금 불편했지만 그래도 추천합니다!
-                </p>
-              </div>
-
-              <!-- 후기 카드 4 -->
-              <div class="bg-white border border-line rounded-2xl p-5 hover:shadow-card transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-11 h-11 bg-gradient-to-br from-green-200 to-green-300 rounded-full flex items-center justify-center text-white font-medium">박</div>
-                  <div class="flex-1">
-                    <p class="font-semibold text-deep">박**</p>
-                    <p class="text-xs text-slate-400">2026.01.18</p>
-                  </div>
-                  <div class="flex items-center gap-1 bg-brand/10 px-3 py-1 rounded-full">
-                    <span class="text-brand text-sm">★</span>
-                    <span class="text-sm font-semibold text-brand">5.0</span>
-                  </div>
-                </div>
-                <p class="text-slate-600 text-sm leading-relaxed mb-4">
-                  강아지랑 같이 브런치 먹었는데 정말 좋았어요! 직원분들이 강아지를 엄청 예뻐해주셔서 감동이었습니다.
-                </p>
-                <div class="flex gap-2">
-                  <img src="5.thumbnail_play.png" alt="후기 이미지" class="w-16 h-16 rounded-lg object-cover" />
-                  <img src="0.thumbnail_food.png" alt="후기 이미지" class="w-16 h-16 rounded-lg object-cover" />
-                  <img src="3.thumbnail_notebook.png" alt="후기 이미지" class="w-16 h-16 rounded-lg object-cover" />
-                </div>
-              </div>
-
-              <!-- 후기 카드 5 -->
-              <div class="bg-white border border-line rounded-2xl p-5 hover:shadow-card transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-11 h-11 bg-gradient-to-br from-purple-200 to-purple-300 rounded-full flex items-center justify-center text-white font-medium">이</div>
-                  <div class="flex-1">
-                    <p class="font-semibold text-deep">이**</p>
-                    <p class="text-xs text-slate-400">2026.01.15</p>
-                  </div>
-                  <div class="flex items-center gap-1 bg-brand/10 px-3 py-1 rounded-full">
-                    <span class="text-brand text-sm">★</span>
-                    <span class="text-sm font-semibold text-brand">5.0</span>
-                  </div>
-                </div>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                  야외 테라스가 넓어서 대형견이랑 가기 좋아요. 날씨 좋을 때 또 방문할게요!
-                </p>
-              </div>
-
-              <!-- 후기 카드 6 -->
-              <div class="bg-white border border-line rounded-2xl p-5 hover:shadow-card transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-11 h-11 bg-gradient-to-br from-orange-200 to-orange-300 rounded-full flex items-center justify-center text-white font-medium">정</div>
-                  <div class="flex-1">
-                    <p class="font-semibold text-deep">정**</p>
-                    <p class="text-xs text-slate-400">2026.01.12</p>
-                  </div>
-                  <div class="flex items-center gap-1 bg-brand/10 px-3 py-1 rounded-full">
-                    <span class="text-brand text-sm">★</span>
-                    <span class="text-sm font-semibold text-brand">4.9</span>
-                  </div>
-                </div>
-                <p class="text-slate-600 text-sm leading-relaxed mb-4">
-                  예약하고 갔는데 자리도 좋고 음식도 맛있었어요. 강아지 동반 식당 중 최고입니다!
-                </p>
-                <div class="flex gap-2">
-                  <img src="4.thumbnail_kids.png" alt="후기 이미지" class="w-16 h-16 rounded-lg object-cover" />
-                </div>
+              <div id="section-companion" class="info-section">
+                <h3 class="text-lg font-semibold text-deep mb-4">동반안내</h3>
+                <ul class="text-slate-600 space-y-2">
+                  <li>• 모든 크기의 반려견 입장 가능</li>
+                  <li>• 리드줄 필수 착용</li>
+                  <li>• 반려견 전용 물그릇 제공</li>
+                  <li>• 야외 테라스석 우선 배정</li>
+                </ul>
               </div>
             </div>
           </div>
@@ -474,41 +253,56 @@
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- 수정 요청하기 탭 -->
-          <div id="edit-request" class="detail-tab-panel">
-            <div class="max-w-2xl">
-              <p class="text-sm text-slate-500 mb-6">잘못된 정보나 변경된 내용이 있다면 알려주세요. 확인 후 반영하겠습니다.</p>
-              <form id="edit-request-form" class="space-y-5">
-                <div>
-                  <label class="block text-sm font-medium text-deep mb-2">수정 항목</label>
-                  <select id="edit-category" class="w-full px-4 py-3 border border-line rounded-xl text-sm text-ink bg-white focus:outline-none focus:border-brand transition" required>
-                    <option value="" disabled selected>선택해주세요</option>
-                    <option value="영업시간">영업시간</option>
-                    <option value="연락처">연락처</option>
-                    <option value="주소">주소</option>
-                    <option value="반려동물 규정">반려동물 규정</option>
-                    <option value="메뉴/가격">메뉴/가격</option>
-                    <option value="폐업/휴업">폐업/휴업</option>
-                    <option value="기타">기타</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-deep mb-2">수정 내용</label>
-                  <textarea id="edit-content" rows="5" class="w-full px-4 py-3 border border-line rounded-xl text-sm text-ink resize-none focus:outline-none focus:border-brand transition" placeholder="변경된 내용을 자세히 적어주세요" required></textarea>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-deep mb-2">연락처 <span class="text-slate-400 font-normal">(선택)</span></label>
-                  <input type="text" id="edit-contact" class="w-full px-4 py-3 border border-line rounded-xl text-sm text-ink focus:outline-none focus:border-brand transition" placeholder="회신 받으실 이메일 또는 연락처" />
-                </div>
-                <button type="submit" class="w-full py-3.5 rounded-xl bg-brand text-white text-sm font-semibold hover:bg-red-700 transition">
-                  수정 요청 보내기
-                </button>
-              </form>
-              <div id="edit-request-success" class="hidden mt-6 p-5 bg-green-50 border border-green-200 rounded-xl text-center">
-                <p class="text-sm font-semibold text-green-700 mb-1">수정 요청이 접수되었습니다!</p>
-                <p class="text-xs text-green-600">검토 후 반영하겠습니다. 감사합니다.</p>
+        <!-- 하단 안내 + 정보 수정 요청 -->
+        <div class="mt-16 pt-8 border-t border-line text-center">
+          <p class="text-sm text-slate-400 mb-4">동반 정보는 언제든 수정될 수 있습니다. 방문 전 정보를 확인하세요.</p>
+          <button id="edit-request-btn" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-line text-sm font-medium text-slate-600 hover:border-brand hover:text-brand transition">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 1.5l2.5 2.5M1 13h2.5L11.5 5 9 2.5 1 10.5V13z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            정보 수정 요청
+          </button>
+        </div>
+
+        <!-- 수정 요청 모달 (기본 숨김) -->
+        <div id="edit-request-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div class="bg-white rounded-2xl shadow-soft w-[min(520px,92%)] max-h-[85vh] overflow-y-auto p-7">
+            <div class="flex items-center justify-between mb-5">
+              <h3 class="text-lg font-semibold text-deep">정보 수정 요청</h3>
+              <button id="edit-modal-close" class="text-slate-400 hover:text-ink transition">
+                <span class="material-icons">close</span>
+              </button>
+            </div>
+            <p class="text-sm text-slate-500 mb-5">잘못된 정보나 변경된 내용이 있다면 알려주세요. 확인 후 반영하겠습니다.</p>
+            <form id="edit-request-form" class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-deep mb-2">수정 항목</label>
+                <select id="edit-category" class="w-full px-4 py-3 border border-line rounded-xl text-sm text-ink bg-white focus:outline-none focus:border-brand transition" required>
+                  <option value="" disabled selected>선택해주세요</option>
+                  <option value="영업시간">영업시간</option>
+                  <option value="연락처">연락처</option>
+                  <option value="주소">주소</option>
+                  <option value="반려동물 규정">반려동물 규정</option>
+                  <option value="메뉴/가격">메뉴/가격</option>
+                  <option value="폐업/휴업">폐업/휴업</option>
+                  <option value="기타">기타</option>
+                </select>
               </div>
+              <div>
+                <label class="block text-sm font-medium text-deep mb-2">수정 내용</label>
+                <textarea id="edit-content" rows="4" class="w-full px-4 py-3 border border-line rounded-xl text-sm text-ink resize-none focus:outline-none focus:border-brand transition" placeholder="변경된 내용을 자세히 적어주세요" required></textarea>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-deep mb-2">연락처 <span class="text-slate-400 font-normal">(선택)</span></label>
+                <input type="text" id="edit-contact" class="w-full px-4 py-3 border border-line rounded-xl text-sm text-ink focus:outline-none focus:border-brand transition" placeholder="회신 받으실 이메일 또는 연락처" />
+              </div>
+              <button type="submit" class="w-full py-3.5 rounded-xl bg-brand text-white text-sm font-semibold hover:bg-red-700 transition">
+                수정 요청 보내기
+              </button>
+            </form>
+            <div id="edit-request-success" class="hidden mt-5 p-5 bg-green-50 border border-green-200 rounded-xl text-center">
+              <p class="text-sm font-semibold text-green-700 mb-1">수정 요청이 접수되었습니다!</p>
+              <p class="text-xs text-green-600">검토 후 반영하겠습니다. 감사합니다.</p>
             </div>
           </div>
         </div>
@@ -538,22 +332,27 @@
       // 탭 전환
       document.querySelectorAll('.detail-tab').forEach(tab => {
         tab.addEventListener('click', () => {
-          // 탭 버튼 활성화
           document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
           tab.classList.add('active');
-          
-          // 탭 패널 전환
           const targetId = tab.dataset.tab;
           document.querySelectorAll('.detail-tab-panel').forEach(panel => panel.classList.remove('active'));
           document.getElementById(targetId).classList.add('active');
         });
       });
 
-      // 서브 태그 전환
+      // 서브 태그 클릭 → 해당 섹션으로 스크롤
       document.querySelectorAll('.sub-tag').forEach(tag => {
         tag.addEventListener('click', () => {
           document.querySelectorAll('.sub-tag').forEach(t => t.classList.remove('active'));
           tag.classList.add('active');
+
+          const targetId = tag.dataset.target;
+          if (targetId) {
+            const el = document.getElementById(targetId);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
         });
       });
 
@@ -578,20 +377,30 @@
         document.getElementById('main-image').src = image;
       }
 
+      // 수정 요청 모달
+      const modal = document.getElementById('edit-request-modal');
+      document.getElementById('edit-request-btn').addEventListener('click', () => {
+        modal.classList.remove('hidden');
+      });
+      document.getElementById('edit-modal-close').addEventListener('click', () => {
+        modal.classList.add('hidden');
+      });
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.add('hidden');
+      });
+
       // 수정 요청 폼 제출
       document.getElementById('edit-request-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        const category = document.getElementById('edit-category').value;
+        const cat = document.getElementById('edit-category').value;
         const content = document.getElementById('edit-content').value;
         const contact = document.getElementById('edit-contact').value;
         const placeTitle = document.getElementById('detail-title').textContent;
 
-        // mailto로 전송
-        const subject = encodeURIComponent(`[수정 요청] ${placeTitle} - ${category}`);
-        const body = encodeURIComponent(`장소: ${placeTitle}\n수정 항목: ${category}\n\n수정 내용:\n${content}\n\n연락처: ${contact || '미입력'}`);
+        const subject = encodeURIComponent(`[수정 요청] ${placeTitle} - ${cat}`);
+        const body = encodeURIComponent(`장소: ${placeTitle}\n수정 항목: ${cat}\n\n수정 내용:\n${content}\n\n연락처: ${contact || '미입력'}`);
         window.location.href = `mailto:uixstudio.official@gmail.com?subject=${subject}&body=${body}`;
 
-        // 성공 메시지 표시
         document.getElementById('edit-request-form').classList.add('hidden');
         document.getElementById('edit-request-success').classList.remove('hidden');
       });
