@@ -8,6 +8,30 @@
   if (!authBtn) return;
 
   if (user) {
+    // 프로필이 없으면 자동 생성 (카카오 로그인 등 OAuth 대응)
+    try {
+      const { data: existing } = await supabaseClient
+        .from('profiles')
+        .select('id')
+        .eq('id', user.id)
+        .single();
+
+      if (!existing) {
+        await supabaseClient
+          .from('profiles')
+          .upsert([{
+            id: user.id,
+            name: user.user_metadata?.name || user.user_metadata?.full_name || '',
+            nickname: user.user_metadata?.preferred_username || user.user_metadata?.name || '',
+            email: user.email || '',
+            marketing_agreed: false
+          }], { onConflict: 'id' });
+        console.log('프로필 자동 생성 완료');
+      }
+    } catch (e) {
+      console.error('프로필 확인/생성 실패:', e);
+    }
+
     // 로그인 상태: 마이페이지 드롭다운으로 변경
     authBtn.outerHTML = `
       <div class="relative" id="mypage-dropdown">
