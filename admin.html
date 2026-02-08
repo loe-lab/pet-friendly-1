@@ -549,8 +549,13 @@
     function renderPlaces() {
       try {
         const tags = (arr) => {
-          if (!arr || !Array.isArray(arr)) return '';
-          return arr.map(tag => `<span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">${tag}</span>`).join('');
+          if (!arr) return '';
+          let tagArr = arr;
+          if (typeof arr === 'string') {
+            try { tagArr = JSON.parse(arr); } catch(e) { tagArr = arr.split(',').map(t => t.trim()).filter(Boolean); }
+          }
+          if (!Array.isArray(tagArr)) return '';
+          return tagArr.map(tag => `<span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">${tag}</span>`).join('');
         };
         const imgCount = (arr) => {
           if (!arr || !Array.isArray(arr) || arr.length === 0) return '';
@@ -613,7 +618,10 @@
         document.getElementById('place-image-url').value = place.image_url || '';
         
         // 태그 체크박스 설정
-        const placeTags = place.tags || [];
+        let placeTags = place.tags || [];
+        if (typeof placeTags === 'string') {
+          try { placeTags = JSON.parse(placeTags); } catch(e) { placeTags = placeTags.split(',').map(t => t.trim()).filter(Boolean); }
+        }
         document.querySelectorAll('#tag-checkboxes input').forEach(cb => {
           cb.checked = placeTags.includes(cb.value);
         });
