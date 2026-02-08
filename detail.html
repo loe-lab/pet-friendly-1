@@ -129,16 +129,16 @@
         </a>
 
         <!-- 상단: 이미지 갤러리 + 정보 -->
-        <div class="grid md:grid-cols-[1fr_100px] gap-4 mb-8">
+        <div class="grid md:grid-cols-[3fr_100px] gap-4 mb-8 max-w-[75%]">
           <!-- 메인 이미지 -->
           <div class="relative">
-            <img id="main-image" src="0.thumbnail_food.png" alt="메인 이미지" class="w-full h-[400px] object-cover rounded-2xl" />
+            <img id="main-image" src="0.thumbnail_food.png" alt="메인 이미지" class="w-full h-[300px] object-cover rounded-2xl" />
             <button class="absolute top-4 right-4 p-2">
               <img src="base-icon-heart.svg" alt="좋아요" class="w-6 h-6" />
             </button>
           </div>
           <!-- 썸네일 갤러리 -->
-          <div id="thumb-gallery" class="hidden md:flex flex-col gap-3 overflow-y-auto max-h-[400px]">
+          <div id="thumb-gallery" class="hidden md:flex flex-col gap-3 overflow-y-auto max-h-[300px]">
             <!-- 동적으로 채워짐 -->
           </div>
         </div>
@@ -155,29 +155,21 @@
           </div>
         </div>
 
-        <!-- 탭 메뉴 -->
-        <div class="border-b border-line mb-6">
-          <div class="flex gap-8">
-            <button class="detail-tab active" data-tab="story">상세정보</button>
-            <button class="detail-tab" data-tab="qna">Q&A</button>
-          </div>
-        </div>
-
-        <!-- 탭 콘텐츠 -->
-        <div id="tab-content">
-          <!-- 상세정보 탭 -->
-          <div id="story" class="detail-tab-panel active">
+        <!-- 상세정보 -->
+        <h2 class="text-lg font-semibold text-deep mb-6">상세정보</h2>
+        <div>
             <!-- 서브 태그 -->
             <div class="flex flex-wrap gap-2 mb-8">
               <button class="sub-tag active" data-target="section-highlight">특별한점</button>
-              <button class="sub-tag" data-target="section-usage">이용안내</button>
               <button class="sub-tag" data-target="section-companion">동반안내</button>
+              <button class="sub-tag" data-target="section-usage">이용안내</button>
+              <button class="sub-tag" data-target="section-map">위치</button>
             </div>
             
             <!-- 스토리 콘텐츠 -->
             <div class="prose max-w-none">
               <div id="section-highlight" class="info-section mb-6">
-                <div id="detail-images-content">
+                <div id="detail-images-content" class="max-w-[75%]">
                   <img src="0.thumbnail_food.png" alt="스토리 이미지" class="w-full rounded-2xl mb-6" />
                 </div>
               </div>
@@ -187,6 +179,16 @@
                 따뜻한 조명 아래에서 반려견과 함께 식사를 즐길 수 있는 공간입니다. 
                 넓은 테이블 간격과 편안한 분위기로 반려견과 보호자 모두 편안하게 식사할 수 있어요.
               </p>
+              
+              <div id="section-companion" class="info-section mb-10">
+                <h3 class="text-lg font-semibold text-deep mb-4">동반안내</h3>
+                <ul class="text-slate-600 space-y-2">
+                  <li>• 모든 크기의 반려견 입장 가능</li>
+                  <li>• 리드줄 필수 착용</li>
+                  <li>• 반려견 전용 물그릇 제공</li>
+                  <li>• 야외 테라스석 우선 배정</li>
+                </ul>
+              </div>
               
               <div id="section-usage" class="info-section mb-10">
                 <h3 class="text-lg font-semibold text-deep mb-4">이용안내</h3>
@@ -198,64 +200,11 @@
                 </ul>
               </div>
               
-              <div id="section-companion" class="info-section">
-                <h3 class="text-lg font-semibold text-deep mb-4">동반안내</h3>
-                <ul class="text-slate-600 space-y-2">
-                  <li>• 모든 크기의 반려견 입장 가능</li>
-                  <li>• 리드줄 필수 착용</li>
-                  <li>• 반려견 전용 물그릇 제공</li>
-                  <li>• 야외 테라스석 우선 배정</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Q&A 탭 -->
-          <div id="qna" class="detail-tab-panel">
-            <div class="mb-6">
-              <button class="w-full py-4 border border-line rounded-xl text-sm text-slate-600 hover:border-deep transition-colors">
-                + 문의하기
-              </button>
-            </div>
-
-            <div class="space-y-4">
-              <div class="border border-line rounded-xl overflow-hidden">
-                <div class="p-4 bg-slate-50">
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="px-2 py-0.5 bg-deep text-white text-xs rounded">Q</span>
-                    <span class="text-sm font-medium text-deep">대형견도 입장 가능한가요?</span>
-                  </div>
-                  <p class="text-xs text-slate-400">김** · 2026.01.15</p>
-                </div>
-                <div class="p-4">
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="px-2 py-0.5 bg-brand text-white text-xs rounded">A</span>
-                    <span class="text-sm font-medium text-deep">네, 모든 크기의 반려견 입장 가능합니다.</span>
-                  </div>
-                  <p class="text-sm text-slate-600">
-                    안녕하세요! 대형견도 입장 가능합니다. 다만 리드줄 착용은 필수이며, 
-                    테라스석을 우선 배정해 드리고 있습니다. 감사합니다 :)
-                  </p>
-                </div>
-              </div>
-
-              <div class="border border-line rounded-xl overflow-hidden">
-                <div class="p-4 bg-slate-50">
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="px-2 py-0.5 bg-deep text-white text-xs rounded">Q</span>
-                    <span class="text-sm font-medium text-deep">예약 필수인가요?</span>
-                  </div>
-                  <p class="text-xs text-slate-400">이** · 2026.01.10</p>
-                </div>
-                <div class="p-4">
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="px-2 py-0.5 bg-brand text-white text-xs rounded">A</span>
-                    <span class="text-sm font-medium text-deep">예약 없이 방문 가능하지만, 주말에는 예약을 권장드립니다.</span>
-                  </div>
-                  <p class="text-sm text-slate-600">
-                    평일에는 웨이팅 없이 바로 입장 가능하시고, 주말이나 공휴일에는 
-                    예약하시면 더 편하게 이용하실 수 있습니다.
-                  </p>
+              <div id="section-map" class="info-section">
+                <h3 class="text-lg font-semibold text-deep mb-4">위치</h3>
+                <p id="map-address" class="text-sm text-slate-500 mb-3">서울 강남구 테헤란로 123</p>
+                <div id="map-container" class="w-full h-[300px] rounded-2xl overflow-hidden border border-line bg-gray-100">
+                  <!-- 카카오맵 또는 구글맵이 여기에 렌더링됩니다 -->
                 </div>
               </div>
             </div>
@@ -335,18 +284,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase.js"></script>
     <script src="auth-header.js"></script>
+    <!-- 카카오맵 SDK -->
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=3r7okJtcBWzIq6dicYYiiO0EaIiwyUsG&libraries=services"></script>
     <script>
-      // 탭 전환
-      document.querySelectorAll('.detail-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-          document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          const targetId = tab.dataset.tab;
-          document.querySelectorAll('.detail-tab-panel').forEach(panel => panel.classList.remove('active'));
-          document.getElementById(targetId).classList.add('active');
-        });
-      });
-
       // 서브 태그 클릭 → 해당 섹션으로 스크롤
       document.querySelectorAll('.sub-tag').forEach(tag => {
         tag.addEventListener('click', () => {
@@ -472,6 +412,49 @@
       // Supabase 준비 후 로드
       if (typeof supabaseClient !== 'undefined') {
         loadDetailImages();
+      }
+
+      // 카카오맵 초기화
+      function initMap(address) {
+        const mapContainer = document.getElementById('map-container');
+        if (!mapContainer || typeof kakao === 'undefined') return;
+
+        const mapOption = {
+          center: new kakao.maps.LatLng(37.5665, 126.978),
+          level: 3
+        };
+        const map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 주소로 좌표 검색
+        const geocoder = new kakao.maps.services.Geocoder();
+        geocoder.addressSearch(address, function(result, status) {
+          if (status === kakao.maps.services.Status.OK) {
+            const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            const marker = new kakao.maps.Marker({ map: map, position: coords });
+            
+            const infowindow = new kakao.maps.InfoWindow({
+              content: `<div style="padding:5px 10px;font-size:12px;white-space:nowrap;">${document.getElementById('detail-title').textContent}</div>`
+            });
+            infowindow.open(map, marker);
+            map.setCenter(coords);
+          } else {
+            // 주소 검색 실패 시 키워드로 재시도
+            const ps = new kakao.maps.services.Places();
+            ps.keywordSearch(address, function(data, status) {
+              if (status === kakao.maps.services.Status.OK) {
+                const coords = new kakao.maps.LatLng(data[0].y, data[0].x);
+                const marker = new kakao.maps.Marker({ map: map, position: coords });
+                map.setCenter(coords);
+              }
+            });
+          }
+        });
+      }
+
+      // 주소 텍스트로 지도 초기화
+      const mapAddress = document.getElementById('map-address');
+      if (mapAddress && mapAddress.textContent.trim()) {
+        initMap(mapAddress.textContent.trim());
       }
 
       // 수정 요청 모달
