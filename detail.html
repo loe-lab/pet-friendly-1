@@ -72,17 +72,22 @@
         border-color: #DD0035;
       }
       .gallery-thumb {
-        width: 80px;
-        height: 80px;
+        width: 88px;
+        height: 88px;
         border-radius: 12px;
         object-fit: cover;
         cursor: pointer;
-        opacity: 0.7;
-        transition: opacity 0.2s ease;
+        opacity: 0.6;
+        border: 2px solid transparent;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
       }
-      .gallery-thumb:hover,
+      .gallery-thumb:hover {
+        opacity: 0.85;
+      }
       .gallery-thumb.active {
         opacity: 1;
+        border-color: #DD0035;
       }
       .info-section {
         scroll-margin-top: 100px;
@@ -124,7 +129,7 @@
         </a>
 
         <!-- 상단: 이미지 갤러리 + 정보 -->
-        <div class="grid md:grid-cols-[1fr_200px] gap-4 mb-8">
+        <div class="grid md:grid-cols-[1fr_100px] gap-4 mb-8">
           <!-- 메인 이미지 -->
           <div class="relative">
             <img id="main-image" src="0.thumbnail_food.png" alt="메인 이미지" class="w-full h-[400px] object-cover rounded-2xl" />
@@ -133,11 +138,8 @@
             </button>
           </div>
           <!-- 썸네일 갤러리 -->
-          <div class="hidden md:flex flex-col gap-3">
-            <img src="0.thumbnail_food.png" alt="썸네일 1" class="gallery-thumb active" onclick="changeMainImage(this)" />
-            <img src="3.thumbnail_notebook.png" alt="썸네일 2" class="gallery-thumb" onclick="changeMainImage(this)" />
-            <img src="4.thumbnail_kids.png" alt="썸네일 3" class="gallery-thumb" onclick="changeMainImage(this)" />
-            <img src="5.thumbnail_play.png" alt="썸네일 4" class="gallery-thumb" onclick="changeMainImage(this)" />
+          <div id="thumb-gallery" class="hidden md:flex flex-col gap-3 overflow-y-auto max-h-[400px]">
+            <!-- 동적으로 채워짐 -->
           </div>
         </div>
 
@@ -175,7 +177,9 @@
             <!-- 스토리 콘텐츠 -->
             <div class="prose max-w-none">
               <div id="section-highlight" class="info-section mb-6">
-                <img src="0.thumbnail_food.png" alt="스토리 이미지" class="w-full rounded-2xl mb-6" />
+                <div id="detail-images-content">
+                  <img src="0.thumbnail_food.png" alt="스토리 이미지" class="w-full rounded-2xl mb-6" />
+                </div>
               </div>
               
               <h3 class="text-lg font-semibold text-deep mb-4">반려견과 함께하는 특별한 다이닝</h3>
@@ -260,7 +264,7 @@
 
         <!-- 하단 안내 + 정보 수정 요청 -->
         <div class="mt-16 pt-8 border-t border-line text-center">
-          <p class="text-sm text-slate-400 mb-4">최신 정보를 유지하고 있으나, 동반 정보는 언제든 변경될 수 있습니다. 방문 전 업체에 문의해 주세요.</p>
+          <p class="text-sm text-slate-400 mb-4">동반 정보는 언제든 변경될 수 있습니다. 방문 전 업체에 문의해 주세요.</p>
           <button id="edit-request-btn" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-line text-sm font-medium text-slate-600 hover:border-brand hover:text-brand transition">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 1.5l2.5 2.5M1 13h2.5L11.5 5 9 2.5 1 10.5V13z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             정보 수정 요청
@@ -371,6 +375,7 @@
       const title = params.get('title');
       const image = params.get('image');
       const category = params.get('category');
+      const placeId = params.get('id');
 
       if (title) {
         document.getElementById('detail-title').textContent = title;
@@ -378,6 +383,95 @@
       }
       if (image) {
         document.getElementById('main-image').src = image;
+      }
+
+      // Supabase에서 상세 이미지 로드
+      async function loadDetailImages() {
+        try {
+          let place = null;
+          
+          // ID로 조회 시도
+          if (placeId) {
+            const { data } = await supabaseClient
+              .from('places')
+              .select('*')
+              .eq('id', parseInt(placeId))
+              .single();
+            place = data;
+          }
+          
+          // title로 조회 시도
+          if (!place && title) {
+            const { data } = await supabaseClient
+              .from('places')
+              .select('*')
+              .eq('title', title)
+              .single();
+            place = data;
+          }
+
+          if (!place) return;
+
+          // 장소 정보 업데이트
+          if (place.title) {
+            document.getElementById('detail-title').textContent = place.title;
+            document.title = place.title + ' - 데일리펫';
+          }
+          if (place.description) {
+            const descEl = document.querySelector('.prose h3 + p');
+            if (descEl) descEl.textContent = place.description;
+          }
+
+          // 이미지 목록 구성 (대표 이미지 + 상세 이미지)
+          const allImages = [];
+          
+          // 대표 이미지
+          const mainImgUrl = place.image_url || image;
+          if (mainImgUrl) {
+            allImages.push({ image_url: mainImgUrl, description: '' });
+          }
+          
+          // 상세 이미지 추가
+          const detailImgs = place.detail_images || [];
+          detailImgs.forEach(img => {
+            if (img.image_url) allImages.push(img);
+          });
+
+          if (allImages.length === 0) return;
+
+          // 메인 이미지 설정
+          document.getElementById('main-image').src = allImages[0].image_url;
+
+          // 썸네일 갤러리 렌더링
+          const gallery = document.getElementById('thumb-gallery');
+          if (allImages.length > 1) {
+            gallery.innerHTML = allImages.map((img, i) => `
+              <img src="${img.image_url}" alt="썸네일 ${i + 1}" class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="changeMainImage(this)" />
+            `).join('');
+          } else {
+            // 이미지 1장이면 갤러리 숨김
+            gallery.classList.add('hidden');
+            gallery.closest('.grid').classList.remove('md:grid-cols-[1fr_100px]');
+          }
+
+          // 상세 이미지 콘텐츠 영역 렌더링
+          if (detailImgs.length > 0) {
+            const contentEl = document.getElementById('detail-images-content');
+            contentEl.innerHTML = detailImgs.map(img => `
+              <div class="mb-8">
+                <img src="${img.image_url}" alt="상세 이미지" class="w-full rounded-2xl mb-4" />
+                ${img.description ? `<p class="text-slate-600 leading-relaxed">${img.description}</p>` : ''}
+              </div>
+            `).join('');
+          }
+        } catch (err) {
+          console.error('상세 이미지 로드 실패:', err);
+        }
+      }
+
+      // Supabase 준비 후 로드
+      if (typeof supabaseClient !== 'undefined') {
+        loadDetailImages();
       }
 
       // 수정 요청 모달

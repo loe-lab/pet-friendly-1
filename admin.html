@@ -226,12 +226,24 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">이미지</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">대표 이미지</label>
           <div id="image-preview" class="mb-3 hidden">
             <img id="preview-img" class="w-full h-48 object-cover rounded-lg" />
           </div>
           <input type="file" id="place-image" accept="image/*" class="input-field" />
           <input type="hidden" id="place-image-url" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">상세 이미지 + 설명</label>
+          <p class="text-xs text-gray-400 mb-3">사진과 설명을 번갈아 추가할 수 있습니다. 상세페이지 갤러리에 표시됩니다.</p>
+          <div id="detail-images-list" class="space-y-4">
+            <!-- 동적으로 채워짐 -->
+          </div>
+          <button type="button" id="add-detail-image-btn" class="mt-3 w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-blue-400 hover:text-blue-500 transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            사진 + 설명 추가
+          </button>
         </div>
 
         <div class="flex gap-3 pt-4">
@@ -533,6 +545,7 @@
             ${place.theme ? `<p class="text-xs text-blue-600 mt-1">${place.theme}</p>` : ''}
             <div class="flex flex-wrap gap-1 mt-2">
               ${(place.tags || []).map(tag => `<span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">${tag}</span>`).join('')}
+              ${(place.detail_images && place.detail_images.length > 0) ? `<span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded">📷 상세 ${place.detail_images.length}장</span>` : ''}
             </div>
           </div>
           <div class="flex gap-2">
@@ -552,6 +565,10 @@
       placeModal.classList.remove('hidden');
       document.getElementById('modal-title').textContent = place ? '장소 수정' : '새 장소 추가';
       
+      // 상세 이미지 초기화
+      document.getElementById('detail-images-list').innerHTML = '';
+      detailImageCount = 0;
+
       if (place) {
         document.getElementById('place-id').value = place.id;
         document.getElementById('place-title').value = place.title || '';
@@ -573,6 +590,12 @@
         } else {
           document.getElementById('image-preview').classList.add('hidden');
         }
+
+        // 상세 이미지 채우기
+        const detailImages = place.detail_images || [];
+        detailImages.forEach(item => {
+          addDetailImageRow(item);
+        });
       } else {
         placeForm.reset();
         document.getElementById('place-id').value = '';
@@ -606,6 +629,55 @@
       }
     });
 
+    // ============ 상세 이미지 관리 ============
+    let detailImageCount = 0;
+
+    function addDetailImageRow(data = {}) {
+      const idx = detailImageCount++;
+      const list = document.getElementById('detail-images-list');
+      const row = document.createElement('div');
+      row.className = 'bg-gray-50 rounded-xl p-4 relative';
+      row.id = `detail-img-row-${idx}`;
+      row.innerHTML = `
+        <button type="button" onclick="removeDetailImageRow(${idx})" class="absolute top-2 right-2 w-7 h-7 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-300 transition text-sm">&times;</button>
+        <div class="flex gap-4 items-start">
+          <div class="w-32 flex-shrink-0">
+            <div id="detail-img-preview-${idx}" class="${data.image_url ? '' : 'hidden'} mb-2">
+              <img src="${data.image_url || ''}" class="w-full h-24 object-cover rounded-lg" />
+            </div>
+            <input type="file" accept="image/*" class="text-xs w-full" data-detail-idx="${idx}" onchange="previewDetailImage(this, ${idx})" />
+            <input type="hidden" id="detail-img-url-${idx}" value="${data.image_url || ''}" />
+          </div>
+          <div class="flex-1">
+            <textarea id="detail-img-desc-${idx}" class="input-field h-24 text-sm" placeholder="이 사진에 대한 설명을 입력하세요">${data.description || ''}</textarea>
+          </div>
+        </div>
+      `;
+      list.appendChild(row);
+    }
+
+    function removeDetailImageRow(idx) {
+      const row = document.getElementById(`detail-img-row-${idx}`);
+      if (row) row.remove();
+    }
+
+    function previewDetailImage(input, idx) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const previewEl = document.getElementById(`detail-img-preview-${idx}`);
+          previewEl.querySelector('img').src = e.target.result;
+          previewEl.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    document.getElementById('add-detail-image-btn').addEventListener('click', () => {
+      addDetailImageRow();
+    });
+
     // 장소 저장
     placeForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -615,9 +687,33 @@
       let imageUrl = document.getElementById('place-image-url').value;
 
       try {
-        // 이미지 업로드
+        // 대표 이미지 업로드
         if (imageFile) {
           imageUrl = await uploadImage(imageFile);
+        }
+
+        // 상세 이미지 업로드 + 수집
+        const detailImages = [];
+        const rows = document.querySelectorAll('[id^="detail-img-row-"]');
+        for (const row of rows) {
+          const idx = row.id.replace('detail-img-row-', '');
+          const fileInput = row.querySelector(`input[type="file"]`);
+          const urlInput = document.getElementById(`detail-img-url-${idx}`);
+          const descInput = document.getElementById(`detail-img-desc-${idx}`);
+          
+          let imgUrl = urlInput ? urlInput.value : '';
+          
+          // 새 파일이 있으면 업로드
+          if (fileInput && fileInput.files[0]) {
+            imgUrl = await uploadImage(fileInput.files[0]);
+          }
+          
+          if (imgUrl) {
+            detailImages.push({
+              image_url: imgUrl,
+              description: descInput ? descInput.value : ''
+            });
+          }
         }
 
         // 선택된 태그 수집
@@ -633,7 +729,8 @@
           theme: document.getElementById('place-theme').value,
           description: document.getElementById('place-description').value,
           tags: selectedTags,
-          image_url: imageUrl
+          image_url: imageUrl,
+          detail_images: detailImages
         };
 
         if (id) {
