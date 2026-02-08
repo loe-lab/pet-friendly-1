@@ -192,16 +192,16 @@
           <input type="text" id="place-title" class="input-field" placeholder="스테이포레스트 카페" required />
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">위치 *</label>
-          <input type="text" id="place-location" class="input-field" placeholder="서울 · 성수" required />
-        </div>
-
         <div class="relative">
           <label class="block text-sm font-medium text-gray-700 mb-1">주소 (지도용)</label>
           <input type="text" id="place-address" class="input-field" placeholder="상호명 또는 주소를 입력하세요" autocomplete="off" />
           <div id="address-results" class="address-dropdown hidden"></div>
-          <p class="text-xs text-gray-400 mt-1">상호명 또는 주소를 입력하면 자동 검색됩니다</p>
+          <p class="text-xs text-gray-400 mt-1">상호명 또는 주소를 입력하면 자동 검색되고 위치가 자동 입력됩니다</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">위치 *</label>
+          <input type="text" id="place-location" class="input-field" placeholder="서울 · 성수" required />
         </div>
 
         <div>
@@ -1016,6 +1016,11 @@
             item.addEventListener('click', () => {
               addressInput.value = item.dataset.address;
               document.getElementById('place-location').value = item.dataset.location;
+              // 장소명이 비어있으면 상호명 자동 입력
+              const titleInput = document.getElementById('place-title');
+              if (!titleInput.value.trim()) {
+                titleInput.value = item.dataset.name;
+              }
               addressResults.classList.add('hidden');
             });
           });
