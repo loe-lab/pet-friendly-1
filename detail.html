@@ -167,13 +167,16 @@
           <div id="story" class="detail-tab-panel active">
             <!-- 서브 태그 -->
             <div class="flex flex-wrap gap-2 mb-8">
-              <button class="sub-tag active" data-target="section-usage">이용안내</button>
+              <button class="sub-tag active" data-target="section-highlight">특별한점</button>
+              <button class="sub-tag" data-target="section-usage">이용안내</button>
               <button class="sub-tag" data-target="section-companion">동반안내</button>
             </div>
             
             <!-- 스토리 콘텐츠 -->
             <div class="prose max-w-none">
-              <img src="0.thumbnail_food.png" alt="스토리 이미지" class="w-full rounded-2xl mb-6" />
+              <div id="section-highlight" class="info-section mb-6">
+                <img src="0.thumbnail_food.png" alt="스토리 이미지" class="w-full rounded-2xl mb-6" />
+              </div>
               
               <h3 class="text-lg font-semibold text-deep mb-4">반려견과 함께하는 특별한 다이닝</h3>
               <p class="text-slate-600 mb-10 leading-relaxed">
@@ -257,7 +260,7 @@
 
         <!-- 하단 안내 + 정보 수정 요청 -->
         <div class="mt-16 pt-8 border-t border-line text-center">
-          <p class="text-sm text-slate-400 mb-4">동반 정보는 언제든 수정될 수 있습니다. 방문 전 정보를 확인하세요.</p>
+          <p class="text-sm text-slate-400 mb-4">최신 정보를 유지하고 있으나, 동반 정보는 언제든 변경될 수 있습니다. 방문 전 업체에 문의해 주세요.</p>
           <button id="edit-request-btn" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-line text-sm font-medium text-slate-600 hover:border-brand hover:text-brand transition">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 1.5l2.5 2.5M1 13h2.5L11.5 5 9 2.5 1 10.5V13z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             정보 수정 요청
