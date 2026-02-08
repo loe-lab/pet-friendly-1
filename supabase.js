@@ -124,7 +124,7 @@ async function getPlaces() {
   const { data, error } = await supabaseClient
     .from('places')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('id', { ascending: false });
   if (error) throw error;
   return data;
 }
