@@ -6,7 +6,7 @@
   <title>데일리펫 어드민</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=9b322ca3a195a49c4ba2d1fdd62fa0fa&libraries=services"></script>
+  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=9b322ca3a195a49c4ba2d1fdd62fa0fa&libraries=services&autoload=false"></script>
   <style>
     body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; }
     .btn-primary { @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition; }
@@ -944,6 +944,15 @@
     const addressInput = document.getElementById('place-address');
     const addressResults = document.getElementById('address-results');
     let searchTimer = null;
+    let kakaoReady = false;
+
+    // 카카오맵 SDK 초기화
+    if (typeof kakao !== 'undefined' && kakao.maps) {
+      kakao.maps.load(function() {
+        kakaoReady = true;
+        console.log('카카오맵 SDK 로드 완료');
+      });
+    }
 
     addressInput.addEventListener('input', () => {
       clearTimeout(searchTimer);
@@ -969,18 +978,28 @@
     });
 
     function searchAddress(keyword) {
-      if (typeof kakao === 'undefined' || !kakao.maps) {
-        addressResults.innerHTML = '<div class="address-item"><span class="address-item-addr">카카오맵 SDK를 불러오지 못했습니다</span></div>';
-        addressResults.classList.remove('hidden');
+      if (!kakaoReady) {
+        // SDK가 아직 준비 안됐으면 다시 시도
+        if (typeof kakao !== 'undefined' && kakao.maps) {
+          kakao.maps.load(function() {
+            kakaoReady = true;
+            doSearch(keyword);
+          });
+        } else {
+          addressResults.innerHTML = '<div class="address-item"><span class="address-item-addr">카카오맵 SDK를 불러오지 못했습니다. 페이지를 새로고침해 주세요.</span></div>';
+          addressResults.classList.remove('hidden');
+        }
         return;
       }
+      doSearch(keyword);
+    }
 
+    function doSearch(keyword) {
       const ps = new kakao.maps.services.Places();
       ps.keywordSearch(keyword, function(data, status) {
         if (status === kakao.maps.services.Status.OK && data.length > 0) {
           addressResults.innerHTML = data.slice(0, 7).map(place => {
             const addr = place.road_address_name || place.address_name;
-            // 주소에서 "시/도 · 구/군" 형태 추출
             const parts = addr.split(' ');
             const region = parts[0] || '';
             const district = parts[1] || '';
