@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>프로필 - 데일리펫</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: "#DD0035",
+              deep: "#12273B",
+              sand: "#F4EDE2",
+              warm: "#FFB27A",
+              ink: "#0F172A",
+              line: "#E2E8F0",
+            },
+            fontFamily: {
+              display: ["Work Sans", "sans-serif"],
+              body: ["Work Sans", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 24px 60px rgba(16, 24, 40, 0.12)",
+              card: "0 14px 30px rgba(18, 39, 59, 0.08)",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .profile-field {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .profile-field:last-child {
+        border-bottom: none;
+      }
+      .profile-label {
+        font-size: 14px;
+        color: #64748b;
+        min-width: 100px;
+      }
+      .profile-value {
+        font-size: 14px;
+        color: #0F172A;
+        font-weight: 500;
+        text-align: right;
+      }
+      .profile-input {
+        width: 100%;
+        max-width: 280px;
+        padding: 8px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 14px;
+        color: #0F172A;
+        text-align: right;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .profile-input:focus {
+        border-color: #DD0035;
+      }
+    </style>
+  </head>
+  <body class="bg-white text-ink font-body">
+    <div class="min-h-screen">
+      <!-- 헤더 -->
+      <header class="sticky top-0 z-30 border-b border-line bg-white/80 backdrop-blur-xl">
+        <div class="mx-auto flex w-[min(1200px,92%)] items-center justify-between gap-6 py-4">
+          <a href="index.html" class="flex items-center gap-3">
+            <div class="flex flex-col">
+              <span class="text-lg font-semibold tracking-[0.2em] text-brand" style="font-family: 'Ria Sans', sans-serif;">데일리펫</span>
+              <span class="text-xs text-slate-500">반려견과 함께하는 프리미엄 라이프스타일 큐레이션</span>
+            </div>
+          </a>
+          <nav class="hidden items-center gap-6 text-sm md:flex">
+            <a href="index.html" class="text-slate-600 hover:text-ink">어디갈까</a>
+            <a href="airline.html" class="text-slate-600 hover:text-ink">비행기 타볼까</a>
+            <a href="daily.html" class="text-slate-600 hover:text-ink">일상을 함께해</a>
+          </nav>
+          <div class="hidden items-center gap-3 md:flex">
+            <a href="auth.html" id="auth-btn" class="rounded-full border-1-5 border-line bg-white px-5 py-2 text-sm font-semibold text-brand shadow-soft">로그인/회원가입</a>
+          </div>
+        </div>
+      </header>
+
+      <!-- 메인 -->
+      <main class="mx-auto w-[min(700px,92%)] py-10">
+        <!-- 로딩 상태 -->
+        <div id="profile-loading" class="flex flex-col items-center justify-center py-20">
+          <div class="w-10 h-10 border-3 border-brand border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p class="text-sm text-slate-400">프로필을 불러오는 중...</p>
+        </div>
+
+        <!-- 비로그인 상태 -->
+        <div id="profile-noauth" class="hidden flex flex-col items-center justify-center py-20 text-center">
+          <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-5">
+            <svg width="28" height="28" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="#94a3b8" stroke-width="1.2"/><path d="M3 13.5c0-2.5 2.2-4 5-4s5 1.5 5 4" stroke="#94a3b8" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          <h2 class="text-lg font-semibold text-ink mb-2">로그인이 필요합니다</h2>
+          <p class="text-sm text-slate-400 mb-6">프로필을 확인하려면 먼저 로그인해주세요.</p>
+          <a href="auth.html" class="rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white hover:opacity-90 transition">로그인하기</a>
+        </div>
+
+        <!-- 프로필 콘텐츠 -->
+        <div id="profile-content" class="hidden">
+          <!-- 프로필 헤더 -->
+          <div class="flex items-center gap-5 mb-8">
+            <div id="profile-avatar" class="w-16 h-16 bg-gradient-to-br from-brand/20 to-brand/40 rounded-full flex items-center justify-center text-brand text-xl font-semibold"></div>
+            <div>
+              <h1 id="profile-display-name" class="text-xl font-semibold text-ink"></h1>
+              <p id="profile-email-display" class="text-sm text-slate-400 mt-1"></p>
+            </div>
+          </div>
+
+          <!-- 프로필 정보 카드 -->
+          <div class="bg-white border border-line rounded-2xl p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-base font-semibold text-deep">내 정보</h2>
+              <button id="edit-toggle-btn" class="text-sm text-brand font-medium hover:underline">수정</button>
+            </div>
+
+            <!-- 보기 모드 -->
+            <div id="view-mode">
+              <div class="profile-field">
+                <span class="profile-label">이름</span>
+                <span class="profile-value" id="view-name">-</span>
+              </div>
+              <div class="profile-field">
+                <span class="profile-label">닉네임</span>
+                <span class="profile-value" id="view-nickname">-</span>
+              </div>
+              <div class="profile-field">
+                <span class="profile-label">이메일</span>
+                <span class="profile-value" id="view-email">-</span>
+              </div>
+              <div class="profile-field">
+                <span class="profile-label">생년월일</span>
+                <span class="profile-value" id="view-birthdate">-</span>
+              </div>
+              <div class="profile-field">
+                <span class="profile-label">마케팅 수신</span>
+                <span class="profile-value" id="view-marketing">-</span>
+              </div>
+              <div class="profile-field">
+                <span class="profile-label">가입일</span>
+                <span class="profile-value" id="view-created">-</span>
+              </div>
+            </div>
+
+            <!-- 수정 모드 -->
+            <div id="edit-mode" class="hidden">
+              <div class="profile-field">
+                <span class="profile-label">이름</span>
+                <input type="text" id="edit-name" class="profile-input" />
+              </div>
+              <div class="profile-field">
+                <span class="profile-label">닉네임</span>
+                <input type="text" id="edit-nickname" class="profile-input" />
+              </div>
+              <div class="profile-field">
+                <span class="profile-label">이메일</span>
+                <span class="profile-value" id="edit-email-readonly">-</span>
+              </div>
+              <div class="profile-field">
+                <span class="profile-label">생년월일</span>
+                <input type="date" id="edit-birthdate" class="profile-input" />
+              </div>
+              <div class="profile-field">
+                <span class="profile-label">마케팅 수신</span>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="edit-marketing" class="w-4 h-4 accent-brand" />
+                  <span class="text-sm text-slate-600">동의</span>
+                </label>
+              </div>
+              <div class="mt-5 flex gap-3">
+                <button id="save-profile-btn" class="flex-1 py-3 rounded-xl bg-brand text-white text-sm font-semibold hover:bg-red-700 transition">저장하기</button>
+                <button id="cancel-edit-btn" class="flex-1 py-3 rounded-xl border border-line text-sm font-semibold text-slate-600 hover:bg-slate-50 transition">취소</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 저장 성공 메시지 -->
+          <div id="save-success" class="hidden mb-6 p-4 bg-green-50 border border-green-200 rounded-xl text-center">
+            <p class="text-sm font-medium text-green-700">프로필이 저장되었습니다.</p>
+          </div>
+
+          <!-- 로그인 방법 -->
+          <div class="bg-white border border-line rounded-2xl p-6 mb-6">
+            <h2 class="text-base font-semibold text-deep mb-4">로그인 정보</h2>
+            <div class="profile-field">
+              <span class="profile-label">로그인 방법</span>
+              <span class="profile-value" id="view-provider">-</span>
+            </div>
+          </div>
+
+          <!-- 계정 액션 -->
+          <div class="flex gap-3">
+            <button id="profile-logout-btn" class="flex-1 py-3 rounded-xl border border-line text-sm font-semibold text-slate-600 hover:bg-slate-50 transition">로그아웃</button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="auth-header.js"></script>
+    <script>
+      (async function loadProfile() {
+        const loadingEl = document.getElementById('profile-loading');
+        const noauthEl = document.getElementById('profile-noauth');
+        const contentEl = document.getElementById('profile-content');
+
+        const { data: { user } } = await supabaseClient.auth.getUser();
+
+        if (!user) {
+          loadingEl.classList.add('hidden');
+          noauthEl.classList.remove('hidden');
+          return;
+        }
+
+        // 프로필 데이터 가져오기
+        let profile = null;
+        try {
+          const { data } = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+          profile = data;
+        } catch (e) {
+          console.error('프로필 로드 실패:', e);
+        }
+
+        loadingEl.classList.add('hidden');
+        contentEl.classList.remove('hidden');
+
+        // 아바타
+        const displayName = profile?.name || profile?.nickname || user.email?.split('@')[0] || '?';
+        document.getElementById('profile-avatar').textContent = displayName.charAt(0);
+        document.getElementById('profile-display-name').textContent = displayName;
+        document.getElementById('profile-email-display').textContent = user.email || '';
+
+        // 보기 모드 채우기
+        document.getElementById('view-name').textContent = profile?.name || '-';
+        document.getElementById('view-nickname').textContent = profile?.nickname || '-';
+        document.getElementById('view-email').textContent = profile?.email || user.email || '-';
+        document.getElementById('view-birthdate').textContent = profile?.birthdate || '-';
+        document.getElementById('view-marketing').textContent = profile?.marketing_agreed ? '동의' : '미동의';
+        document.getElementById('view-created').textContent = profile?.created_at
+          ? new Date(profile.created_at).toLocaleDateString('ko-KR')
+          : '-';
+
+        // 로그인 방법
+        const provider = user.app_metadata?.provider;
+        const providerLabel = provider === 'kakao' ? '카카오' : provider === 'google' ? '구글' : '이메일';
+        document.getElementById('view-provider').textContent = providerLabel;
+
+        // 수정 모드 토글
+        const viewMode = document.getElementById('view-mode');
+        const editMode = document.getElementById('edit-mode');
+        const editBtn = document.getElementById('edit-toggle-btn');
+
+        editBtn.addEventListener('click', () => {
+          viewMode.classList.add('hidden');
+          editMode.classList.remove('hidden');
+          editBtn.classList.add('hidden');
+          document.getElementById('save-success').classList.add('hidden');
+
+          // 수정 폼에 기존값 채우기
+          document.getElementById('edit-name').value = profile?.name || '';
+          document.getElementById('edit-nickname').value = profile?.nickname || '';
+          document.getElementById('edit-email-readonly').textContent = profile?.email || user.email || '-';
+          document.getElementById('edit-birthdate').value = profile?.birthdate || '';
+          document.getElementById('edit-marketing').checked = profile?.marketing_agreed || false;
+        });
+
+        // 취소
+        document.getElementById('cancel-edit-btn').addEventListener('click', () => {
+          viewMode.classList.remove('hidden');
+          editMode.classList.add('hidden');
+          editBtn.classList.remove('hidden');
+        });
+
+        // 저장
+        document.getElementById('save-profile-btn').addEventListener('click', async () => {
+          const updates = {
+            name: document.getElementById('edit-name').value.trim(),
+            nickname: document.getElementById('edit-nickname').value.trim(),
+            birthdate: document.getElementById('edit-birthdate').value || null,
+            marketing_agreed: document.getElementById('edit-marketing').checked,
+          };
+
+          try {
+            await supabaseClient
+              .from('profiles')
+              .update(updates)
+              .eq('id', user.id);
+
+            // 화면 갱신
+            profile = { ...profile, ...updates };
+            document.getElementById('view-name').textContent = updates.name || '-';
+            document.getElementById('view-nickname').textContent = updates.nickname || '-';
+            document.getElementById('view-birthdate').textContent = updates.birthdate || '-';
+            document.getElementById('view-marketing').textContent = updates.marketing_agreed ? '동의' : '미동의';
+
+            const newDisplay = updates.name || updates.nickname || user.email?.split('@')[0] || '?';
+            document.getElementById('profile-avatar').textContent = newDisplay.charAt(0);
+            document.getElementById('profile-display-name').textContent = newDisplay;
+
+            viewMode.classList.remove('hidden');
+            editMode.classList.add('hidden');
+            editBtn.classList.remove('hidden');
+
+            document.getElementById('save-success').classList.remove('hidden');
+            setTimeout(() => document.getElementById('save-success').classList.add('hidden'), 3000);
+          } catch (err) {
+            console.error('프로필 저장 실패:', err);
+            alert('저장 중 오류가 발생했습니다.');
+          }
+        });
+
+        // 로그아웃
+        document.getElementById('profile-logout-btn').addEventListener('click', async () => {
+          await supabaseClient.auth.signOut();
+          window.location.href = 'index.html';
+        });
+      })();
+    </script>
+  </body>
+</html>

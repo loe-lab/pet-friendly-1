@@ -42,7 +42,11 @@
           </svg>
         </button>
         <div id="mypage-menu" class="hidden absolute right-0 top-full mt-2 w-44 bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden z-50">
-          <a href="my-likes.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition flex items-center gap-2">
+          <a href="my-profile.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition flex items-center gap-2">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="#64748b" stroke-width="1.2"/><path d="M3 13.5c0-2.5 2.2-4 5-4s5 1.5 5 4" stroke="#64748b" stroke-width="1.2" stroke-linecap="round"/></svg>
+            프로필
+          </a>
+          <a href="my-likes.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition flex items-center gap-2 border-t border-gray-100">
             <img src="base-icon-heart-selected.svg" alt="좋아요" width="16" height="16" />
             좋아요
           </a>
