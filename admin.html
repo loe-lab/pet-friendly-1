@@ -6,7 +6,7 @@
   <title>데일리펫 어드민</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=3r7okJtcBWzIq6dicYYiiO0EaIiwyUsG&libraries=services"></script>
+  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=9b322ca3a195a49c4ba2d1fdd62fa0fa&libraries=services"></script>
   <style>
     body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; }
     .btn-primary { @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition; }
@@ -978,17 +978,25 @@
       const ps = new kakao.maps.services.Places();
       ps.keywordSearch(keyword, function(data, status) {
         if (status === kakao.maps.services.Status.OK && data.length > 0) {
-          addressResults.innerHTML = data.slice(0, 7).map(place => `
-            <div class="address-item" data-address="${place.road_address_name || place.address_name}" data-name="${place.place_name}">
-              <div class="address-item-name">${place.place_name}</div>
-              <div class="address-item-addr">${place.road_address_name || place.address_name}</div>
-            </div>
-          `).join('');
+          addressResults.innerHTML = data.slice(0, 7).map(place => {
+            const addr = place.road_address_name || place.address_name;
+            // 주소에서 "시/도 · 구/군" 형태 추출
+            const parts = addr.split(' ');
+            const region = parts[0] || '';
+            const district = parts[1] || '';
+            const locationText = district ? region + ' · ' + district : region;
+            return `
+              <div class="address-item" data-address="${addr}" data-name="${place.place_name}" data-location="${locationText}">
+                <div class="address-item-name">${place.place_name}</div>
+                <div class="address-item-addr">${addr}</div>
+              </div>
+            `;
+          }).join('');
 
           addressResults.querySelectorAll('.address-item').forEach(item => {
             item.addEventListener('click', () => {
-              const addr = item.dataset.address;
-              addressInput.value = addr;
+              addressInput.value = item.dataset.address;
+              document.getElementById('place-location').value = item.dataset.location;
               addressResults.classList.add('hidden');
             });
           });
