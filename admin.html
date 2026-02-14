@@ -234,13 +234,13 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">동반안내</label>
-          <textarea id="place-companion-info" class="input-field h-28" placeholder="반려견 동반 규정을 한 줄씩 입력하세요&#10;예: 모든 크기의 반려견 입장 가능&#10;리드줄 필수 착용"></textarea>
+          <textarea id="place-companion-info" class="input-field min-h-[140px] resize-y" placeholder="반려견 동반 규정을 한 줄씩 입력하세요&#10;예: 모든 크기의 반려견 입장 가능&#10;리드줄 필수 착용"></textarea>
           <p class="text-xs text-gray-400 mt-1">줄바꿈으로 항목을 구분합니다</p>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">이용안내</label>
-          <textarea id="place-usage-info" class="input-field h-28" placeholder="운영 정보를 한 줄씩 입력하세요&#10;예: 영업시간: 11:00 - 22:00&#10;전화: 02-1234-5678"></textarea>
+          <textarea id="place-usage-info" class="input-field min-h-[140px] resize-y" placeholder="운영 정보를 한 줄씩 입력하세요&#10;예: 영업시간: 11:00 - 22:00&#10;전화: 02-1234-5678"></textarea>
           <p class="text-xs text-gray-400 mt-1">줄바꿈으로 항목을 구분합니다</p>
         </div>
 
@@ -710,7 +710,7 @@
               <input type="hidden" id="detail-img-url-${idx}" value="${data.image_url || ''}" />
             </div>
           </div>
-          <textarea id="detail-img-desc-${idx}" class="input-field w-full h-20 text-sm" placeholder="이 사진에 대한 설명을 입력하세요">${data.description || ''}</textarea>
+          <textarea id="detail-img-desc-${idx}" class="input-field w-full min-h-[120px] text-sm resize-y" placeholder="이 사진에 대한 설명을 입력하세요">${data.description || ''}</textarea>
         </div>
       `;
       list.appendChild(row);
