@@ -1297,6 +1297,56 @@ function renderDailyPanel(targetEl) {
   let activeCategory = "전체";
   let activeRegion = "전체";
 
+  // Supabase에서 장소 데이터 로드 후 병합
+  async function loadSupabasePlaces() {
+    if (typeof supabaseClient === 'undefined') return;
+    try {
+      const { data, error } = await supabaseClient
+        .from('places')
+        .select('*')
+        .order('id', { ascending: false });
+      if (error) { console.error('Supabase 장소 로드 에러:', error); return; }
+      if (!data || data.length === 0) return;
+
+      // Supabase 데이터를 dailyPlaces 형식으로 변환
+      const supabasePlaces = data.map(p => {
+        let parsedTags = p.tags || [];
+        if (typeof parsedTags === 'string') {
+          try { parsedTags = JSON.parse(parsedTags); } catch(e) { parsedTags = parsedTags.split(',').map(t => t.trim()).filter(Boolean); }
+        }
+        // location에서 region 추출
+        const locParts = (p.location || '').split('·').map(s => s.trim());
+        const region = locParts[0] || '';
+        return {
+          id: p.id,
+          title: p.title,
+          location: p.location || '',
+          region: region,
+          category: p.category || '',
+          tags: parsedTags,
+          image: p.image_url || '',
+          address: p.address || '',
+          fromSupabase: true
+        };
+      });
+
+      // 기존 하드코딩 데이터에서 Supabase에 같은 이름이 있으면 교체
+      const supabaseTitles = new Set(supabasePlaces.map(p => p.title));
+      const filteredHardcoded = dailyPlaces.filter(p => !supabaseTitles.has(p.title));
+      
+      // Supabase 데이터를 앞에, 하드코딩 데이터를 뒤에
+      dailyPlaces.length = 0;
+      dailyPlaces.push(...supabasePlaces, ...filteredHardcoded);
+      
+      console.log('Supabase 장소 병합 완료:', supabasePlaces.length, '건');
+      renderDailyGrid();
+    } catch (err) {
+      console.error('Supabase 장소 로드 실패:', err);
+    }
+  }
+
+  loadSupabasePlaces();
+
   function renderDailyGrid() {
     let filtered = dailyPlaces;
     
@@ -1318,7 +1368,7 @@ function renderDailyPanel(targetEl) {
     gridEl.innerHTML = filtered
       .map(
         (place) => `
-        <article class="daily-place" data-title="${place.title}" data-image="${place.image}" data-location="${place.location}" data-category="${place.category || ''}" data-tags="${(place.tags || []).join(',')}">
+        <article class="daily-place" data-id="${place.id || ''}" data-title="${place.title}" data-image="${place.image}" data-location="${place.location}" data-category="${place.category || ''}" data-tags="${(place.tags || []).join(',')}">
           <div class="daily-place__media">
             <img class="daily-place__like-icon" src="${typeof LikesManager !== 'undefined' && LikesManager.isLiked(place.title) ? 'base-icon-heart-selected.svg' : 'base-icon-heart.svg'}" alt="좋아요" />
             <img src="${place.image}" alt="${place.title}" />
@@ -1366,7 +1416,9 @@ function renderDailyPanel(targetEl) {
         const title = card.dataset.title;
         const image = card.dataset.image;
         const location = card.dataset.location;
+        const placeId = card.dataset.id;
         const params = new URLSearchParams({ title, image, category: location });
+        if (placeId) params.set('id', placeId);
         window.location.href = 'detail.html?' + params.toString();
       });
     });
