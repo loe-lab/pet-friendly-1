@@ -63,6 +63,7 @@
       <!-- 탭 메뉴 -->
       <div class="flex gap-4 mb-6 border-b border-gray-200">
         <button id="tab-places" class="tab-btn px-4 py-3 font-semibold text-blue-600 border-b-2 border-blue-600" onclick="switchTab('places')">장소 관리</button>
+        <button id="tab-banners" class="tab-btn px-4 py-3 font-semibold text-gray-500 hover:text-gray-700" onclick="switchTab('banners')">배너 관리</button>
         <button id="tab-tags" class="tab-btn px-4 py-3 font-semibold text-gray-500 hover:text-gray-700" onclick="switchTab('tags')">태그 관리</button>
         <button id="tab-members" class="tab-btn px-4 py-3 font-semibold text-gray-500 hover:text-gray-700" onclick="switchTab('members')">회원 관리</button>
       </div>
@@ -92,6 +93,66 @@
         <div id="empty-state" class="hidden text-center py-12">
           <p class="text-gray-500 mb-4">등록된 장소가 없습니다.</p>
           <button class="text-blue-600 hover:underline" onclick="openModal()">첫 장소를 추가해보세요</button>
+        </div>
+      </div>
+
+      <!-- 배너 관리 섹션 -->
+      <div id="section-banners" class="hidden">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">배너 관리</h2>
+          <button id="add-banner-btn" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            새 배너 추가
+          </button>
+        </div>
+        <p class="text-sm text-gray-400 mb-4">메인 페이지 히어로 캐러셀에 표시되는 배너입니다. 순서를 변경하려면 ▲▼ 버튼을 사용하세요.</p>
+        <div id="banners-list" class="space-y-4">
+          <!-- 동적으로 채워짐 -->
+        </div>
+        <div id="banners-loading" class="text-center py-12 text-gray-500">불러오는 중...</div>
+        <div id="banners-empty" class="hidden text-center py-12 text-gray-400">등록된 배너가 없습니다.</div>
+      </div>
+
+      <!-- 배너 추가/수정 모달 -->
+      <div id="banner-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4">
+          <div class="p-6 border-b border-gray-200">
+            <h3 id="banner-modal-title" class="text-xl font-bold">새 배너 추가</h3>
+          </div>
+          <form id="banner-form" class="p-6 space-y-5">
+            <input type="hidden" id="banner-id" />
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">배너 이미지 *</label>
+              <div id="banner-image-preview" class="mb-3 hidden">
+                <img id="banner-preview-img" class="w-full h-48 object-cover rounded-lg" />
+              </div>
+              <input type="file" id="banner-image" accept="image/*" class="input-field" />
+              <input type="hidden" id="banner-image-url" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">상단 텍스트</label>
+              <input type="text" id="banner-label" class="input-field" placeholder="예: DAILY PET, LET'S TRAVEL!" />
+              <p class="text-xs text-gray-400 mt-1">배너 상단에 작게 표시되는 텍스트</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">제목 *</label>
+              <textarea id="banner-title" class="input-field min-h-[80px] resize-y" placeholder="반려동물과 함께하는&#10;특별한 일상" required></textarea>
+              <p class="text-xs text-gray-400 mt-1">줄바꿈하면 두 줄로 표시됩니다</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">설명</label>
+              <input type="text" id="banner-description" class="input-field" placeholder="어디든 함께라면 행복해요" />
+            </div>
+
+            <div class="flex gap-3 pt-4">
+              <button type="button" id="banner-cancel-btn" class="flex-1 btn-secondary py-3 rounded-xl">취소</button>
+              <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">저장</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -357,8 +418,10 @@
       document.getElementById(`tab-${tab}`).classList.remove('text-gray-500');
       
       document.getElementById('section-places').classList.toggle('hidden', tab !== 'places');
+      document.getElementById('section-banners').classList.toggle('hidden', tab !== 'banners');
       document.getElementById('section-tags').classList.toggle('hidden', tab !== 'tags');
       document.getElementById('section-members').classList.toggle('hidden', tab !== 'members');
+      if (tab === 'banners') loadBanners();
       
       if (tab === 'tags') {
         loadTagsList();
@@ -1090,6 +1153,164 @@
           addressResults.classList.remove('hidden');
         }
       });
+    }
+
+    // ============ 배너 관리 ============
+    const bannerModal = document.getElementById('banner-modal');
+    const bannerForm = document.getElementById('banner-form');
+    
+    document.getElementById('add-banner-btn').addEventListener('click', () => openBannerModal());
+    document.getElementById('banner-cancel-btn').addEventListener('click', () => bannerModal.classList.add('hidden'));
+
+    // 배너 이미지 미리보기
+    document.getElementById('banner-image').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          document.getElementById('banner-preview-img').src = ev.target.result;
+          document.getElementById('banner-image-preview').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    async function loadBanners() {
+      const list = document.getElementById('banners-list');
+      const loading = document.getElementById('banners-loading');
+      const empty = document.getElementById('banners-empty');
+      loading.classList.remove('hidden');
+      empty.classList.add('hidden');
+      list.innerHTML = '';
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('banners')
+          .select('*')
+          .order('sort_order', { ascending: true });
+        
+        loading.classList.add('hidden');
+        if (error) throw error;
+        if (!data || data.length === 0) {
+          empty.classList.remove('hidden');
+          return;
+        }
+
+        list.innerHTML = data.map((banner, i) => `
+          <div class="bg-white border border-gray-200 rounded-xl overflow-hidden flex items-stretch" data-banner-id="${banner.id}">
+            <div class="w-48 h-32 flex-shrink-0 bg-gray-100">
+              <img src="${banner.image_url || ''}" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 100%22><rect fill=%22%23f3f4f6%22 width=%22200%22 height=%22100%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%239ca3af%22 font-size=%2214%22>No Image</text></svg>'" />
+            </div>
+            <div class="flex-1 p-4 flex items-center justify-between">
+              <div>
+                <p class="text-xs text-gray-400 mb-1">${banner.label || ''}</p>
+                <h4 class="font-bold text-gray-800">${(banner.title || '').replace(/\n/g, ' ')}</h4>
+                <p class="text-sm text-gray-500 mt-1">${banner.description || ''}</p>
+              </div>
+              <div class="flex items-center gap-2 ml-4">
+                <button onclick="moveBanner(${banner.id}, 'up')" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-blue-500 transition text-xs ${i === 0 ? 'opacity-30 pointer-events-none' : ''}">▲</button>
+                <button onclick="moveBanner(${banner.id}, 'down')" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-blue-500 transition text-xs ${i === data.length - 1 ? 'opacity-30 pointer-events-none' : ''}">▼</button>
+                <button onclick="openBannerModal(${banner.id})" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-blue-500 transition text-xs">✏️</button>
+                <button onclick="deleteBanner(${banner.id})" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 transition text-xs">🗑</button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        loading.classList.add('hidden');
+        console.error('배너 로드 에러:', err);
+        alert('배너 로드 실패: ' + err.message);
+      }
+    }
+
+    async function openBannerModal(id) {
+      bannerForm.reset();
+      document.getElementById('banner-id').value = '';
+      document.getElementById('banner-image-url').value = '';
+      document.getElementById('banner-image-preview').classList.add('hidden');
+
+      if (id) {
+        document.getElementById('banner-modal-title').textContent = '배너 수정';
+        const { data } = await supabaseClient.from('banners').select('*').eq('id', id).single();
+        if (data) {
+          document.getElementById('banner-id').value = data.id;
+          document.getElementById('banner-label').value = data.label || '';
+          document.getElementById('banner-title').value = data.title || '';
+          document.getElementById('banner-description').value = data.description || '';
+          document.getElementById('banner-image-url').value = data.image_url || '';
+          if (data.image_url) {
+            document.getElementById('banner-preview-img').src = data.image_url;
+            document.getElementById('banner-image-preview').classList.remove('hidden');
+          }
+        }
+      } else {
+        document.getElementById('banner-modal-title').textContent = '새 배너 추가';
+      }
+      bannerModal.classList.remove('hidden');
+    }
+
+    bannerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('banner-id').value;
+      let imageUrl = document.getElementById('banner-image-url').value;
+
+      // 이미지 업로드
+      const imageFile = document.getElementById('banner-image').files[0];
+      if (imageFile) {
+        const fileName = `banner_${Date.now()}_${imageFile.name}`;
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage
+          .from('places')
+          .upload(fileName, imageFile);
+        if (uploadError) { alert('이미지 업로드 실패: ' + uploadError.message); return; }
+        const { data: urlData } = supabaseClient.storage.from('places').getPublicUrl(fileName);
+        imageUrl = urlData.publicUrl;
+      }
+
+      if (!imageUrl) { alert('배너 이미지를 선택해주세요'); return; }
+
+      const bannerData = {
+        label: document.getElementById('banner-label').value,
+        title: document.getElementById('banner-title').value,
+        description: document.getElementById('banner-description').value,
+        image_url: imageUrl
+      };
+
+      try {
+        if (id) {
+          const { error } = await supabaseClient.from('banners').update(bannerData).eq('id', id);
+          if (error) throw error;
+        } else {
+          // 새 배너: sort_order를 마지막으로
+          const { data: existing } = await supabaseClient.from('banners').select('sort_order').order('sort_order', { ascending: false }).limit(1);
+          bannerData.sort_order = (existing && existing.length > 0) ? existing[0].sort_order + 1 : 0;
+          const { error } = await supabaseClient.from('banners').insert(bannerData);
+          if (error) throw error;
+        }
+        bannerModal.classList.add('hidden');
+        loadBanners();
+      } catch (err) {
+        alert('저장 실패: ' + err.message);
+      }
+    });
+
+    async function moveBanner(id, direction) {
+      const { data: banners } = await supabaseClient.from('banners').select('id, sort_order').order('sort_order', { ascending: true });
+      if (!banners) return;
+      const idx = banners.findIndex(b => b.id === id);
+      if (idx < 0) return;
+      const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (swapIdx < 0 || swapIdx >= banners.length) return;
+
+      const tempOrder = banners[idx].sort_order;
+      await supabaseClient.from('banners').update({ sort_order: banners[swapIdx].sort_order }).eq('id', banners[idx].id);
+      await supabaseClient.from('banners').update({ sort_order: tempOrder }).eq('id', banners[swapIdx].id);
+      loadBanners();
+    }
+
+    async function deleteBanner(id) {
+      if (!confirm('이 배너를 삭제하시겠습니까?')) return;
+      await supabaseClient.from('banners').delete().eq('id', id);
+      loadBanners();
     }
 
     // 초기화 실행

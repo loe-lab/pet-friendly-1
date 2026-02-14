@@ -91,6 +91,7 @@
         <section id="banner-carousel" class="mb-10">
           <div class="relative overflow-hidden rounded-2xl">
             <div id="banner-slides" class="flex transition-transform duration-500">
+              <!-- 동적으로 채워짐, 기본 폴백 배너 -->
               <div class="banner-slide min-w-full">
                 <div class="relative h-[300px] bg-cover bg-center rounded-2xl" style="background-image: url('banner1.jpg')">
                   <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl"></div>
@@ -113,7 +114,7 @@
               </div>
             </div>
             <!-- 인디케이터 -->
-            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            <div id="banner-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
               <button class="banner-dot w-2 h-2 rounded-full bg-white opacity-100" data-index="0"></button>
               <button class="banner-dot w-2 h-2 rounded-full bg-white opacity-50" data-index="1"></button>
             </div>
@@ -522,28 +523,64 @@
       });
 
       // 배너 캐로셀
-      (function() {
-        const slides = document.getElementById('banner-slides');
-        const dots = document.querySelectorAll('.banner-dot');
+      (async function() {
+        const slidesContainer = document.getElementById('banner-slides');
+        const dotsContainer = document.getElementById('banner-dots');
         const prevBtn = document.getElementById('banner-prev');
         const nextBtn = document.getElementById('banner-next');
         let currentIndex = 0;
-        const totalSlides = 2;
+        let totalSlides = 2; // 기본값 (폴백 배너 수)
+
+        // Supabase에서 배너 로드
+        if (typeof supabaseClient !== 'undefined') {
+          try {
+            const { data, error } = await supabaseClient
+              .from('banners')
+              .select('*')
+              .order('sort_order', { ascending: true });
+            
+            if (!error && data && data.length > 0) {
+              // Supabase 배너로 교체
+              slidesContainer.innerHTML = data.map(banner => `
+                <div class="banner-slide min-w-full">
+                  <div class="relative h-[300px] bg-cover bg-center rounded-2xl" style="background-image: url('${banner.image_url}')">
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl"></div>
+                    <div class="absolute inset-0 flex flex-col justify-center px-10 text-white">
+                      <p class="text-sm tracking-wider mb-2">${banner.label || ''}</p>
+                      <h2 class="text-3xl font-bold mb-2">${(banner.title || '').split('\n').join('<br>')}</h2>
+                      <p class="text-sm opacity-80">${banner.description || ''}</p>
+                    </div>
+                  </div>
+                </div>
+              `).join('');
+              totalSlides = data.length;
+
+              // 인디케이터 재생성
+              dotsContainer.innerHTML = data.map((_, i) => `
+                <button class="banner-dot w-2 h-2 rounded-full bg-white ${i === 0 ? 'opacity-100' : 'opacity-50'}" data-index="${i}"></button>
+              `).join('');
+            }
+          } catch (err) {
+            console.log('배너 로드 실패, 기본 배너 사용:', err);
+          }
+        }
 
         function goToSlide(index) {
           if (index < 0) index = totalSlides - 1;
           if (index >= totalSlides) index = 0;
           currentIndex = index;
-          slides.style.transform = `translateX(-${currentIndex * 100}%)`;
-          dots.forEach((dot, i) => {
+          slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+          dotsContainer.querySelectorAll('.banner-dot').forEach((dot, i) => {
             dot.style.opacity = i === currentIndex ? '1' : '0.5';
           });
         }
 
         prevBtn?.addEventListener('click', () => goToSlide(currentIndex - 1));
         nextBtn?.addEventListener('click', () => goToSlide(currentIndex + 1));
-        dots.forEach(dot => {
-          dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
+        dotsContainer.addEventListener('click', (e) => {
+          if (e.target.classList.contains('banner-dot')) {
+            goToSlide(parseInt(e.target.dataset.index));
+          }
         });
 
         // 자동 슬라이드 (5초)
