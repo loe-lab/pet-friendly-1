@@ -146,60 +146,14 @@
             </div>
           </article>
 
-          <!-- 신규 애견동반 장소 -->
-          <article class="theme-row">
+          <!-- 신규 애견동반 장소 (동적 렌더링) -->
+          <article id="new-places-section" class="theme-row" style="display:none;">
             <div class="theme-row__head">
               <h3>신규 애견동반 장소</h3>
-              <button class="theme-row__cta">더보기</button>
+              <a href="daily.html" class="theme-row__cta">더보기</a>
             </div>
-            <div class="theme-row__track no-scrollbar">
-              <div class="theme-card">
-                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="0.thumbnail_food.png" alt="나이스펫 카페" />
-                <div class="theme-card__body">
-                  <p class="theme-card__location">서울 · 강남</p>
-                  <h4>나이스펫 카페</h4>
-                  <div class="theme-card__tags">
-                    <span class="theme-card__tag">실내동반 가능</span>
-                    <span class="theme-card__tag">카공족</span>
-                  </div>
-                </div>
-              </div>
-              <div class="theme-card">
-                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="3.thumbnail_notebook.png" alt="펫프렌들리 브런치" />
-                <div class="theme-card__body">
-                  <p class="theme-card__location">서울 · 성수</p>
-                  <h4>펫프렌들리 브런치</h4>
-                  <div class="theme-card__tags">
-                    <span class="theme-card__tag">실내동반 가능</span>
-                  </div>
-                </div>
-              </div>
-              <div class="theme-card">
-                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="4.thumbnail_kids.png" alt="자연 힐링 캠핑장" />
-                <div class="theme-card__body">
-                  <p class="theme-card__location">경기 · 가평</p>
-                  <h4>자연 힐링 캠핑장</h4>
-                  <div class="theme-card__tags">
-                    <span class="theme-card__tag">캠핑장</span>
-                    <span class="theme-card__tag">자연체험</span>
-                  </div>
-                </div>
-              </div>
-              <div class="theme-card">
-                <img class="theme-card__like-icon" src="base-icon-heart.svg" alt="좋아요" />
-                <img src="5.thumbnail_play.png" alt="그린필드 운동장" />
-                <div class="theme-card__body">
-                  <p class="theme-card__location">경기 · 용인</p>
-                  <h4>그린필드 운동장</h4>
-                  <div class="theme-card__tags">
-                    <span class="theme-card__tag">천연잔디</span>
-                    <span class="theme-card__tag">오프리쉬 가능</span>
-                  </div>
-                </div>
-              </div>
+            <div id="new-places-track" class="theme-row__track no-scrollbar">
+              <!-- 동적으로 채워짐 -->
             </div>
           </article>
 
@@ -389,6 +343,83 @@
           window.location.href = 'detail.html?' + params.toString();
         });
       });
+
+      // 신규 애견동반 장소 (Supabase에서 최신순 로드)
+      (async function renderNewPlaces() {
+        if (typeof supabaseClient === 'undefined') return;
+        try {
+          const { data, error } = await supabaseClient
+            .from('places')
+            .select('*')
+            .order('id', { ascending: false })
+            .limit(10);
+          
+          if (error || !data || data.length === 0) return;
+
+          const section = document.getElementById('new-places-section');
+          const track = document.getElementById('new-places-track');
+          if (!section || !track) return;
+
+          track.innerHTML = data.map(place => {
+            let tags = place.tags || [];
+            if (typeof tags === 'string') {
+              try { tags = JSON.parse(tags); } catch(e) { tags = tags.split(',').map(t => t.trim()).filter(Boolean); }
+            }
+            const isLiked = LikesManager.isLiked(place.title);
+            return `
+              <div class="theme-card" data-id="${place.id || ''}">
+                <img class="theme-card__like-icon" src="${isLiked ? 'base-icon-heart-selected.svg' : 'base-icon-heart.svg'}" alt="좋아요" />
+                <img src="${place.image_url || '0.thumbnail_food.png'}" alt="${place.title}" onerror="this.src='0.thumbnail_food.png'" />
+                <div class="theme-card__body">
+                  <p class="theme-card__location">${place.location || ''}</p>
+                  <h4>${place.title}</h4>
+                  <div class="theme-card__tags">
+                    ${tags.map(tag => `<span class="theme-card__tag">${tag}</span>`).join('')}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+          section.style.display = '';
+
+          // 좋아요 이벤트 바인딩
+          track.querySelectorAll('.theme-card__like-icon').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const card = icon.closest('.theme-card');
+              const titleEl = card.querySelector('h4');
+              const imgEl = card.querySelector('img:not(.theme-card__like-icon)');
+              const locationEl = card.querySelector('.theme-card__location');
+              const tagEls = card.querySelectorAll('.theme-card__tag');
+              const placeData = {
+                title: titleEl ? titleEl.textContent.trim() : '',
+                image: imgEl ? imgEl.src : '',
+                location: locationEl ? locationEl.textContent.trim() : '',
+                tags: Array.from(tagEls).map(t => t.textContent.trim()),
+              };
+              const liked = LikesManager.toggle(placeData);
+              icon.src = liked ? 'base-icon-heart-selected.svg' : 'base-icon-heart.svg';
+              renderLikesTop10();
+            });
+          });
+
+          // 카드 클릭 시 상세페이지 이동
+          track.querySelectorAll('.theme-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+              if (e.target.classList.contains('theme-card__like-icon')) return;
+              const title = card.querySelector('h4')?.textContent.trim() || '';
+              const image = card.querySelector('img:not(.theme-card__like-icon)')?.src || '';
+              const location = card.querySelector('.theme-card__location')?.textContent.trim() || '';
+              const placeId = card.dataset.id;
+              const params = new URLSearchParams({ title, image, category: location });
+              if (placeId) params.set('id', placeId);
+              window.location.href = 'detail.html?' + params.toString();
+            });
+          });
+        } catch (err) {
+          console.error('신규 장소 로드 실패:', err);
+        }
+      })();
 
       // 좋아요 TOP 10 동적 렌더링
       function renderLikesTop10() {
