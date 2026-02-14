@@ -148,6 +148,15 @@
               <input type="text" id="banner-description" class="input-field" placeholder="어디든 함께라면 행복해요" />
             </div>
 
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">연결 장소</label>
+              <select id="banner-place-id" class="input-field">
+                <option value="">선택 안함 (클릭 시 이동 없음)</option>
+                <!-- 동적으로 장소 목록 채워짐 -->
+              </select>
+              <p class="text-xs text-gray-400 mt-1">배너 클릭 시 이동할 장소를 선택하세요</p>
+            </div>
+
             <div class="flex gap-3 pt-4">
               <button type="button" id="banner-cancel-btn" class="flex-1 btn-secondary py-3 rounded-xl">취소</button>
               <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">저장</button>
@@ -1229,6 +1238,16 @@
       document.getElementById('banner-image-url').value = '';
       document.getElementById('banner-image-preview').classList.add('hidden');
 
+      // 장소 목록 로드
+      const placeSelect = document.getElementById('banner-place-id');
+      placeSelect.innerHTML = '<option value="">선택 안함 (클릭 시 이동 없음)</option>';
+      const { data: places } = await supabaseClient.from('places').select('id, title, location').order('id', { ascending: false });
+      if (places) {
+        places.forEach(p => {
+          placeSelect.innerHTML += `<option value="${p.id}">${p.title} (${p.location || ''})</option>`;
+        });
+      }
+
       if (id) {
         document.getElementById('banner-modal-title').textContent = '배너 수정';
         const { data } = await supabaseClient.from('banners').select('*').eq('id', id).single();
@@ -1238,6 +1257,7 @@
           document.getElementById('banner-title').value = data.title || '';
           document.getElementById('banner-description').value = data.description || '';
           document.getElementById('banner-image-url').value = data.image_url || '';
+          placeSelect.value = data.place_id || '';
           if (data.image_url) {
             document.getElementById('banner-preview-img').src = data.image_url;
             document.getElementById('banner-image-preview').classList.remove('hidden');
@@ -1268,11 +1288,13 @@
 
       if (!imageUrl) { alert('배너 이미지를 선택해주세요'); return; }
 
+      const bannerPlaceId = document.getElementById('banner-place-id').value;
       const bannerData = {
         label: document.getElementById('banner-label').value,
         title: document.getElementById('banner-title').value,
         description: document.getElementById('banner-description').value,
-        image_url: imageUrl
+        image_url: imageUrl,
+        place_id: bannerPlaceId ? parseInt(bannerPlaceId) : null
       };
 
       try {
