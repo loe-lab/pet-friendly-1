@@ -151,7 +151,7 @@
             <h1 id="detail-title" class="text-2xl font-semibold text-deep mb-2">따뜻한 조명 실내 다이닝</h1>
             <p id="detail-subtitle" class="text-slate-500 text-sm mb-4">서울 강남구 · 애견동반 식당</p>
             
-            <div class="flex flex-wrap gap-2 mb-6">
+            <div id="detail-tags" class="flex flex-wrap gap-2 mb-6">
               <span class="px-3 py-1 bg-slate-100 rounded-full text-xs text-slate-600">주차가능</span>
               <span class="px-3 py-1 bg-slate-100 rounded-full text-xs text-slate-600">대형견 가능</span>
               <span class="px-3 py-1 bg-slate-100 rounded-full text-xs text-slate-600">야외테라스</span>
@@ -363,6 +363,18 @@
           if (place.location) {
             const subtitleEl = document.getElementById('detail-subtitle');
             if (subtitleEl) subtitleEl.textContent = place.location + (place.category ? ' · ' + place.category : '');
+          }
+
+          // 태그 업데이트
+          let tags = place.tags || [];
+          if (typeof tags === 'string') {
+            try { tags = JSON.parse(tags); } catch(e) { tags = tags.split(',').map(t => t.trim()).filter(Boolean); }
+          }
+          if (tags.length > 0) {
+            const tagsEl = document.getElementById('detail-tags');
+            if (tagsEl) {
+              tagsEl.innerHTML = tags.map(tag => `<span class="px-3 py-1 bg-slate-100 rounded-full text-xs text-slate-600">${tag}</span>`).join('');
+            }
           }
           if (place.description) {
             const descEl = document.querySelector('.prose h3 + p');
