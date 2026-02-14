@@ -367,6 +367,25 @@
           if (place.description) {
             const descEl = document.querySelector('.prose h3 + p');
             if (descEl) descEl.textContent = place.description;
+            // 설명 제목도 장소명으로
+            const descTitle = document.querySelector('.prose > h3');
+            if (descTitle) descTitle.textContent = place.title + ' 소개';
+          }
+
+          // 동반안내 업데이트
+          if (place.companion_info) {
+            const companionEl = document.querySelector('#section-companion ul');
+            if (companionEl) {
+              companionEl.innerHTML = place.companion_info.split('\n').filter(l => l.trim()).map(line => `<li>• ${line.trim()}</li>`).join('');
+            }
+          }
+
+          // 이용안내 업데이트
+          if (place.usage_info) {
+            const usageEl = document.querySelector('#section-usage ul');
+            if (usageEl) {
+              usageEl.innerHTML = place.usage_info.split('\n').filter(l => l.trim()).map(line => `<li>• ${line.trim()}</li>`).join('');
+            }
           }
 
           // 주소가 있으면 지도 업데이트
