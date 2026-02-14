@@ -700,17 +700,17 @@
           <button type="button" onclick="moveDetailImageRow(this, 'down')" class="w-7 h-7 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-300 transition text-xs" title="아래로">▼</button>
           <button type="button" onclick="removeDetailImageRow(${idx})" class="w-7 h-7 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-300 transition text-sm">&times;</button>
         </div>
-        <div class="flex gap-4 items-start mt-4">
-          <div class="w-32 flex-shrink-0">
-            <div id="detail-img-preview-${idx}" class="${data.image_url ? '' : 'hidden'} mb-2">
-              <img src="${data.image_url || ''}" class="w-full h-24 object-cover rounded-lg" />
+        <div class="mt-4 space-y-3">
+          <div class="flex gap-3 items-center">
+            <div id="detail-img-preview-${idx}" class="${data.image_url ? '' : 'hidden'} flex-shrink-0">
+              <img src="${data.image_url || ''}" class="w-28 h-20 object-cover rounded-lg" />
             </div>
-            <input type="file" accept="image/*" class="text-xs w-full" data-detail-idx="${idx}" onchange="previewDetailImage(this, ${idx})" />
-            <input type="hidden" id="detail-img-url-${idx}" value="${data.image_url || ''}" />
+            <div class="flex-1">
+              <input type="file" accept="image/*" class="text-xs w-full" data-detail-idx="${idx}" onchange="previewDetailImage(this, ${idx})" />
+              <input type="hidden" id="detail-img-url-${idx}" value="${data.image_url || ''}" />
+            </div>
           </div>
-          <div class="flex-1">
-            <textarea id="detail-img-desc-${idx}" class="input-field h-24 text-sm" placeholder="이 사진에 대한 설명을 입력하세요">${data.description || ''}</textarea>
-          </div>
+          <textarea id="detail-img-desc-${idx}" class="input-field w-full h-20 text-sm" placeholder="이 사진에 대한 설명을 입력하세요">${data.description || ''}</textarea>
         </div>
       `;
       list.appendChild(row);
