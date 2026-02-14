@@ -5,7 +5,7 @@
 // 히어로(상단 배너) 슬라이드 데이터
 const heroSlides = [
   {
-    title: "데일리펫과 함께 떠나는 반려견 여행",
+    title: "위드펫과 함께 떠나는 반려견 여행",
     subtitle: "항공 규정부터 액티비티까지, 우리 아이와의 모든 여정을 큐레이션합니다.",
     image: "eva-darron-oCdVtGFeDC0-unsplash.jpg",
     tag: "WITH PAW CURATION",
