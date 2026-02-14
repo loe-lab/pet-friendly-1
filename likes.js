@@ -1,6 +1,6 @@
 // 좋아요 저장/관리 유틸리티 (localStorage 기반)
 const LikesManager = {
-  STORAGE_KEY: 'withpet_likes',
+  STORAGE_KEY: 'dailypet_likes',
 
   getAll() {
     try {

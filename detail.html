@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>상세 정보 - 위드펫</title>
+    <title>상세 정보 - 데일리펫</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
@@ -102,7 +102,7 @@
           <a href="index.html" class="flex items-center gap-3">
             <div class="flex flex-col">
               <span class="text-lg font-semibold tracking-[0.2em] text-brand" style="font-family: 'Ria Sans', sans-serif;">
-                위드펫
+                데일리펫
               </span>
               <span class="text-xs text-slate-500">반려견과 함께하는 프리미엄 라이프스타일 큐레이션</span>
             </div>
@@ -271,7 +271,7 @@
       <footer class="border-t border-line py-10 text-sm text-slate-500">
         <div class="mx-auto flex w-[min(1200px,92%)] flex-wrap items-center justify-between gap-6">
           <div>
-            <p class="text-xl font-semibold text-ink">위드펫</p>
+            <p class="text-xl font-semibold text-ink">데일리펫</p>
             <p>반려견과 함께하는 프리미엄 라이프스타일 큐레이션</p>
           </div>
           <div class="flex items-center gap-6 text-xs">
@@ -322,7 +322,7 @@
 
       if (title) {
         document.getElementById('detail-title').textContent = title;
-        document.title = title + ' - 위드펫';
+        document.title = title + ' - 데일리펫';
       }
       if (image) {
         document.getElementById('main-image').src = image;
@@ -358,7 +358,7 @@
           // 장소 정보 업데이트
           if (place.title) {
             document.getElementById('detail-title').textContent = place.title;
-            document.title = place.title + ' - 위드펫';
+            document.title = place.title + ' - 데일리펫';
           }
           if (place.location) {
             const subtitleEl = document.getElementById('detail-subtitle');
