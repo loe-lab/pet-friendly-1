@@ -400,6 +400,7 @@
               const liked = LikesManager.toggle(placeData);
               icon.src = liked ? 'base-icon-heart-selected.svg' : 'base-icon-heart.svg';
               renderLikesTop10();
+              syncAllLikeIcons();
             });
           });
 
@@ -420,6 +421,19 @@
           console.error('신규 장소 로드 실패:', err);
         }
       })();
+
+      // 페이지 전체 좋아요 아이콘 동기화
+      function syncAllLikeIcons() {
+        document.querySelectorAll('.theme-card').forEach(card => {
+          const titleEl = card.querySelector('h4');
+          if (!titleEl) return;
+          const title = titleEl.textContent.trim();
+          const icon = card.querySelector('.theme-card__like-icon');
+          if (icon) {
+            icon.src = LikesManager.isLiked(title) ? 'base-icon-heart-selected.svg' : 'base-icon-heart.svg';
+          }
+        });
+      }
 
       // 좋아요 TOP 10 동적 렌더링
       function renderLikesTop10() {
@@ -459,6 +473,7 @@
             if (title) {
               LikesManager.remove(title);
               renderLikesTop10();
+              syncAllLikeIcons();
             }
           });
         });
@@ -495,7 +510,8 @@
 
           const liked = LikesManager.toggle(placeData);
           icon.src = liked ? 'base-icon-heart-selected.svg' : 'base-icon-heart.svg';
-          renderLikesTop10(); // 좋아요 변경 시 TOP 10 갱신
+          renderLikesTop10();
+          syncAllLikeIcons();
         });
       });
 
