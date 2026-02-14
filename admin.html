@@ -12,7 +12,8 @@
     .btn-primary { @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition; }
     .btn-secondary { @apply bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition; }
     .btn-danger { @apply bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition; }
-    .input-field { @apply w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500; }
+    .input-field { @apply w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500; box-sizing: border-box; }
+    textarea.input-field { display: block; width: 100% !important; max-width: 100%; }
     .address-dropdown { position: absolute; top: 100%; left: 0; right: 0; z-index: 50; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); max-height: 240px; overflow-y: auto; }
     .address-item { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #f3f4f6; }
     .address-item:last-child { border-bottom: none; }
