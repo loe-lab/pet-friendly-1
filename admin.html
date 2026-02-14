@@ -700,17 +700,17 @@
           <button type="button" onclick="moveDetailImageRow(this, 'down')" class="w-7 h-7 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-300 transition text-xs" title="아래로">▼</button>
           <button type="button" onclick="removeDetailImageRow(${idx})" class="w-7 h-7 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-300 transition text-sm">&times;</button>
         </div>
-        <div class="mt-4 space-y-3">
-          <div class="flex gap-3 items-center">
+        <div class="mt-4">
+          <div class="flex gap-3 items-center mb-3">
             <div id="detail-img-preview-${idx}" class="${data.image_url ? '' : 'hidden'} flex-shrink-0">
               <img src="${data.image_url || ''}" class="w-28 h-20 object-cover rounded-lg" />
             </div>
-            <div class="flex-1">
-              <input type="file" accept="image/*" class="text-xs w-full" data-detail-idx="${idx}" onchange="previewDetailImage(this, ${idx})" />
+            <div>
+              <input type="file" accept="image/*" class="text-xs" data-detail-idx="${idx}" onchange="previewDetailImage(this, ${idx})" />
               <input type="hidden" id="detail-img-url-${idx}" value="${data.image_url || ''}" />
             </div>
           </div>
-          <textarea id="detail-img-desc-${idx}" class="input-field w-full min-h-[120px] text-sm resize-y" placeholder="이 사진에 대한 설명을 입력하세요">${data.description || ''}</textarea>
+          <textarea id="detail-img-desc-${idx}" class="input-field min-h-[120px] text-sm resize-y" style="width:100%;box-sizing:border-box;" placeholder="이 사진에 대한 설명을 입력하세요">${data.description || ''}</textarea>
         </div>
       `;
       list.appendChild(row);
