@@ -443,7 +443,7 @@
           if (detailImgs.length > 0) {
             const contentEl = document.getElementById('detail-images-content');
             contentEl.innerHTML = detailImgs.map(img => `
-              <div class="mb-8">
+              <div class="mb-14">
                 <img src="${img.image_url}" alt="상세 이미지" class="w-full rounded-2xl mb-4" />
                 ${img.description ? `<p class="text-slate-600 leading-relaxed">${img.description}</p>` : ''}
               </div>
