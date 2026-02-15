@@ -864,10 +864,12 @@
           tags: selectedTags,
         };
 
-        await updatePlace(parseInt(id), placeData);
-        showAutoSaveStatus('✓ 자동 저장됨', false);
+        console.log('자동 저장 시도:', { id, title: placeData.title, location: placeData.location });
+        const result = await updatePlace(parseInt(id), placeData);
+        console.log('자동 저장 성공:', result?.title);
+        showAutoSaveStatus('✓ 자동 저장됨 (제목: ' + placeData.title + ')', false);
       } catch (err) {
-        showAutoSaveStatus('자동 저장 실패', true);
+        showAutoSaveStatus('❌ 자동 저장 실패: ' + err.message, true);
         console.error('자동 저장 오류:', err);
       }
     }
@@ -903,12 +905,20 @@
     });
 
     // 장소 저장 (버튼 클릭으로만 동작)
-    document.getElementById('save-place-btn').addEventListener('click', async (e) => {
+    const savePlaceBtn = document.getElementById('save-place-btn');
+    console.log('저장 버튼 연결:', savePlaceBtn ? '성공' : '실패');
+    
+    savePlaceBtn.addEventListener('click', async (e) => {
       e.preventDefault();
+      console.log('=== 저장 버튼 클릭됨 ===');
       
       const id = document.getElementById('place-id').value;
       const imageFile = document.getElementById('place-image').files[0];
       let imageUrl = document.getElementById('place-image-url').value;
+
+      // 저장 버튼 비활성화 (중복 클릭 방지)
+      savePlaceBtn.disabled = true;
+      savePlaceBtn.textContent = '저장 중...';
 
       try {
         // 대표 이미지 업로드
@@ -960,16 +970,25 @@
           detail_images: detailImages
         };
 
+        console.log('저장할 데이터:', JSON.stringify({ id, title: placeData.title, location: placeData.location }));
+
         if (id) {
-          await updatePlace(parseInt(id), placeData);
+          const result = await updatePlace(parseInt(id), placeData);
+          console.log('수정 완료:', result);
         } else {
-          await createPlace(placeData);
+          const result = await createPlace(placeData);
+          console.log('생성 완료:', result);
         }
 
+        alert('✅ 저장 완료! (제목: ' + placeData.title + ')');
         closeModal();
         loadPlaces();
       } catch (error) {
-        alert('저장 실패: ' + error.message);
+        console.error('저장 실패:', error);
+        alert('❌ 저장 실패: ' + error.message);
+      } finally {
+        savePlaceBtn.disabled = false;
+        savePlaceBtn.textContent = '저장';
       }
     });
 
