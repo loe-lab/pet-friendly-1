@@ -347,7 +347,7 @@
           <button type="button" id="cancel-btn" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
             취소
           </button>
-          <button type="submit" id="save-place-btn" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+          <button type="button" id="save-place-btn" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
             저장
           </button>
         </div>
@@ -937,12 +937,13 @@
       }
     });
 
-    // 장소 저장 (폼 submit)
+    // 장소 저장 (버튼 클릭)
     const savePlaceBtn = document.getElementById('save-place-btn');
     
-    placeForm.addEventListener('submit', async (e) => {
+    savePlaceBtn.addEventListener('click', async (e) => {
       e.preventDefault();
-      console.log('=== 저장 실행 ===');
+      e.stopPropagation();
+      console.log('=== 저장 버튼 클릭 ===');
       
       const id = document.getElementById('place-id').value;
       const imageFile = document.getElementById('place-image').files[0];
