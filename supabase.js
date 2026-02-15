@@ -2,8 +2,18 @@
 const SUPABASE_URL = 'https://gxyqxdciuskrxdmprpfc.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_DsNr2yYZKvnqTrtYkRSDnA__iRSAEI5';
 
-// Supabase 클라이언트 초기화
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Supabase 클라이언트 초기화 (에러 핸들링 포함)
+let supabaseClient;
+try {
+  if (typeof window.supabase === 'undefined') {
+    console.error('[Supabase] SDK가 로드되지 않았습니다. CDN을 확인하세요.');
+  } else {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('[Supabase] 클라이언트 초기화 성공');
+  }
+} catch (err) {
+  console.error('[Supabase] 클라이언트 초기화 실패:', err);
+}
 
 // 인증 관련 함수
 async function signIn(email, password) {

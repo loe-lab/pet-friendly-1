@@ -281,7 +281,8 @@
       const category = params.get('category');
       const placeId = params.get('id');
 
-      if (title) {
+      // URL 파라미터로 우선 세팅 (Supabase 로드 전 임시 표시)
+      if (title && title !== '이름 없음') {
         document.getElementById('detail-title').textContent = title;
         document.title = title + ' - 데일리펫';
       }
@@ -289,46 +290,79 @@
         document.getElementById('main-image').src = image;
       }
 
-      // Supabase에서 상세 이미지 로드
-      async function loadDetailImages() {
-        try {
-          let place = null;
-          
-          // ID로 조회 시도
-          if (placeId) {
-            const { data } = await supabaseClient
-              .from('places')
-              .select('*')
-              .eq('id', parseInt(placeId))
-              .single();
-            place = data;
-          }
-          
-          // title로 조회 시도 (정확 일치)
-          if (!place && title) {
-            const { data } = await supabaseClient
-              .from('places')
-              .select('*')
-              .eq('title', title)
-              .single();
-            place = data;
-          }
-          // title 유사 검색 (부분 일치)
-          if (!place && title) {
-            const { data } = await supabaseClient
-              .from('places')
-              .select('*')
-              .ilike('title', '%' + title + '%')
-              .limit(1)
-              .single();
-            place = data;
-          }
+      // Supabase 쿼리 (에러 포함 반환)
+      async function queryPlace() {
+        let place = null;
+        
+        // 1) ID로 조회
+        if (placeId) {
+          const { data, error } = await supabaseClient
+            .from('places')
+            .select('*')
+            .eq('id', parseInt(placeId))
+            .single();
+          if (error) console.warn('[Detail] ID 조회 실패:', error.message);
+          else place = data;
+        }
+        
+        // 2) title 정확 일치
+        if (!place && title && title !== '이름 없음') {
+          const { data, error } = await supabaseClient
+            .from('places')
+            .select('*')
+            .eq('title', title)
+            .single();
+          if (error) console.warn('[Detail] title 정확 조회 실패:', error.message);
+          else place = data;
+        }
+        
+        // 3) title 유사 검색
+        if (!place && title && title !== '이름 없음') {
+          const { data, error } = await supabaseClient
+            .from('places')
+            .select('*')
+            .ilike('title', '%' + title + '%')
+            .limit(1)
+            .single();
+          if (!error) place = data;
+        }
 
-          if (!place) {
-            console.warn('Supabase에서 장소를 찾지 못했습니다. placeId:', placeId, 'title:', title);
+        // 4) ID 없고 title도 없으면 전체 목록에서 첫번째
+        if (!place && !placeId && (!title || title === '이름 없음')) {
+          const { data } = await supabaseClient
+            .from('places')
+            .select('*')
+            .order('id', { ascending: false })
+            .limit(1);
+          if (data && data.length > 0) place = data[0];
+        }
+
+        return place;
+      }
+
+      // Supabase에서 장소 데이터 로드 (재시도 포함)
+      async function loadDetailImages(retryCount = 0) {
+        try {
+          if (!supabaseClient) {
+            console.error('[Detail] supabaseClient가 초기화되지 않았습니다.');
+            if (retryCount < 3) {
+              console.log('[Detail] 1초 후 재시도... (' + (retryCount + 1) + '/3)');
+              setTimeout(() => loadDetailImages(retryCount + 1), 1000);
+            }
             return;
           }
-          console.log('장소 데이터 로드 완료:', place.title, place);
+
+          const place = await queryPlace();
+
+          if (!place) {
+            console.warn('[Detail] 장소를 찾지 못했습니다. placeId:', placeId, 'title:', title);
+            if (retryCount < 2) {
+              console.log('[Detail] 1.5초 후 재시도... (' + (retryCount + 1) + '/2)');
+              setTimeout(() => loadDetailImages(retryCount + 1), 1500);
+            }
+            return;
+          }
+          console.log('[Detail] 장소 데이터 로드 완료:', place.title, place);
 
           // 장소 정보 업데이트
           if (place.title) {
@@ -440,9 +474,19 @@
         }
       }
 
-      // Supabase 준비 후 로드
-      if (typeof supabaseClient !== 'undefined') {
+      // Supabase 준비 후 로드 (지연 실행으로 안정성 확보)
+      if (typeof supabaseClient !== 'undefined' && supabaseClient) {
         loadDetailImages();
+      } else {
+        // Supabase SDK 로드가 늦는 경우 대비 재시도
+        console.warn('[Detail] supabaseClient 미정의, 1초 후 재시도');
+        setTimeout(() => {
+          if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+            loadDetailImages();
+          } else {
+            console.error('[Detail] supabaseClient를 초기화할 수 없습니다.');
+          }
+        }, 1000);
       }
 
       // 카카오맵 초기화

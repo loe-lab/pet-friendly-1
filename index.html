@@ -345,8 +345,14 @@
       });
 
       // 신규 애견동반 장소 (Supabase에서 최신순 로드)
-      (async function renderNewPlaces() {
-        if (typeof supabaseClient === 'undefined') return;
+      async function renderNewPlaces(retryCount = 0) {
+        if (!supabaseClient) {
+          if (retryCount < 3) {
+            console.warn('[Main] supabaseClient 미정의, 1초 후 재시도 (' + (retryCount+1) + '/3)');
+            setTimeout(() => renderNewPlaces(retryCount + 1), 1000);
+          }
+          return;
+        }
         try {
           const { data, error } = await supabaseClient
             .from('places')
@@ -354,7 +360,14 @@
             .order('id', { ascending: false })
             .limit(10);
           
-          if (error || !data || data.length === 0) return;
+          if (error) {
+            console.error('[Main] 장소 로드 에러:', error.message);
+            if (retryCount < 2) {
+              setTimeout(() => renderNewPlaces(retryCount + 1), 1500);
+            }
+            return;
+          }
+          if (!data || data.length === 0) return;
 
           const section = document.getElementById('new-places-section');
           const track = document.getElementById('new-places-track');
@@ -393,6 +406,7 @@
               const locationEl = card.querySelector('.theme-card__location');
               const tagEls = card.querySelectorAll('.theme-card__tag');
               const placeData = {
+                id: card.dataset.id || '',
                 title: titleEl ? titleEl.textContent.trim() : '',
                 image: imgEl ? imgEl.src : '',
                 location: locationEl ? locationEl.textContent.trim() : '',
@@ -419,9 +433,13 @@
             });
           });
         } catch (err) {
-          console.error('신규 장소 로드 실패:', err);
+          console.error('[Main] 신규 장소 로드 실패:', err);
+          if (retryCount < 2) {
+            setTimeout(() => renderNewPlaces(retryCount + 1), 1500);
+          }
         }
-      })();
+      }
+      renderNewPlaces();
 
       // 페이지 전체 좋아요 아이콘 동기화
       function syncAllLikeIcons() {
@@ -453,7 +471,7 @@
         track.innerHTML = top10.map(place => {
           const title = place.title || '이름 없음';
           return `
-          <div class="theme-card" data-title="${title}">
+          <div class="theme-card" data-id="${place.id || ''}" data-title="${title}">
             <img class="theme-card__like-icon" src="base-icon-heart-selected.svg" alt="좋아요" />
             <img src="${place.image || '0.thumbnail_food.png'}" alt="${title}" />
             <div class="theme-card__body">
@@ -478,6 +496,21 @@
               renderLikesTop10();
               syncAllLikeIcons();
             }
+          });
+        });
+
+        // 카드 클릭 시 상세페이지 이동
+        track.querySelectorAll('.theme-card').forEach(card => {
+          card.style.cursor = 'pointer';
+          card.addEventListener('click', (e) => {
+            if (e.target.classList.contains('theme-card__like-icon')) return;
+            const title = card.querySelector('h4')?.textContent.trim() || '';
+            const image = card.querySelector('img:not(.theme-card__like-icon)')?.src || '';
+            const location = card.querySelector('.theme-card__location')?.textContent.trim() || '';
+            const placeId = card.dataset.id;
+            const params = new URLSearchParams({ title, image, category: location });
+            if (placeId) params.set('id', placeId);
+            window.location.href = 'detail.html?' + params.toString();
           });
         });
       }
