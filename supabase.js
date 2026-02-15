@@ -160,6 +160,11 @@ async function createPlace(place) {
 }
 
 async function updatePlace(id, updates) {
+  // 빈 데이터로 덮어쓰기 방지 (최종 방어선)
+  if (!updates.title || !updates.title.trim()) {
+    console.error('[updatePlace] 제목이 비어있어 저장을 차단합니다. id:', id);
+    throw new Error('제목이 비어있어 저장할 수 없습니다.');
+  }
   const { data, error } = await supabaseClient
     .from('places')
     .update(updates)

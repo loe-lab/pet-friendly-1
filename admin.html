@@ -744,8 +744,16 @@
       isModalOpen = false;
       // 자동 저장 타이머가 남아있으면 즉시 취소 (빈 값 저장 방지)
       clearTimeout(autoSaveTimer);
+      
+      // form reset 전에 모든 input/change 이벤트 리스너가 동작하지 않도록 
+      // 자동 저장 비활성화 플래그 설정
+      autoSaveDisabled = true;
+      
       placeModal.classList.add('hidden');
       placeForm.reset();
+      
+      // reset 후 다시 활성화 (다음 모달 열기에 대비)
+      setTimeout(() => { autoSaveDisabled = false; }, 100);
     }
 
     addPlaceBtn.addEventListener('click', () => openModal());
@@ -832,6 +840,7 @@
     let autoSaveTimer = null;
     const autoSaveDelay = 1500; // 1.5초 후 자동 저장
     let autoSaveIndicator = null;
+    let autoSaveDisabled = false; // closeModal 시 일시 비활성화
 
     function showAutoSaveStatus(msg, isError) {
       if (!autoSaveIndicator) {
@@ -848,7 +857,12 @@
     }
 
     async function autoSavePlace() {
-      // 안전 장치: 모달이 열려있지 않으면 절대 저장하지 않음
+      // 안전 장치 1: 비활성화 플래그 확인
+      if (autoSaveDisabled) {
+        console.log('자동 저장 건너뜀: 비활성화됨 (모달 닫는 중)');
+        return;
+      }
+      // 안전 장치 2: 모달이 열려있지 않으면 절대 저장하지 않음
       if (!isModalOpen) {
         console.log('자동 저장 건너뜀: 모달이 닫혀있음');
         return;
@@ -987,6 +1001,14 @@
           image_url: imageUrl,
           detail_images: detailImages
         };
+
+        // 빈 제목 저장 차단
+        if (!placeData.title.trim()) {
+          alert('⚠️ 장소명을 입력해주세요.');
+          savePlaceBtn.disabled = false;
+          savePlaceBtn.textContent = '저장';
+          return;
+        }
 
         console.log('저장할 데이터:', JSON.stringify({ id, title: placeData.title, location: placeData.location }));
 
