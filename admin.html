@@ -822,6 +822,78 @@
       addDetailImageRow();
     });
 
+    // ===== 실시간 자동 저장 (기존 장소 수정 시) =====
+    let autoSaveTimer = null;
+    const autoSaveDelay = 1500; // 1.5초 후 자동 저장
+    let autoSaveIndicator = null;
+
+    function showAutoSaveStatus(msg, isError) {
+      if (!autoSaveIndicator) {
+        autoSaveIndicator = document.createElement('div');
+        autoSaveIndicator.style.cssText = 'position:fixed;bottom:24px;right:24px;padding:8px 16px;border-radius:8px;font-size:13px;z-index:9999;transition:opacity 0.3s;pointer-events:none;';
+        document.body.appendChild(autoSaveIndicator);
+      }
+      autoSaveIndicator.style.background = isError ? '#fee2e2' : '#dcfce7';
+      autoSaveIndicator.style.color = isError ? '#b91c1c' : '#166534';
+      autoSaveIndicator.textContent = msg;
+      autoSaveIndicator.style.opacity = '1';
+      clearTimeout(autoSaveIndicator._hideTimer);
+      autoSaveIndicator._hideTimer = setTimeout(() => { autoSaveIndicator.style.opacity = '0'; }, 2500);
+    }
+
+    async function autoSavePlace() {
+      const id = document.getElementById('place-id').value;
+      if (!id) return; // 새 장소는 자동저장 안 함
+
+      try {
+        // 선택된 태그 수집
+        const selectedTags = [];
+        document.querySelectorAll('#tag-checkboxes input:checked').forEach(cb => {
+          selectedTags.push(cb.value);
+        });
+
+        const placeData = {
+          title: document.getElementById('place-title').value,
+          location: document.getElementById('place-location').value,
+          address: document.getElementById('place-address').value,
+          category: document.getElementById('place-category').value,
+          theme: document.getElementById('place-theme').value,
+          description: document.getElementById('place-description').value,
+          companion_info: document.getElementById('place-companion-info').value,
+          usage_info: document.getElementById('place-usage-info').value,
+          tags: selectedTags,
+        };
+
+        await updatePlace(parseInt(id), placeData);
+        showAutoSaveStatus('✓ 자동 저장됨', false);
+      } catch (err) {
+        showAutoSaveStatus('자동 저장 실패', true);
+        console.error('자동 저장 오류:', err);
+      }
+    }
+
+    function triggerAutoSave() {
+      clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(autoSavePlace, autoSaveDelay);
+    }
+
+    // 텍스트 필드 변경 시 자동 저장 연결
+    ['place-title','place-location','place-address','place-category','place-theme',
+     'place-description','place-companion-info','place-usage-info'].forEach(fieldId => {
+      const el = document.getElementById(fieldId);
+      if (el) {
+        el.addEventListener('input', triggerAutoSave);
+        el.addEventListener('change', triggerAutoSave);
+      }
+    });
+    // 태그 체크박스 변경도 감지
+    document.getElementById('tag-checkboxes').addEventListener('change', triggerAutoSave);
+
+    // 상세 이미지 설명도 자동 저장 (이벤트 위임)
+    document.getElementById('detail-images-list').addEventListener('input', (e) => {
+      if (e.target.tagName === 'TEXTAREA') triggerAutoSave();
+    });
+
     // 장소 저장
     placeForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -923,13 +995,8 @@
       }
     });
 
-    // 모달 외부 클릭 시 닫기 (드래그로 인한 오작동 방지)
-    let placeModalMouseDownTarget = null;
-    placeModal.addEventListener('mousedown', (e) => { placeModalMouseDownTarget = e.target; });
-    placeModal.addEventListener('mouseup', (e) => {
-      if (e.target === placeModal && placeModalMouseDownTarget === placeModal) closeModal();
-      placeModalMouseDownTarget = null;
-    });
+    // 모달 외부 클릭으로 닫기 비활성화 — 저장/취소 버튼으로만 닫힘
+    // (드래그 시 모달이 닫히는 문제 완전 방지)
 
     deleteModal.addEventListener('click', (e) => {
       if (e.target === deleteModal) {
