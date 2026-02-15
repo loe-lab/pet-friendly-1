@@ -923,9 +923,12 @@
       }
     });
 
-    // 모달 외부 클릭 시 닫기
-    placeModal.addEventListener('click', (e) => {
-      if (e.target === placeModal) closeModal();
+    // 모달 외부 클릭 시 닫기 (드래그로 인한 오작동 방지)
+    let placeModalMouseDownTarget = null;
+    placeModal.addEventListener('mousedown', (e) => { placeModalMouseDownTarget = e.target; });
+    placeModal.addEventListener('mouseup', (e) => {
+      if (e.target === placeModal && placeModalMouseDownTarget === placeModal) closeModal();
+      placeModalMouseDownTarget = null;
     });
 
     deleteModal.addEventListener('click', (e) => {
