@@ -685,6 +685,7 @@
 
     // 모달 열기/닫기
     function openModal(place = null) {
+      isModalOpen = true;
       placeModal.classList.remove('hidden');
       document.getElementById('modal-title').textContent = place ? '장소 수정' : '새 장소 추가';
       
@@ -737,7 +738,12 @@
       }
     }
 
+    let isModalOpen = false;
+
     function closeModal() {
+      isModalOpen = false;
+      // 자동 저장 타이머가 남아있으면 즉시 취소 (빈 값 저장 방지)
+      clearTimeout(autoSaveTimer);
       placeModal.classList.add('hidden');
       placeForm.reset();
     }
@@ -842,8 +848,22 @@
     }
 
     async function autoSavePlace() {
+      // 안전 장치: 모달이 열려있지 않으면 절대 저장하지 않음
+      if (!isModalOpen) {
+        console.log('자동 저장 건너뜀: 모달이 닫혀있음');
+        return;
+      }
+
       const id = document.getElementById('place-id').value;
       if (!id) return; // 새 장소는 자동저장 안 함
+
+      const title = document.getElementById('place-title').value;
+
+      // 안전 장치: 제목이 비어있으면 자동 저장 하지 않음 (빈 값 덮어쓰기 방지)
+      if (!title.trim()) {
+        console.log('자동 저장 건너뜀: 제목이 비어있음 (기존 데이터 보호)');
+        return;
+      }
 
       try {
         // 선택된 태그 수집
@@ -853,7 +873,7 @@
         });
 
         const placeData = {
-          title: document.getElementById('place-title').value,
+          title: title,
           location: document.getElementById('place-location').value,
           address: document.getElementById('place-address').value,
           category: document.getElementById('place-category').value,
@@ -867,7 +887,7 @@
         console.log('자동 저장 시도:', { id, title: placeData.title, location: placeData.location });
         const result = await updatePlace(parseInt(id), placeData);
         console.log('자동 저장 성공:', result?.title);
-        showAutoSaveStatus('✓ 자동 저장됨 (제목: ' + placeData.title + ')', false);
+        showAutoSaveStatus('✓ 자동 저장됨', false);
       } catch (err) {
         showAutoSaveStatus('❌ 자동 저장 실패: ' + err.message, true);
         console.error('자동 저장 오류:', err);
