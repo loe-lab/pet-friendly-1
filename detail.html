@@ -157,6 +157,11 @@
             </div>
           </div>
 
+          <!-- 소개 (설명) -->
+          <div id="section-description" class="info-section mb-10" style="display:none;">
+            <p id="detail-description" class="text-slate-600 leading-relaxed"></p>
+          </div>
+
           <!-- 동반안내 -->
           <div id="section-companion" class="info-section mb-10" style="display:none;">
             <h3 class="text-lg font-semibold text-deep mb-4">동반안내</h3>
@@ -169,7 +174,7 @@
             <ul class="text-slate-600 space-y-2"></ul>
           </div>
 
-          <!-- 소개 (사진 + 설명) -->
+          <!-- 상세 사진 + 설명 -->
           <div id="section-highlight" class="info-section mb-10">
             <div id="detail-images-content">
               <!-- Supabase에서 동적으로 채워짐 -->
@@ -299,7 +304,7 @@
             place = data;
           }
           
-          // title로 조회 시도
+          // title로 조회 시도 (정확 일치)
           if (!place && title) {
             const { data } = await supabaseClient
               .from('places')
@@ -308,8 +313,22 @@
               .single();
             place = data;
           }
+          // title 유사 검색 (부분 일치)
+          if (!place && title) {
+            const { data } = await supabaseClient
+              .from('places')
+              .select('*')
+              .ilike('title', '%' + title + '%')
+              .limit(1)
+              .single();
+            place = data;
+          }
 
-          if (!place) return;
+          if (!place) {
+            console.warn('Supabase에서 장소를 찾지 못했습니다. placeId:', placeId, 'title:', title);
+            return;
+          }
+          console.log('장소 데이터 로드 완료:', place.title, place);
 
           // 장소 정보 업데이트
           if (place.title) {
@@ -339,7 +358,13 @@
               tagsEl.innerHTML = tags.map(tag => `<span class="px-3 py-1 bg-slate-100 rounded-full text-xs text-slate-600">${tag}</span>`).join('');
             }
           }
-          // description은 상세 이미지 콘텐츠 영역에서 표시됨
+          // 설명 업데이트
+          if (place.description && place.description.trim()) {
+            const descSection = document.getElementById('section-description');
+            const descEl = document.getElementById('detail-description');
+            if (descEl) descEl.textContent = place.description;
+            if (descSection) descSection.style.display = 'block';
+          }
 
           // 동반안내 업데이트
           if (place.companion_info && place.companion_info.trim()) {
