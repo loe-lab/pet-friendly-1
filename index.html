@@ -361,18 +361,19 @@
           if (!section || !track) return;
 
           track.innerHTML = data.map(place => {
+            const title = place.title || place.name || '이름 없음';
             let tags = place.tags || [];
             if (typeof tags === 'string') {
               try { tags = JSON.parse(tags); } catch(e) { tags = tags.split(',').map(t => t.trim()).filter(Boolean); }
             }
-            const isLiked = LikesManager.isLiked(place.title);
+            const isLiked = LikesManager.isLiked(title);
             return `
-              <div class="theme-card" data-id="${place.id || ''}">
+              <div class="theme-card" data-id="${place.id || ''}" data-title="${title}">
                 <img class="theme-card__like-icon" src="${isLiked ? 'base-icon-heart-selected.svg' : 'base-icon-heart.svg'}" alt="좋아요" />
-                <img src="${place.image_url || '0.thumbnail_food.png'}" alt="${place.title}" onerror="this.src='0.thumbnail_food.png'" />
+                <img src="${place.image_url || '0.thumbnail_food.png'}" alt="${title}" onerror="this.src='0.thumbnail_food.png'" />
                 <div class="theme-card__body">
                   <p class="theme-card__location">${place.location || ''}</p>
-                  <h4>${place.title}</h4>
+                  <h4>${title}</h4>
                   <div class="theme-card__tags">
                     ${tags.map(tag => `<span class="theme-card__tag">${tag}</span>`).join('')}
                   </div>
@@ -449,19 +450,21 @@
 
         // 최신 좋아요 순서대로, 최대 10개
         const top10 = likes.slice().reverse().slice(0, 10);
-        track.innerHTML = top10.map(place => `
-          <div class="theme-card">
+        track.innerHTML = top10.map(place => {
+          const title = place.title || '이름 없음';
+          return `
+          <div class="theme-card" data-title="${title}">
             <img class="theme-card__like-icon" src="base-icon-heart-selected.svg" alt="좋아요" />
-            <img src="${place.image || '0.thumbnail_food.png'}" alt="${place.title}" />
+            <img src="${place.image || '0.thumbnail_food.png'}" alt="${title}" />
             <div class="theme-card__body">
               <p class="theme-card__location">${place.location || ''}</p>
-              <h4>${place.title}</h4>
+              <h4>${title}</h4>
               <div class="theme-card__tags">
                 ${(place.tags || []).map(tag => `<span class="theme-card__tag">${tag}</span>`).join('')}
               </div>
             </div>
           </div>
-        `).join('');
+        `;}).join('');
         section.style.display = '';
 
         // 좋아요 해제 이벤트 바인딩
