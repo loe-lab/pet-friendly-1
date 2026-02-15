@@ -148,8 +148,9 @@
 
           <!-- 타이틀 & 기본 정보 -->
           <div class="mb-8">
+            <span id="detail-category-badge" class="inline-block px-3 py-1 rounded-full text-xs font-medium border border-slate-300 text-slate-600 mb-3">카페</span>
             <h1 id="detail-title" class="text-2xl font-semibold text-deep mb-2">따뜻한 조명 실내 다이닝</h1>
-            <p id="detail-subtitle" class="text-slate-500 text-sm mb-4">서울 강남구 · 애견동반 식당</p>
+            <p id="detail-subtitle" class="text-slate-500 text-sm mb-4">서울 강남구</p>
             
             <div id="detail-tags" class="flex flex-wrap gap-2 mb-6">
               <span class="px-3 py-1 bg-slate-100 rounded-full text-xs text-slate-600">주차가능</span>
@@ -362,7 +363,14 @@
           }
           if (place.location) {
             const subtitleEl = document.getElementById('detail-subtitle');
-            if (subtitleEl) subtitleEl.textContent = place.location + (place.category ? ' · ' + place.category : '');
+            if (subtitleEl) subtitleEl.textContent = place.location;
+          }
+          if (place.category) {
+            const badgeEl = document.getElementById('detail-category-badge');
+            if (badgeEl) {
+              badgeEl.textContent = place.category;
+              badgeEl.style.display = 'inline-block';
+            }
           }
 
           // 태그 업데이트
