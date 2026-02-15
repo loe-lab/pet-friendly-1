@@ -250,8 +250,8 @@
   </div>
 
   <!-- 장소 추가/수정 모달 -->
-  <div id="place-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden" onmousedown="event.stopPropagation()" onmouseup="event.stopPropagation()" onclick="event.stopPropagation()">
-    <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4" onmousedown="event.stopPropagation()" onmouseup="event.stopPropagation()" onclick="event.stopPropagation()">
+  <div id="place-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4">
       <div class="p-6 border-b border-gray-200">
         <h3 id="modal-title" class="text-xl font-bold">새 장소 추가</h3>
       </div>
@@ -347,7 +347,7 @@
           <button type="button" id="cancel-btn" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
             취소
           </button>
-          <button type="button" id="save-place-btn" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+          <button type="submit" id="save-place-btn" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
             저장
           </button>
         </div>
@@ -916,21 +916,19 @@
       if (e.target.tagName === 'TEXTAREA') triggerAutoSave();
     });
 
-    // Enter 키로 폼이 제출되는 것 완전 차단
-    placeForm.addEventListener('submit', (e) => { e.preventDefault(); });
+    // Enter 키로 폼이 제출되는 것 차단 (textarea 줄바꿈은 허용)
     placeForm.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
         e.preventDefault();
       }
     });
 
-    // 장소 저장 (버튼 클릭으로만 동작)
+    // 장소 저장 (폼 submit)
     const savePlaceBtn = document.getElementById('save-place-btn');
-    console.log('저장 버튼 연결:', savePlaceBtn ? '성공' : '실패');
     
-    savePlaceBtn.addEventListener('click', async (e) => {
+    placeForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      console.log('=== 저장 버튼 클릭됨 ===');
+      console.log('=== 저장 실행 ===');
       
       const id = document.getElementById('place-id').value;
       const imageFile = document.getElementById('place-image').files[0];
@@ -1042,11 +1040,7 @@
       }
     });
 
-    // 모달은 저장/취소 버튼으로만 닫힘 — 외부 클릭, 드래그, Enter 키 모두 차단
-    // 모달 내부 클릭/드래그 이벤트가 절대 배경으로 전파되지 않도록 차단
-    placeModal.querySelector('.bg-white').addEventListener('mousedown', e => e.stopPropagation());
-    placeModal.querySelector('.bg-white').addEventListener('mouseup', e => e.stopPropagation());
-    placeModal.querySelector('.bg-white').addEventListener('click', e => e.stopPropagation());
+    // 모달은 저장/취소 버튼으로만 닫힘 — 외부 클릭 닫기 없음
 
     deleteModal.addEventListener('click', (e) => {
       if (e.target === deleteModal) {
