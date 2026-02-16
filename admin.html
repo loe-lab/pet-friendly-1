@@ -304,6 +304,20 @@
         </div>
 
         <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">웰컴펫 지수</label>
+          <div id="welcomepet-score" class="flex items-center gap-1">
+            <button type="button" class="paw-btn text-2xl opacity-30 hover:opacity-100 transition" data-score="1">🐾</button>
+            <button type="button" class="paw-btn text-2xl opacity-30 hover:opacity-100 transition" data-score="2">🐾</button>
+            <button type="button" class="paw-btn text-2xl opacity-30 hover:opacity-100 transition" data-score="3">🐾</button>
+            <button type="button" class="paw-btn text-2xl opacity-30 hover:opacity-100 transition" data-score="4">🐾</button>
+            <button type="button" class="paw-btn text-2xl opacity-30 hover:opacity-100 transition" data-score="5">🐾</button>
+            <span id="paw-score-label" class="ml-2 text-sm text-gray-500">선택 안함</span>
+          </div>
+          <input type="hidden" id="place-welcomepet-score" value="0" />
+          <p class="text-xs text-gray-400 mt-1">1~5점: 높을수록 반려동물 친화적인 공간</p>
+        </div>
+
+        <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">동반안내</label>
           <textarea id="place-companion-info" class="input-field min-h-[140px] resize-y" placeholder="반려견 동반 규정을 한 줄씩 입력하세요&#10;예: 모든 크기의 반려견 입장 가능&#10;리드줄 필수 착용"></textarea>
           <p class="text-xs text-gray-400 mt-1">줄바꿈으로 항목을 구분합니다</p>
@@ -704,6 +718,7 @@
         document.getElementById('place-companion-info').value = place.companion_info || '';
         document.getElementById('place-usage-info').value = place.usage_info || '';
         document.getElementById('place-image-url').value = place.image_url || '';
+        setPawScore(place.welcomepet_score || 0);
         
         // 태그 체크박스 설정
         let placeTags = place.tags || [];
@@ -731,6 +746,7 @@
         document.getElementById('place-id').value = '';
         document.getElementById('place-image-url').value = '';
         document.getElementById('image-preview').classList.add('hidden');
+        setPawScore(0);
         // 체크박스 초기화
         document.querySelectorAll('#tag-checkboxes input').forEach(cb => {
           cb.checked = false;
@@ -758,6 +774,25 @@
 
     addPlaceBtn.addEventListener('click', () => openModal());
     cancelBtn.addEventListener('click', closeModal);
+
+    // 웰컴펫 지수 선택
+    const pawLabels = ['선택 안함', '1 Paw', '2 Paw', '3 Paw', '4 Paw', '5 Paw'];
+    function setPawScore(score) {
+      document.getElementById('place-welcomepet-score').value = score;
+      document.querySelectorAll('.paw-btn').forEach(btn => {
+        const s = parseInt(btn.dataset.score);
+        btn.style.opacity = s <= score ? '1' : '0.3';
+      });
+      document.getElementById('paw-score-label').textContent = pawLabels[score] || '선택 안함';
+    }
+    document.querySelectorAll('.paw-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const score = parseInt(btn.dataset.score);
+        const current = parseInt(document.getElementById('place-welcomepet-score').value);
+        setPawScore(score === current ? 0 : score);
+        triggerAutoSave();
+      });
+    });
 
     // 이미지 미리보기
     document.getElementById('place-image').addEventListener('change', (e) => {
@@ -895,6 +930,7 @@
           description: document.getElementById('place-description').value,
           companion_info: document.getElementById('place-companion-info').value,
           usage_info: document.getElementById('place-usage-info').value,
+          welcomepet_score: parseInt(document.getElementById('place-welcomepet-score').value) || 0,
           tags: selectedTags,
         };
 
@@ -998,6 +1034,7 @@
           description: document.getElementById('place-description').value,
           companion_info: document.getElementById('place-companion-info').value,
           usage_info: document.getElementById('place-usage-info').value,
+          welcomepet_score: parseInt(document.getElementById('place-welcomepet-score').value) || 0,
           tags: selectedTags,
           image_url: imageUrl,
           detail_images: detailImages
