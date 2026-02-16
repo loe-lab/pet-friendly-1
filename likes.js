@@ -52,33 +52,57 @@ const LikesManager = {
     }
   },
 
-  // Supabase에서 최신 데이터로 localStorage 동기화
+  // Supabase에서 최신 데이터로 localStorage 전체 동기화
   async syncWithSupabase(supabaseClient) {
     if (!supabaseClient) return;
     const likes = this.getAll();
     if (likes.length === 0) return;
 
-    const likedIds = likes.map(p => p.id).filter(Boolean);
-    if (likedIds.length === 0) return;
-
     try {
-      const { data, error } = await supabaseClient
-        .from('places')
-        .select('id, title, location, image_url, tags, welcomepet_score')
-        .in('id', likedIds);
+      // id가 있는 항목과 없는 항목 분리
+      const withId = likes.filter(p => p.id);
+      const withoutId = likes.filter(p => !p.id);
 
-      if (error || !data) return;
+      let freshMap = {};
 
-      const freshMap = {};
-      data.forEach(p => { freshMap[p.id] = p; });
+      // 1) id 기반 조회
+      if (withId.length > 0) {
+        const ids = withId.map(p => p.id);
+        const { data } = await supabaseClient
+          .from('places')
+          .select('id, title, location, image_url, tags, welcomepet_score')
+          .in('id', ids);
+        if (data) {
+          data.forEach(p => { freshMap[p.id] = p; });
+        }
+      }
 
-      let updated = false;
-      likes.forEach(p => {
-        if (p.id && freshMap[p.id]) {
-          const fresh = freshMap[p.id];
-          if (p.image !== fresh.image_url || p.title !== fresh.title || p.location !== fresh.location) {
-            updated = true;
+      // 2) id 없는 항목은 title 기반 조회로 id 복구
+      if (withoutId.length > 0) {
+        const titles = withoutId.map(p => p.title).filter(Boolean);
+        if (titles.length > 0) {
+          const { data } = await supabaseClient
+            .from('places')
+            .select('id, title, location, image_url, tags, welcomepet_score')
+            .in('title', titles);
+          if (data) {
+            const titleMap = {};
+            data.forEach(p => { titleMap[p.title] = p; });
+            // id 없는 항목에 id 채우기
+            withoutId.forEach(p => {
+              if (titleMap[p.title]) {
+                p.id = titleMap[p.title].id;
+                freshMap[p.id] = titleMap[p.title];
+              }
+            });
           }
+        }
+      }
+
+      // 3) 모든 항목을 최신 데이터로 갱신
+      likes.forEach(p => {
+        const fresh = p.id ? freshMap[p.id] : null;
+        if (fresh) {
           p.image = fresh.image_url || p.image;
           p.title = fresh.title || p.title;
           p.location = fresh.location || p.location;
@@ -87,10 +111,9 @@ const LikesManager = {
         }
       });
 
-      if (updated) {
-        this._save(likes);
-        console.log('[LikesManager] Supabase 최신 데이터로 동기화 완료');
-      }
+      // 항상 저장 (최신 상태 보장)
+      this._save(likes);
+      console.log('[LikesManager] Supabase 최신 데이터로 동기화 완료');
     } catch (err) {
       console.warn('[LikesManager] Supabase 동기화 실패, 캐시 사용:', err);
     }
