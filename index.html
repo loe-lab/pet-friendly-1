@@ -93,7 +93,7 @@
             <div id="banner-slides" class="flex transition-transform duration-500">
               <!-- 동적으로 채워짐, 기본 폴백 배너 -->
               <div class="banner-slide min-w-full">
-                <div class="relative h-[310px] bg-cover bg-center rounded-2xl" style="background-image: url('banner1.jpg')">
+                <div class="relative h-[330px] bg-cover bg-center rounded-2xl" style="background-image: url('banner1.jpg')">
                   <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl"></div>
                   <div class="absolute inset-0 flex flex-col justify-end px-10 pb-8 text-white">
                     <p class="text-sm tracking-wider mb-2">LET'S TRAVEL!</p>
@@ -103,7 +103,7 @@
                 </div>
               </div>
               <div class="banner-slide min-w-full">
-                <div class="relative h-[310px] bg-cover bg-center rounded-2xl" style="background-image: url('banner2.jpg')">
+                <div class="relative h-[330px] bg-cover bg-center rounded-2xl" style="background-image: url('banner2.jpg')">
                   <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl"></div>
                   <div class="absolute inset-0 flex flex-col justify-end px-10 pb-8 text-white">
                     <p class="text-sm tracking-wider mb-2">DAILY PET</p>
@@ -608,7 +608,7 @@
                 const placeLabel = linkedPlace ? `${linkedPlace.title} (${linkedPlace.location || ''})` : '';
                 return `
                 <div class="banner-slide min-w-full ${banner.place_id ? 'cursor-pointer' : ''}" data-place-id="${banner.place_id || ''}" data-banner-title="${(banner.title || '').replace(/"/g, '&quot;')}" data-banner-image="${banner.image_url || ''}">
-                  <div class="relative h-[310px] bg-cover bg-center rounded-2xl" style="background-image: url('${banner.image_url}')">
+                  <div class="relative h-[330px] bg-cover bg-center rounded-2xl" style="background-image: url('${banner.image_url}')">
                     <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl"></div>
                     <div class="absolute inset-0 flex flex-col justify-end px-10 pb-8 text-white">
                       <p class="text-sm tracking-wider mb-2">${banner.label || ''}</p>
