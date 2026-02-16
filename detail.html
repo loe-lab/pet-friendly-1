@@ -405,7 +405,13 @@
             const companionSection = document.getElementById('section-companion');
             const companionEl = companionSection.querySelector('ul');
             if (companionEl) {
-              companionEl.innerHTML = place.companion_info.split('\n').filter(l => l.trim()).map(line => `<li>• ${line.trim()}</li>`).join('');
+              companionEl.innerHTML = place.companion_info.split('\n').filter(l => l.trim()).map(line => {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+                  return `<li class="font-semibold text-deep mt-4 mb-1 list-none">${trimmed.slice(1, -1)}</li>`;
+                }
+                return `<li>• ${trimmed}</li>`;
+              }).join('');
             }
             companionSection.style.display = 'block';
           }
@@ -415,7 +421,13 @@
             const usageSection = document.getElementById('section-usage');
             const usageEl = usageSection.querySelector('ul');
             if (usageEl) {
-              usageEl.innerHTML = place.usage_info.split('\n').filter(l => l.trim()).map(line => `<li>• ${line.trim()}</li>`).join('');
+              usageEl.innerHTML = place.usage_info.split('\n').filter(l => l.trim()).map(line => {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+                  return `<li class="font-semibold text-deep mt-4 mb-1 list-none">${trimmed.slice(1, -1)}</li>`;
+                }
+                return `<li>• ${trimmed}</li>`;
+              }).join('');
             }
             usageSection.style.display = 'block';
           }
