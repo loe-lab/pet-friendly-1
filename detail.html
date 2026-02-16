@@ -442,7 +442,7 @@
             for (let i = 1; i <= 5; i++) {
               pawsHtml += `<span class="text-2xl ${i <= score ? '' : 'opacity-20'}">\u{1F43E}</span>`;
             }
-            pawsHtml += `<span class="ml-2 text-sm font-medium text-deep">${score} Paw</span>`;
+            // 점수 텍스트 없이 🐾만 표시
             wpPaws.innerHTML = pawsHtml;
             wpLabel.textContent = pawLabels[score] || '';
             wpSection.style.display = 'block';
