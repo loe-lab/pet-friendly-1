@@ -570,8 +570,19 @@
               .order('sort_order', { ascending: true });
             
             if (!error && data && data.length > 0) {
+              // 연결된 장소 정보 가져오기
+              const placeIds = data.filter(b => b.place_id).map(b => b.place_id);
+              let placesMap = {};
+              if (placeIds.length > 0) {
+                const { data: places } = await supabaseClient.from('places').select('id, title, location').in('id', placeIds);
+                if (places) places.forEach(p => { placesMap[p.id] = p; });
+              }
+
               // Supabase 배너로 교체
-              slidesContainer.innerHTML = data.map(banner => `
+              slidesContainer.innerHTML = data.map(banner => {
+                const linkedPlace = banner.place_id ? placesMap[banner.place_id] : null;
+                const placeLabel = linkedPlace ? `${linkedPlace.title} (${linkedPlace.location || ''})` : '';
+                return `
                 <div class="banner-slide min-w-full ${banner.place_id ? 'cursor-pointer' : ''}" data-place-id="${banner.place_id || ''}" data-banner-title="${(banner.title || '').replace(/"/g, '&quot;')}" data-banner-image="${banner.image_url || ''}">
                   <div class="relative h-[300px] bg-cover bg-center rounded-2xl" style="background-image: url('${banner.image_url}')">
                     <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl"></div>
@@ -579,10 +590,11 @@
                       <p class="text-sm tracking-wider mb-2">${banner.label || ''}</p>
                       <h2 class="text-3xl font-bold mb-2">${(banner.title || '').split('\n').join('<br>')}</h2>
                       <p class="text-sm opacity-80">${banner.description || ''}</p>
+                      ${placeLabel ? `<p class="text-xs opacity-60 mt-2">${placeLabel}</p>` : ''}
                     </div>
                   </div>
                 </div>
-              `).join('');
+              `;}).join('');
               totalSlides = data.length;
 
               // 배너 클릭 시 상세페이지 이동

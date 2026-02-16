@@ -1379,7 +1379,18 @@
           return;
         }
 
-        list.innerHTML = data.map((banner, i) => `
+        // 연결된 장소 정보 가져오기
+        const placeIds = data.filter(b => b.place_id).map(b => b.place_id);
+        let placesMap = {};
+        if (placeIds.length > 0) {
+          const { data: places } = await supabaseClient.from('places').select('id, title, location').in('id', placeIds);
+          if (places) places.forEach(p => { placesMap[p.id] = p; });
+        }
+
+        list.innerHTML = data.map((banner, i) => {
+          const linkedPlace = banner.place_id ? placesMap[banner.place_id] : null;
+          const linkedLabel = linkedPlace ? `${linkedPlace.title} (${linkedPlace.location || ''})` : '';
+          return `
           <div class="bg-white border border-gray-200 rounded-xl overflow-hidden flex items-stretch" data-banner-id="${banner.id}">
             <div class="w-48 h-32 flex-shrink-0 bg-gray-100">
               <img src="${banner.image_url || ''}" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 100%22><rect fill=%22%23f3f4f6%22 width=%22200%22 height=%22100%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%239ca3af%22 font-size=%2214%22>No Image</text></svg>'" />
@@ -1389,6 +1400,7 @@
                 <p class="text-xs text-gray-400 mb-1">${banner.label || ''}</p>
                 <h4 class="font-bold text-gray-800">${(banner.title || '').replace(/\n/g, ' ')}</h4>
                 <p class="text-sm text-gray-500 mt-1">${banner.description || ''}</p>
+                ${linkedLabel ? `<p class="text-xs text-blue-500 mt-2">🔗 ${linkedLabel}</p>` : '<p class="text-xs text-gray-300 mt-2">연결된 장소 없음</p>'}
               </div>
               <div class="flex items-center gap-2 ml-4">
                 <button onclick="moveBanner(${banner.id}, 'up')" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-blue-500 transition text-xs ${i === 0 ? 'opacity-30 pointer-events-none' : ''}">▲</button>
@@ -1398,7 +1410,7 @@
               </div>
             </div>
           </div>
-        `).join('');
+        `;}).join('');
       } catch (err) {
         loading.classList.add('hidden');
         console.error('배너 로드 에러:', err);
