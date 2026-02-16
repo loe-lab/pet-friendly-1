@@ -471,6 +471,11 @@
         const top10 = likes.slice().reverse().slice(0, 10);
         track.innerHTML = top10.map(place => {
           const title = place.title || '이름 없음';
+          let tags = place.tags || [];
+          if (typeof tags === 'string') {
+            try { tags = JSON.parse(tags); } catch(e) { tags = tags.split(',').map(t => t.trim()).filter(Boolean); }
+          }
+          if (!Array.isArray(tags)) tags = [];
           return `
           <div class="theme-card" data-id="${place.id || ''}" data-title="${title}">
             <img class="theme-card__like-icon" src="base-icon-heart-selected.svg" alt="좋아요" />
@@ -479,7 +484,7 @@
               <p class="theme-card__location">${place.location || ''}</p>
               <h4>${title}</h4>
               <div class="theme-card__tags">
-                ${(place.tags || []).map(tag => `<span class="theme-card__tag">${tag}</span>`).join('')}
+                ${tags.map(tag => `<span class="theme-card__tag">${tag}</span>`).join('')}
               </div>
             </div>
           </div>
