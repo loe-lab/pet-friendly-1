@@ -454,20 +454,11 @@
         });
       }
 
-      // 좋아요 TOP 10 동적 렌더링
-      async function renderLikesTop10() {
+      // 좋아요 TOP 10 렌더링 (localStorage 기반 즉시 렌더)
+      function renderLikesTop10() {
         const section = document.getElementById('likes-top10-section');
         const track = document.getElementById('likes-top10-track');
         if (!section || !track) return;
-
-        // Supabase에서 최신 데이터 동기화 (실패해도 기존 데이터로 렌더링)
-        try {
-          if (typeof supabaseClient !== 'undefined') {
-            await LikesManager.syncWithSupabase(supabaseClient);
-          }
-        } catch (err) {
-          console.warn('[좋아요 TOP10] 동기화 실패, 캐시 데이터 사용:', err);
-        }
 
         const likes = LikesManager.getAll();
         if (likes.length === 0) {
@@ -475,7 +466,6 @@
           return;
         }
 
-        // 최신 좋아요 순서대로, 최대 10개
         const top10 = likes.slice().reverse().slice(0, 10);
         track.innerHTML = top10.map(place => {
           const title = place.title || '이름 없음';
@@ -523,7 +513,22 @@
           });
         });
       }
+
+      // 즉시 렌더링 (localStorage 기반)
       renderLikesTop10();
+
+      // 백그라운드에서 Supabase 동기화 후 다시 렌더링
+      setTimeout(async () => {
+        try {
+          if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+            await LikesManager.syncWithSupabase(supabaseClient);
+            renderLikesTop10();
+            syncAllLikeIcons();
+          }
+        } catch (e) {
+          console.warn('[좋아요 TOP10] 백그라운드 동기화 실패:', e);
+        }
+      }, 1500);
 
       // 페이지 로드 시 좋아요 상태 복원
       document.querySelectorAll('.theme-card').forEach(card => {
