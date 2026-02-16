@@ -460,9 +460,13 @@
         const track = document.getElementById('likes-top10-track');
         if (!section || !track) return;
 
-        // Supabase에서 최신 데이터 동기화
-        if (typeof supabaseClient !== 'undefined') {
-          await LikesManager.syncWithSupabase(supabaseClient);
+        // Supabase에서 최신 데이터 동기화 (실패해도 기존 데이터로 렌더링)
+        try {
+          if (typeof supabaseClient !== 'undefined') {
+            await LikesManager.syncWithSupabase(supabaseClient);
+          }
+        } catch (err) {
+          console.warn('[좋아요 TOP10] 동기화 실패, 캐시 데이터 사용:', err);
         }
 
         const likes = LikesManager.getAll();
