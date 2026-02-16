@@ -187,8 +187,14 @@
     <script src="supabase.js"></script>
     <script src="auth-header.js"></script>
     <script>
-      function renderLikes() {
+      async function renderLikes() {
         const container = document.getElementById('likes-container');
+
+        // Supabase에서 최신 데이터 동기화
+        if (typeof supabaseClient !== 'undefined') {
+          await LikesManager.syncWithSupabase(supabaseClient);
+        }
+
         const likes = LikesManager.getAll();
 
         if (likes.length === 0) {
@@ -256,6 +262,7 @@
                 image: place.image,
                 category: place.location || ''
               });
+              if (place.id) params.set('id', place.id);
               window.location.href = 'detail.html?' + params.toString();
             }
           });

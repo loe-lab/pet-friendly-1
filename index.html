@@ -457,38 +457,19 @@
 
       // 좋아요 TOP 10 동적 렌더링
       async function renderLikesTop10() {
-        const likes = LikesManager.getAll();
         const section = document.getElementById('likes-top10-section');
         const track = document.getElementById('likes-top10-track');
         if (!section || !track) return;
 
+        // Supabase에서 최신 데이터 동기화
+        if (typeof supabaseClient !== 'undefined') {
+          await LikesManager.syncWithSupabase(supabaseClient);
+        }
+
+        const likes = LikesManager.getAll();
         if (likes.length === 0) {
           section.style.display = 'none';
           return;
-        }
-
-        // 좋아요된 장소 ID 목록으로 Supabase에서 최신 데이터 가져오기
-        const likedIds = likes.map(p => p.id).filter(Boolean);
-        let freshDataMap = {};
-        if (likedIds.length > 0 && typeof supabaseClient !== 'undefined') {
-          try {
-            const { data } = await supabaseClient.from('places').select('id, title, location, image_url, tags, welcomepet_score').in('id', likedIds);
-            if (data) {
-              data.forEach(p => { freshDataMap[p.id] = p; });
-              // localStorage 이미지도 최신으로 갱신
-              likes.forEach(p => {
-                if (p.id && freshDataMap[p.id]) {
-                  p.image = freshDataMap[p.id].image_url || p.image;
-                  p.title = freshDataMap[p.id].title || p.title;
-                  p.location = freshDataMap[p.id].location || p.location;
-                  p.tags = freshDataMap[p.id].tags || p.tags;
-                }
-              });
-              localStorage.setItem('liked_places', JSON.stringify(likes));
-            }
-          } catch (err) {
-            console.warn('[좋아요 TOP10] 최신 데이터 가져오기 실패, 캐시 사용:', err);
-          }
         }
 
         // 최신 좋아요 순서대로, 최대 10개
@@ -563,6 +544,7 @@
           const tagEls = card.querySelectorAll('.theme-card__tag');
 
           const placeData = {
+            id: card.dataset.id || '',
             title: titleEl ? titleEl.textContent.trim() : '',
             image: imgEl ? imgEl.src : '',
             location: locationEl ? locationEl.textContent.trim() : '',
