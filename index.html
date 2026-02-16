@@ -313,11 +313,11 @@
     </div>
 
     <!-- 앱 스크립트 -->
-    <script src="likes.js"></script>
+    <script src="likes.js?v=20260201"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase.js"></script>
-    <script src="app.js"></script>
-    <script src="auth-header.js"></script>
+    <script src="supabase.js?v=20260201"></script>
+    <script src="app.js?v=20260201"></script>
+    <script src="auth-header.js?v=20260201"></script>
     <script>
       // 썸네일 카드 클릭 시 상세페이지로 이동
       document.querySelectorAll('.theme-card').forEach(card => {
@@ -456,11 +456,13 @@
 
       // 좋아요 TOP 10 렌더링 (localStorage 기반 즉시 렌더)
       function renderLikesTop10() {
+        console.log('[TOP10] renderLikesTop10 호출');
         const section = document.getElementById('likes-top10-section');
         const track = document.getElementById('likes-top10-track');
-        if (!section || !track) return;
+        if (!section || !track) { console.warn('[TOP10] section 또는 track 요소 없음'); return; }
 
         const likes = LikesManager.getAll();
+        console.log('[TOP10] 좋아요 데이터:', likes.length, '개', likes);
         if (likes.length === 0) {
           section.style.display = 'none';
           return;
