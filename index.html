@@ -387,7 +387,6 @@
                 <div class="theme-card__body">
                   <p class="theme-card__location">${place.location || ''}</p>
                   <h4>${title}</h4>
-                  ${place.welcomepet_score ? `<div class="theme-card__paws" style="margin:4px 0 6px;">${'🐾'.repeat(place.welcomepet_score)}${'<span style="opacity:0.2">🐾</span>'.repeat(5 - place.welcomepet_score)}</div>` : ''}
                   <div class="theme-card__tags">
                     ${tags.map(tag => `<span class="theme-card__tag">${tag}</span>`).join('')}
                   </div>

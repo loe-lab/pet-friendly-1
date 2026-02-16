@@ -162,7 +162,28 @@
             <p id="detail-description" class="text-slate-600 leading-relaxed"></p>
           </div>
 
-          <!-- 웰컴펫 지수 (비활성) -->
+          <!-- 웰컴펫 지수 -->
+          <div id="section-welcomepet" class="info-section mb-10" style="display:none;">
+            <div class="flex items-center gap-2 mb-3">
+              <h3 class="text-lg font-semibold text-deep">웰컴펫 지수</h3>
+              <div class="relative group">
+                <svg class="w-4 h-4 text-slate-400 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" stroke-width="1.5"/>
+                  <path stroke-linecap="round" stroke-width="1.5" d="M12 16v-4m0-4h.01"/>
+                </svg>
+                <div class="absolute left-6 top-0 z-30 hidden group-hover:block w-[300px] bg-white border border-line rounded-xl shadow-lg p-4 text-xs text-slate-600 leading-relaxed">
+                  <p class="font-semibold text-deep mb-2">🐾 웰컴펫 지수란?</p>
+                  <p class="mb-1"><span class="font-medium">5 Paw</span> — 눈치 제로, 펫이 환영받는 공간</p>
+                  <p class="mb-1"><span class="font-medium">4 Paw</span> — 실내 동반이 편안한 곳</p>
+                  <p class="mb-1"><span class="font-medium">3 Paw</span> — 조건부 동반이 가능한 곳</p>
+                  <p class="mb-1"><span class="font-medium">2 Paw</span> — 특정 목적이면 가능한 곳</p>
+                  <p><span class="font-medium">1 Paw</span> — 반려동물 방문 비추천</p>
+                </div>
+              </div>
+            </div>
+            <div id="welcomepet-paws" class="flex items-center gap-1"></div>
+            <p id="welcomepet-label" class="text-sm text-slate-500 mt-2"></p>
+          </div>
 
           <!-- 동반안내 -->
           <div id="section-companion" class="info-section mb-10" style="display:none;">
@@ -402,7 +423,27 @@
             if (descSection) descSection.style.display = 'block';
           }
 
-          // 웰컴펫 지수 (비활성)
+          // 웰컴펫 지수 업데이트
+          if (place.welcomepet_score && place.welcomepet_score > 0) {
+            const wpSection = document.getElementById('section-welcomepet');
+            const wpPaws = document.getElementById('welcomepet-paws');
+            const wpLabel = document.getElementById('welcomepet-label');
+            const score = place.welcomepet_score;
+            const pawLabels = {
+              5: '눈치 제로, 펫이 환영받는 공간이에요',
+              4: '실내 동반이 편안한 곳이에요',
+              3: '조건부 동반이 가능한 곳이에요',
+              2: '특정 목적이면 가능한 곳이에요',
+              1: '반려동물 방문을 추천하지 않아요'
+            };
+            let pawsHtml = '';
+            for (let i = 1; i <= 5; i++) {
+              pawsHtml += `<span class="text-2xl ${i <= score ? '' : 'opacity-20'}">🐾</span>`;
+            }
+            wpPaws.innerHTML = pawsHtml;
+            wpLabel.textContent = pawLabels[score] || '';
+            wpSection.style.display = 'block';
+          }
 
           // 동반안내 업데이트
           if (place.companion_info && place.companion_info.trim()) {
