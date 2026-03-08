@@ -629,11 +629,24 @@
       }
       try {
         loginError.classList.add('hidden');
-        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + '/auth.html'
+
+        if (!supabaseClient || !supabaseClient.auth) {
+          throw new Error('Supabase 클라이언트가 준비되지 않았습니다. 잠시 후 다시 시도해주세요.');
+        }
+
+        // 1차: admin 페이지로 복귀하도록 redirect 지정
+        let { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + '/admin.html'
         });
+
+        // 일부 프로젝트에서 redirect URL 미등록 시 2차 폴백
+        if (error && /redirect|url/i.test(error.message || '')) {
+          const retry = await supabaseClient.auth.resetPasswordForEmail(email);
+          error = retry.error;
+        }
+
         if (error) throw error;
-        alert('비밀번호 재설정 메일을 보냈습니다. 메일함을 확인해주세요.');
+        alert('비밀번호 재설정 메일을 보냈습니다. 메일함(스팸함 포함)을 확인해주세요.');
       } catch (error) {
         loginError.textContent = '재설정 실패: ' + error.message;
         loginError.classList.remove('hidden');
