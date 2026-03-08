@@ -678,3 +678,128 @@ body {
   box-shadow: 0 30px 80px rgba(15, 23, 42, 0.2);
   text-align: center;
 }
+
+/* Mobile optimization (<= 640px): 360 해상도 우선 대응 */
+@media (max-width: 640px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  /* 헤더: 작은 화면에서 정보 밀집도 조정 */
+  header .mx-auto {
+    gap: 10px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  header .text-xs.text-slate-500 {
+    display: none;
+  }
+
+  /* 메인 섹션 간격 완화 */
+  main {
+    gap: 48px !important;
+    padding-top: 20px !important;
+    padding-bottom: 84px !important;
+  }
+
+  /* 배너 캐러셀: 360px에서도 콘텐츠가 자연스럽게 보이도록 */
+  #banner-carousel {
+    margin-bottom: 20px !important;
+  }
+
+  #banner-carousel .banner-slide > div {
+    height: 220px !important;
+    border-radius: 16px !important;
+  }
+
+  #banner-carousel .banner-slide > div > .absolute.inset-0.flex {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-bottom: 14px !important;
+  }
+
+  #banner-carousel h2 {
+    font-size: 24px !important;
+    line-height: 1.25 !important;
+    margin-bottom: 6px !important;
+  }
+
+  #banner-carousel p.text-sm {
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+  }
+
+  /* 모바일은 hover가 없으므로 화살표 항상 보이게 */
+  #banner-prev,
+  #banner-next {
+    width: 34px !important;
+    height: 34px !important;
+    opacity: 1 !important;
+  }
+
+  #banner-prev {
+    left: 8px !important;
+  }
+
+  #banner-next {
+    right: 8px !important;
+  }
+
+  #banner-dots {
+    bottom: 8px !important;
+  }
+
+  /* 베스트 장소 타이틀/설명 */
+  .theme-rows > div > h2 {
+    font-size: 28px !important;
+    line-height: 1.2 !important;
+  }
+
+  .theme-rows > div > p:first-child {
+    font-size: 10px !important;
+    letter-spacing: 0.2em !important;
+  }
+
+  .theme-row__head h3 {
+    font-size: 22px !important;
+    line-height: 1.15 !important;
+  }
+
+  .theme-row__track {
+    gap: 12px;
+  }
+
+  .theme-card {
+    width: calc(100vw - 28px);
+    min-width: calc(100vw - 28px);
+    border-radius: 14px;
+  }
+
+  .theme-card img:not(.theme-card__like-icon) {
+    height: 200px;
+  }
+
+  .theme-card__body {
+    padding: 14px;
+  }
+
+  .theme-card__body h4 {
+    font-size: 17px;
+  }
+
+  .theme-card__tag {
+    font-size: 11px;
+    padding: 4px 9px;
+  }
+
+  .theme-row__cta {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  footer {
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+  }
+}
