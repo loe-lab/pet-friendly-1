@@ -406,11 +406,24 @@
           return;
         }
         try {
-          const { data, error } = await supabaseClient
+          let data = null;
+          let error = null;
+
+          // 최근 "수정된" 카페가 먼저 보이도록 updated_at 우선 정렬
+          ({ data, error } = await supabaseClient
             .from('places')
             .select('*')
-            .order('id', { ascending: false })
-            .limit(10);
+            .order('updated_at', { ascending: false })
+            .limit(20));
+
+          // 프로젝트에 updated_at이 없는 경우 기존 id 정렬로 폴백
+          if (error && /updated_at/i.test(error.message || '')) {
+            ({ data, error } = await supabaseClient
+              .from('places')
+              .select('*')
+              .order('id', { ascending: false })
+              .limit(20));
+          }
           
           if (error) {
             console.error('[Main] 장소 로드 에러:', error.message);
