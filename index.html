@@ -737,8 +737,8 @@
           }
         });
 
-        // 자동 슬라이드 (5초)
-        setInterval(() => goToSlide(currentIndex + 1), 5000);
+        // 자동 슬라이드 (5초): 오른쪽 한 방향으로만 롤링
+        setInterval(() => goToSlide(currentIndex - 1), 5000);
       })();
     </script>
   </body>
