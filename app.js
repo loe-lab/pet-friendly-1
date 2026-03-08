@@ -939,15 +939,6 @@ const dailyPlaces = [
       "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=900&q=80",
   },
   {
-    title: "별빛 글램핑 파크",
-    location: "춘천",
-    region: "춘천",
-    category: "리조트/펜션",
-    tags: ["캠핑장", "자연체험", "오프리쉬 가능"],
-    image:
-      "https://images.unsplash.com/photo-1487730116445-4e6b5b74a6e4?auto=format&fit=crop&w=900&q=80",
-  },
-  {
     title: "제주 펫프렌들리 카페",
     location: "제주 · 애월",
     region: "제주",
