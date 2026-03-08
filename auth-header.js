@@ -8,28 +8,26 @@
   if (!authBtn) return;
 
   if (user) {
-    // 프로필이 없으면 자동 생성 (카카오 로그인 등 OAuth 대응)
+    // 탈퇴 후 재로그인 등으로 프로필이 없을 수 있음: 자동 생성하지 않고 가입 정보 입력 유도
+    let hasProfile = false;
     try {
       const { data: existing } = await supabaseClient
         .from('profiles')
         .select('id')
         .eq('id', user.id)
         .single();
+      hasProfile = !!existing;
+    } catch (_) {
+      hasProfile = false;
+    }
 
-      if (!existing) {
-        await supabaseClient
-          .from('profiles')
-          .upsert([{
-            id: user.id,
-            name: user.user_metadata?.name || user.user_metadata?.full_name || '',
-            nickname: user.user_metadata?.preferred_username || user.user_metadata?.name || '',
-            email: user.email || '',
-            marketing_agreed: false
-          }], { onConflict: 'id' });
-        console.log('프로필 자동 생성 완료');
-      }
-    } catch (e) {
-      console.error('프로필 확인/생성 실패:', e);
+    if (!hasProfile) {
+      authBtn.outerHTML = `
+        <a href="auth.html?tab=signup&complete=1" id="auth-btn" class="rounded-full border-1-5 border-line bg-white px-5 py-2 text-sm font-semibold text-brand shadow-soft">
+          회원정보 입력
+        </a>
+      `;
+      return;
     }
 
     // 로그인 상태: 마이페이지 드롭다운으로 변경

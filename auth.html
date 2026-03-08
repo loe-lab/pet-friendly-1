@@ -261,6 +261,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase.js?v=20260201"></script>
     <script>
+      let completionMode = false;
+      let currentUser = null;
+
       // 탭 전환
       function switchTab(tab) {
         document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -349,24 +352,44 @@
         const name = document.getElementById('signup-name').value;
         const nickname = document.getElementById('signup-nickname').value;
         const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        const passwordConfirm = document.getElementById('signup-password-confirm').value;
+        const passwordInput = document.getElementById('signup-password');
+        const passwordConfirmInput = document.getElementById('signup-password-confirm');
+        const password = passwordInput ? passwordInput.value : '';
+        const passwordConfirm = passwordConfirmInput ? passwordConfirmInput.value : '';
         const birthdate = document.getElementById('signup-birthdate').value;
         const marketingAgreed = document.getElementById('agree-marketing').checked;
 
-        if (password !== passwordConfirm) {
+        if (!completionMode && password !== passwordConfirm) {
           errorEl.textContent = '비밀번호가 일치하지 않습니다.';
           errorEl.classList.remove('hidden');
           return;
         }
 
-        if (password.length < 8) {
+        if (!completionMode && password.length < 8) {
           errorEl.textContent = '비밀번호는 8자 이상이어야 합니다.';
           errorEl.classList.remove('hidden');
           return;
         }
 
         try {
+          // OAuth 재로그인(탈퇴 후 등): 추가 정보 입력만 받고 프로필 생성
+          if (completionMode && currentUser) {
+            await createProfile({
+              id: currentUser.id,
+              name,
+              nickname,
+              email: currentUser.email || email,
+              birthdate,
+              marketing_agreed: marketingAgreed
+            });
+            successEl.textContent = '가입 정보 입력이 완료되었습니다!';
+            successEl.classList.remove('hidden');
+            setTimeout(() => {
+              window.location.href = 'index.html';
+            }, 1000);
+            return;
+          }
+
           const signUpData = await signUp(email, password);
           console.log('signUp 결과:', signUpData);
           const user = signUpData?.user;
@@ -428,21 +451,55 @@
       if (urlParams.get('tab') === 'signup') {
         switchTab('signup');
       }
+      if (urlParams.get('complete') === '1') {
+        switchTab('signup');
+      }
 
-      // 이미 로그인된 경우 안내 + 프로필 자동 생성
+      // 이미 로그인된 경우 처리
       (async () => {
         const user = await getUser();
         if (user) {
-          // 프로필이 없으면 자동 생성 (카카오 로그인 등)
           const existing = await getProfile(user.id).catch(() => null);
+
+          // 프로필이 없으면 회원정보 입력 절차 강제
           if (!existing) {
-            await createProfile({
-              id: user.id,
-              name: user.user_metadata?.name || user.user_metadata?.full_name || '',
-              nickname: user.user_metadata?.preferred_username || user.user_metadata?.name || '',
-              email: user.email || '',
-              marketing_agreed: false
-            }).catch(e => console.error('자동 프로필 생성 실패:', e));
+            completionMode = true;
+            currentUser = user;
+            switchTab('signup');
+
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => btn.style.display = 'none');
+
+            const loginPanel = document.getElementById('login-panel');
+            if (loginPanel) loginPanel.classList.add('hidden');
+
+            // OAuth 추가 정보 입력 모드: 이메일/비밀번호는 숨기고 필수 프로필만 입력
+            const emailField = document.getElementById('signup-email')?.closest('div');
+            const pwField = document.getElementById('signup-password')?.closest('div');
+            const pw2Field = document.getElementById('signup-password-confirm')?.closest('div');
+            const emailInput = document.getElementById('signup-email');
+            const pwInput = document.getElementById('signup-password');
+            const pw2Input = document.getElementById('signup-password-confirm');
+            if (emailField) emailField.style.display = 'none';
+            if (pwField) pwField.style.display = 'none';
+            if (pw2Field) pw2Field.style.display = 'none';
+            if (emailInput) { emailInput.required = false; emailInput.disabled = true; }
+            if (pwInput) { pwInput.required = false; pwInput.disabled = true; }
+            if (pw2Input) { pw2Input.required = false; pw2Input.disabled = true; }
+
+            const submitBtn = document.getElementById('signup-submit');
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = '추가 정보 저장 후 시작하기';
+            }
+
+            // 닉네임/이름 프리필
+            const nameEl = document.getElementById('signup-name');
+            const nickEl = document.getElementById('signup-nickname');
+            if (nameEl && !nameEl.value) nameEl.value = user.user_metadata?.name || user.user_metadata?.full_name || '';
+            if (nickEl && !nickEl.value) nickEl.value = user.user_metadata?.preferred_username || user.user_metadata?.name || '';
+
+            return;
           }
 
           // 로그인 상태면 로그아웃 옵션 표시
