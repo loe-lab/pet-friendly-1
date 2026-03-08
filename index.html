@@ -93,16 +93,6 @@
             <div id="banner-slides" class="flex transition-transform duration-500">
               <!-- 동적으로 채워짐, 기본 폴백 배너 -->
               <div class="banner-slide min-w-full">
-                <div class="relative h-[380px] bg-cover bg-center rounded-2xl" style="background-image: url('banner1.jpg')">
-                  <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl"></div>
-                  <div class="absolute inset-0 flex flex-col justify-end px-10 pb-8 text-white">
-                    <p class="text-sm tracking-wider mb-2">LET'S TRAVEL!</p>
-                    <h2 class="text-3xl font-bold mb-2">찾았다!<br>나만의 자유 아지트</h2>
-                    <p class="text-sm opacity-80">우리집 아이와 함께, 새로운 여행지!</p>
-                  </div>
-                </div>
-              </div>
-              <div class="banner-slide min-w-full">
                 <div class="relative h-[380px] bg-cover bg-center rounded-2xl" style="background-image: url('banner2.jpg')">
                   <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl"></div>
                   <div class="absolute inset-0 flex flex-col justify-end px-10 pb-8 text-white">
@@ -116,7 +106,6 @@
             <!-- 인디케이터 -->
             <div id="banner-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
               <button class="banner-dot w-2 h-2 rounded-full bg-white opacity-100" data-index="0"></button>
-              <button class="banner-dot w-2 h-2 rounded-full bg-white opacity-50" data-index="1"></button>
             </div>
             <!-- 화살표 -->
             <button id="banner-prev" class="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 flex items-center justify-center shadow-lg hover:bg-white transition opacity-0 group-hover:opacity-100 cursor-pointer">
@@ -651,7 +640,7 @@
         const prevBtn = document.getElementById('banner-prev');
         const nextBtn = document.getElementById('banner-next');
         let currentIndex = 0;
-        let totalSlides = 2; // 기본값 (폴백 배너 수)
+        let totalSlides = 1; // 기본값 (폴백 배너 수)
 
         // Supabase 초기화 지연 대비 대기
         let waitCount = 0;
