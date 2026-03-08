@@ -22,9 +22,9 @@
     }
 
     if (!hasProfile) {
-      // 탈퇴 후 OAuth 재로그인 상태: 버튼 노출 대신 즉시 가입 보완 화면으로 이동
-      window.location.href = 'auth.html?tab=signup&complete=1';
-      return;
+      // 메인/일반 페이지에서는 강제 이동하지 않음 (무한 리다이렉트 방지)
+      // 가입 보완은 auth.html OAuth 콜백 흐름에서만 처리
+      console.warn('프로필 미완성 사용자: 강제 이동 없이 현재 페이지 유지');
     }
 
     // 로그인 상태: 마이페이지 드롭다운으로 변경
