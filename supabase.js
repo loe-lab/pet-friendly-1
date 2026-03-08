@@ -34,11 +34,11 @@ async function signUp(email, password) {
   return data;
 }
 
-async function signInWithKakao() {
+async function signInWithKakao(redirectTo) {
   const { data, error } = await supabaseClient.auth.signInWithOAuth({
     provider: 'kakao',
     options: {
-      redirectTo: window.location.origin + '/index.html'
+      redirectTo: redirectTo || (window.location.origin + '/index.html')
     }
   });
   if (error) throw error;

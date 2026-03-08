@@ -427,23 +427,32 @@
         }
       });
 
-      // 카카오 로그인
-      document.getElementById('kakao-login-btn').addEventListener('click', async () => {
+      async function startKakaoFlow(errorTargetId) {
+        const errorEl = document.getElementById(errorTargetId);
         try {
-          await signInWithKakao();
+          if (errorEl) errorEl.classList.add('hidden');
+
+          // 기존 세션이 있으면 로그아웃 후 OAuth 시작 (가입화면 미진입 이슈 방지)
+          try { await supabaseClient.auth.signOut(); } catch (_) {}
+
+          // 카카오 인증 후 가입 보완 화면으로 복귀
+          const redirectTo = window.location.origin + '/auth.html?tab=signup&complete=1&oauth=kakao';
+          await signInWithKakao(redirectTo);
         } catch (err) {
-          document.getElementById('login-error').textContent = '카카오 로그인에 실패했습니다.';
-          document.getElementById('login-error').classList.remove('hidden');
+          if (errorEl) {
+            errorEl.textContent = '카카오 로그인에 실패했습니다. ' + (err?.message || '');
+            errorEl.classList.remove('hidden');
+          }
         }
+      }
+
+      // 카카오 로그인/회원가입 버튼
+      document.getElementById('kakao-login-btn').addEventListener('click', async () => {
+        await startKakaoFlow('login-error');
       });
 
       document.getElementById('kakao-signup-btn').addEventListener('click', async () => {
-        try {
-          await signInWithKakao();
-        } catch (err) {
-          document.getElementById('signup-error').textContent = '카카오 로그인에 실패했습니다.';
-          document.getElementById('signup-error').classList.remove('hidden');
-        }
+        await startKakaoFlow('signup-error');
       });
 
       // URL 파라미터로 탭 선택
