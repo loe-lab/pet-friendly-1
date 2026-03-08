@@ -319,6 +319,58 @@
     <script src="app.js?v=20260201"></script>
     <script src="auth-header.js?v=20260201"></script>
     <script>
+      function normalizeImageUrl(imageUrl) {
+        const FALLBACK = '0.thumbnail_food.png';
+
+        // JSON 문자열 배열/객체 또는 배열 타입 대응
+        if (Array.isArray(imageUrl)) imageUrl = imageUrl[0];
+        if (imageUrl && typeof imageUrl === 'object') {
+          imageUrl = imageUrl.image_url || imageUrl.url || imageUrl.publicUrl || '';
+        }
+        if (typeof imageUrl === 'string') {
+          const trimmed = imageUrl.trim();
+          if (!trimmed) return FALLBACK;
+          if ((trimmed.startsWith('[') && trimmed.endsWith(']')) || (trimmed.startsWith('{') && trimmed.endsWith('}'))) {
+            try {
+              return normalizeImageUrl(JSON.parse(trimmed));
+            } catch (_) {
+              // JSON 파싱 실패 시 원문으로 계속 처리
+              imageUrl = trimmed;
+            }
+          } else {
+            imageUrl = trimmed;
+          }
+        }
+
+        if (!imageUrl || typeof imageUrl !== 'string') return FALLBACK;
+
+        // 이미 사용 가능한 URL이면 그대로 사용
+        if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://') || imageUrl.startsWith('data:') || imageUrl.startsWith('/')) {
+          return imageUrl;
+        }
+
+        // 버킷 접두어 제거 후 파일 경로 추출
+        const filePath = imageUrl
+          .replace(/^place-images\//, '')
+          .replace(/^places\//, '')
+          .trim();
+        if (!filePath) return FALLBACK;
+
+        try {
+          if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+            // 과거/현재 버킷명 모두 지원
+            const buckets = ['place-images', 'places'];
+            for (const bucket of buckets) {
+              const { data } = supabaseClient.storage.from(bucket).getPublicUrl(filePath);
+              if (data && data.publicUrl) return data.publicUrl;
+            }
+          }
+        } catch (e) {
+          console.warn('[Main] 이미지 URL 변환 실패:', e);
+        }
+        return FALLBACK;
+      }
+
       // 썸네일 카드 클릭 시 상세페이지로 이동
       document.querySelectorAll('.theme-card').forEach(card => {
         card.style.cursor = 'pointer';
@@ -380,10 +432,11 @@
               try { tags = JSON.parse(tags); } catch(e) { tags = tags.split(',').map(t => t.trim()).filter(Boolean); }
             }
             const isLiked = LikesManager.isLiked(title);
+            const thumbnail = normalizeImageUrl(place.image_url);
             return `
               <div class="theme-card" data-id="${place.id || ''}" data-title="${title}">
                 <img class="theme-card__like-icon" src="${isLiked ? 'base-icon-heart-selected.svg' : 'base-icon-heart.svg'}" alt="좋아요" />
-                <img src="${place.image_url || '0.thumbnail_food.png'}" alt="${title}" onerror="this.src='0.thumbnail_food.png'" />
+                <img src="${thumbnail}" alt="${title}" onerror="this.src='0.thumbnail_food.png'" />
                 <div class="theme-card__body">
                   <p class="theme-card__location">${place.location || ''}</p>
                   <h4>${title}</h4>
@@ -476,10 +529,11 @@
             try { tags = JSON.parse(tags); } catch(e) { tags = tags.split(',').map(t => t.trim()).filter(Boolean); }
           }
           if (!Array.isArray(tags)) tags = [];
+          const thumbnail = normalizeImageUrl(place.image);
           return `
           <div class="theme-card" data-id="${place.id || ''}" data-title="${title}">
             <img class="theme-card__like-icon" src="base-icon-heart-selected.svg" alt="좋아요" />
-            <img src="${place.image || '0.thumbnail_food.png'}" alt="${title}" />
+            <img src="${thumbnail}" alt="${title}" onerror="this.src='0.thumbnail_food.png'" />
             <div class="theme-card__body">
               <p class="theme-card__location">${place.location || ''}</p>
               <h4>${title}</h4>

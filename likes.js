@@ -1,6 +1,7 @@
 // 좋아요 저장/관리 유틸리티 (localStorage 기반 + Supabase 동기화)
 const LikesManager = {
   STORAGE_KEY: 'dailypet_likes',
+  FALLBACK_IMAGE: '0.thumbnail_food.png',
 
   getAll() {
     try {
@@ -12,6 +13,48 @@ const LikesManager = {
 
   _save(likes) {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(likes));
+  },
+
+  _normalizeImageUrl(imageUrl, supabaseClient) {
+    if (Array.isArray(imageUrl)) imageUrl = imageUrl[0];
+    if (imageUrl && typeof imageUrl === 'object') {
+      imageUrl = imageUrl.image_url || imageUrl.url || imageUrl.publicUrl || '';
+    }
+    if (typeof imageUrl === 'string') {
+      const trimmed = imageUrl.trim();
+      if (!trimmed) return this.FALLBACK_IMAGE;
+      if ((trimmed.startsWith('[') && trimmed.endsWith(']')) || (trimmed.startsWith('{') && trimmed.endsWith('}'))) {
+        try {
+          return this._normalizeImageUrl(JSON.parse(trimmed), supabaseClient);
+        } catch (_) {
+          imageUrl = trimmed;
+        }
+      } else {
+        imageUrl = trimmed;
+      }
+    }
+
+    if (!imageUrl || typeof imageUrl !== 'string') return this.FALLBACK_IMAGE;
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://') || imageUrl.startsWith('data:') || imageUrl.startsWith('/')) {
+      return imageUrl;
+    }
+
+    const filePath = imageUrl
+      .replace(/^place-images\//, '')
+      .replace(/^places\//, '')
+      .trim();
+    if (!filePath) return this.FALLBACK_IMAGE;
+
+    try {
+      const buckets = ['place-images', 'places'];
+      for (const bucket of buckets) {
+        const { data } = supabaseClient.storage.from(bucket).getPublicUrl(filePath);
+        if (data && data.publicUrl) return data.publicUrl;
+      }
+      return this.FALLBACK_IMAGE;
+    } catch {
+      return this.FALLBACK_IMAGE;
+    }
   },
 
   isLiked(title) {
@@ -103,7 +146,7 @@ const LikesManager = {
       likes.forEach(p => {
         const fresh = p.id ? freshMap[p.id] : null;
         if (fresh) {
-          p.image = fresh.image_url || p.image;
+          p.image = this._normalizeImageUrl(fresh.image_url || p.image, supabaseClient);
           p.title = fresh.title || p.title;
           p.location = fresh.location || p.location;
           p.tags = fresh.tags || p.tags;
