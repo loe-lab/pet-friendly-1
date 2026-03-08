@@ -22,11 +22,8 @@
     }
 
     if (!hasProfile) {
-      authBtn.outerHTML = `
-        <a href="auth.html?tab=signup&complete=1" id="auth-btn" class="rounded-full border-1-5 border-line bg-white px-5 py-2 text-sm font-semibold text-brand shadow-soft">
-          회원정보 입력
-        </a>
-      `;
+      // 탈퇴 후 OAuth 재로그인 상태: 버튼 노출 대신 즉시 가입 보완 화면으로 이동
+      window.location.href = 'auth.html?tab=signup&complete=1';
       return;
     }
 
