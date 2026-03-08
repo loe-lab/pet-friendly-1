@@ -40,6 +40,9 @@
         <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
           로그인
         </button>
+        <button type="button" id="reset-password-btn" class="w-full bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+          비밀번호 재설정 메일 보내기
+        </button>
         <p id="login-error" class="text-red-500 text-sm text-center hidden"></p>
       </form>
     </div>
@@ -414,6 +417,7 @@
     const adminScreen = document.getElementById('admin-screen');
     const loginForm = document.getElementById('login-form');
     const loginError = document.getElementById('login-error');
+    const resetPasswordBtn = document.getElementById('reset-password-btn');
     const userEmailEl = document.getElementById('user-email');
     const logoutBtn = document.getElementById('logout-btn');
     const placesList = document.getElementById('places-list');
@@ -611,6 +615,27 @@
         loadPlaces();
       } catch (error) {
         loginError.textContent = '로그인 실패: ' + error.message;
+        loginError.classList.remove('hidden');
+      }
+    });
+
+    // 비밀번호 재설정 메일 발송
+    resetPasswordBtn.addEventListener('click', async () => {
+      const email = document.getElementById('login-email').value.trim();
+      if (!email) {
+        loginError.textContent = '이메일을 먼저 입력해주세요.';
+        loginError.classList.remove('hidden');
+        return;
+      }
+      try {
+        loginError.classList.add('hidden');
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + '/auth.html'
+        });
+        if (error) throw error;
+        alert('비밀번호 재설정 메일을 보냈습니다. 메일함을 확인해주세요.');
+      } catch (error) {
+        loginError.textContent = '재설정 실패: ' + error.message;
         loginError.classList.remove('hidden');
       }
     });

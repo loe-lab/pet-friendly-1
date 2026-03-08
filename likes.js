@@ -5,7 +5,19 @@ const LikesManager = {
 
   getAll() {
     try {
-      return JSON.parse(localStorage.getItem(this.STORAGE_KEY)) || [];
+      const primary = JSON.parse(localStorage.getItem(this.STORAGE_KEY)) || [];
+      if (Array.isArray(primary) && primary.length > 0) return primary;
+
+      // 과거 키 호환 (캐러셀 미노출 방지)
+      const legacyKeys = ['liked_places', 'likes'];
+      for (const key of legacyKeys) {
+        const legacy = JSON.parse(localStorage.getItem(key)) || [];
+        if (Array.isArray(legacy) && legacy.length > 0) {
+          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(legacy));
+          return legacy;
+        }
+      }
+      return [];
     } catch {
       return [];
     }
