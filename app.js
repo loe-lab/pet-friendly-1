@@ -105,417 +105,285 @@ const destinationOptionsMarkup = destinationOptions
   .join("");
 
 
-// 항공사 규정 샘플 데이터
+// 항공사 규정 데이터 (flight.text 기준으로 정리)
+// - 화면 필터는 maxCabinWeight(kg) 기준으로 동작합니다.
+// - 실제 규정/운임은 항공사 정책에 따라 변동될 수 있습니다.
 const airlineData = [
   {
     id: "korean",
-    name: "대한항공",
+    name: "대한항공 (Korean Air)",
     badge: "KOREAN AIR",
+    reservationNote:
+      "항공권 발권 이후 서비스 신청 · 출발 48시간 전까지 서비스 확약 필요",
     cabin: {
       maxWeight: 7,
-      cage: "가로 32cm x 세로 45cm x 높이 19cm (소프트 25cm)",
-      note: "생후 8주 이상 · 국제 200~300USD",
+      cage: "소프트: 32×45×25cm 이하 (눌렀을 때 19cm 이하) · 하드: 32×45×19cm 이하",
+      note: "기내 동반: 생후 8주 이상",
     },
     cargo: {
       maxWeight: 45,
-      cage: "3면 합 291cm 이하 · 높이 84cm 이하",
-      note: "생후 16주 이상",
+      cage: "하드 케이지: 3면 합 291cm 이하 · 최대 높이 84cm 이하",
+      note: "화물칸 동반: 생후 16주 이상",
     },
+    fees:
+      "국내선 30,000원\n국제선 150,000~600,000원 (노선/거리/무게에 따라 상이)\n단거리 150,000원 · 중거리 225,000원 · 장거리 300,000원",
+    routes:
+      "(국내) 전 노선 · (해외) 미주/유럽/아시아 등 전 세계",
     contact: "1588-2001",
-    destinations: [
-      "gmp",
-      "pus",
-      "cju",
-      "tae",
-      "kwj",
-      "rsu",
-      "usn",
-      "hin",
-      "lax",
-      "jfk",
-      "sfo",
-      "sea",
-      "ord",
-      "atl",
-      "iad",
-      "las",
-      "hnl",
-      "gum",
-      "cdg",
-      "lhr",
-      "fra",
-      "fco",
-      "mxp",
-      "ams",
-      "bud",
-      "nrt",
-      "hnd",
-      "kix",
-      "fuk",
-      "hkg",
-      "tpe",
-      "bkk",
-      "dad",
-      "cxr",
-    ],
-    maxCabinWeight: 7,
-    maxCargoWeight: 32,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "asiana",
-    name: "아시아나",
-    badge: "ASIANA",
-    cabin: {
-      maxWeight: 7,
-      cage: "가로 32cm x 세로 45cm x 높이 21cm (소프트 26cm)",
-      note: "생후 8주 이상 · 좌석 하단 수납",
-    },
-    cargo: { maxWeight: 45, cage: "3면 합 285cm 이하 · 높이 84cm 이하", note: "생후 16주 이상" },
-    contact: "1588-8000",
-    destinations: [
-      "gmp",
-      "pus",
-      "cju",
-      "tae",
-      "kwj",
-      "rsu",
-      "lax",
-      "jfk",
-      "sfo",
-      "sea",
-      "hnl",
-      "lhr",
-      "fra",
-      "cdg",
-      "bcn",
-      "fco",
-      "nrt",
-      "hnd",
-      "kix",
-      "fuk",
-      "tao",
-      "bkk",
-      "dad",
-      "mnl",
-      "sin",
-    ],
+    destinations: [],
     maxCabinWeight: 7,
     maxCargoWeight: 45,
     breeds: ["small", "medium"],
   },
   {
-    id: "jeju",
-    name: "제주항공",
-    badge: "JEJU AIR",
+    id: "asiana",
+    name: "아시아나항공 (Asiana Airlines)",
+    badge: "ASIANA",
     cabin: {
-      maxWeight: 9,
-      cage: "가로 37cm x 세로 23cm x 높이 23cm (소프트 26cm)",
-      note: "생후 8주 이상",
+      maxWeight: 7,
+      cage: "소프트: 32×45×26cm 이하 (눌렀을 때 21cm 이하) · 하드: 32×45×21cm 이하",
+      note: "기내 동반: 생후 8주 이상",
     },
-    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
-    contact: "1599-1500",
-    destinations: [
-      "gmp",
-      "cju",
-      "pus",
-      "tae",
-      "cjj",
-      "kwj",
-      "nrt",
-      "kix",
-      "fuk",
-      "cts",
-      "oka",
-      "myj",
-      "fsz",
-      "tpe",
-      "hkg",
-      "dad",
-      "cxr",
-      "pqc",
-      "bkk",
-      "cnx",
-      "gum",
-      "spn",
-    ],
-    maxCabinWeight: 9,
-    maxCargoWeight: 0,
+    cargo: {
+      maxWeight: 45,
+      cage: "하드 케이지: 3면 합 285cm 이하 · 최대 높이 84cm 이하",
+      note: "화물칸 동반: 생후 16주 이상",
+    },
+    fees:
+      "국내선 30,000원 (~32kg) / 60,000원 (32~45kg)\n국제선: 한국↔일본/중국/대만/홍콩/몽골 140,000원(USD140)~290,000원(USD290)\n그 외 아시아(괌/사이판 포함) 210,000원(USD210)~440,000원(USD440)\n미주/유럽/대양주 290,000원(USD290)~590,000원(USD590)",
+    routes: "(국내) 전 노선 · (해외) 미주/유럽 등 전 세계",
+    contact: "1588-8000",
+    destinations: [],
+    maxCabinWeight: 7,
+    maxCargoWeight: 45,
     breeds: ["small", "medium"],
   },
   {
     id: "tway",
-    name: "티웨이",
+    name: "티웨이항공 (T'way Air)",
     badge: "T'WAY",
     cabin: {
       maxWeight: 9,
-      cage: "가로 37cm x 세로 23cm x 높이 23cm (소프트 26cm)",
-      note: "생후 8주 이상",
+      cage: "소프트: 37×23×26cm 이하 · 하드: 37×23×23cm 이하",
+      note: "기내 동반: 생후 8주 이상",
     },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
+    fees: "국내선 30,000원\n국제선 100,000~200,000원 (노선별 상이)",
+    routes: "(국내) 전 노선 · (해외) 유럽/일본/동남아/시드니 등",
     contact: "1688-8686",
-    destinations: [
-      "gmp",
-      "cju",
-      "tae",
-      "cjj",
-      "pus",
-      "kwj",
-      "cdg",
-      "fco",
-      "bcn",
-      "fra",
-      "nrt",
-      "kix",
-      "fuk",
-      "cts",
-      "tao",
-      "dad",
-      "cxr",
-      "bkk",
-      "sin",
-      "syd",
-      "gum",
-      "spn",
-    ],
+    destinations: [],
     maxCabinWeight: 9,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
-    id: "airbusan",
-    name: "에어부산",
-    badge: "AIR BUSAN",
+    id: "jeju",
+    name: "제주항공 (Jeju Air)",
+    badge: "JEJU AIR",
     cabin: {
-      maxWeight: 7,
-      cage: "가로 37cm x 세로 23cm x 높이 24cm (소프트 26cm)",
-      note: "생후 8주 이상",
+      maxWeight: 9,
+      cage: "소프트: 37×23×26cm 이하 · 하드: 37×23×23cm 이하",
+      note: "기내 동반: 생후 8주 이상 · 펫멤버십 운영(고급형/기본형)",
     },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
-    contact: "1666-3060",
-    destinations: [
-      "pus",
-      "gmp",
-      "cju",
-      "usn",
-      "nrt",
-      "kix",
-      "fuk",
-      "cts",
-      "khh",
-      "tpe",
-      "dad",
-      "cxr",
-      "bkk",
-      "tag",
-      "dps",
-    ],
-    maxCabinWeight: 7,
+    fees:
+      "국내선 25,000원\n국제선 $70~$100 (노선별 상이)\n일본/중국(산동성) 70,000원(USD70)\n홍콩/마카오/대만/중국(산동성 외)/러시아/몽골 85,000원(USD85)\n동남아/괌/사이판 100,000원(USD100)\n펫멤버십: 고급형 240,000원 / 기본형 98,000원",
+    routes: "(국내) 전 노선 · (해외) 일본/동남아/대양주 등",
+    contact: "1599-1500",
+    destinations: [],
+    maxCabinWeight: 9,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
     id: "jinair",
-    name: "진에어",
+    name: "진에어 (Jin Air)",
     badge: "JIN AIR",
     cabin: {
       maxWeight: 7,
-      cage: "가로 37cm x 세로 23cm x 높이 23cm (소프트 26cm)",
-      note: "생후 8주 이상",
+      cage: "소프트: 37×23×26cm 이하 · 하드: 37×23×23cm 이하",
+      note: "기내 동반: 생후 8주 이상",
     },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
+    fees:
+      "국내선 20,000원\n국제선 70,000~100,000원\n일본/중국/대만 70,000원 · 동남아/괌/몽골 100,000원",
+    routes: "(국내) 전 노선 · (해외) 일본/동남아/괌 등",
     contact: "1600-6200",
-    destinations: [
-      "gmp",
-      "cju",
-      "pus",
-      "tae",
-      "cjj",
-      "kwj",
-      "usn",
-      "rsu",
-      "kpo",
-      "wju",
-      "nrt",
-      "kix",
-      "fuk",
-      "cts",
-      "oka",
-      "tpe",
-      "dad",
-      "cxr",
-      "pqc",
-      "bkk",
-      "ceb",
-      "crk",
-      "gum",
-    ],
+    destinations: [],
     maxCabinWeight: 7,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
     id: "eastar",
-    name: "이스타항공",
+    name: "이스타항공 (Eastar Jet)",
     badge: "EASTAR",
     cabin: {
       maxWeight: 9,
-      cage: "가로 35cm x 세로 25cm x 높이 23cm (소프트 26cm)",
-      note: "생후 8주 이상",
+      cage: "소프트: (가로+세로+높이) 합 100cm 이하 · 가로 최대 43cm · 높이 25cm 이하\n하드: (가로+세로+높이) 합 100cm 이하 · 가로 최대 37cm · 높이 23cm 이하",
+      note: "기내 동반: 생후 8주 이상",
     },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
+    fees:
+      "국내선 30,000원\n국제선 일본 120,000원(USD120) · 중국/대만 150,000원(USD150) · 동남아 200,000원(USD200)",
+    routes:
+      "(국내) 전 노선 · (해외) 일본/타이베이/동남아 등",
     contact: "1544-0080",
-    destinations: [
-      "gmp",
-      "cju",
-      "pus",
-      "cjj",
-      "kuv",
-      "nrt",
-      "kix",
-      "fuk",
-      "cts",
-      "tpe",
-      "tsa",
-      "pvg",
-      "dad",
-      "cxr",
-      "bkk",
-      "pqc",
-    ],
+    destinations: [],
     maxCabinWeight: 9,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
-    id: "airseoul",
-    name: "에어서울",
-    badge: "AIR SEOUL",
-    cabin: { maxWeight: 7, cage: "가로 37cm x 세로 23cm x 높이 23cm", note: "생후 8주 이상" },
-    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
-    maxCabinWeight: 7,
-    maxCargoWeight: 0,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "twaye",
-    name: "플라이강원",
-    badge: "FLY GANGWON",
-    cabin: { maxWeight: 9, cage: "가로 37cm x 세로 23cm x 높이 23cm", note: "생후 8주 이상" },
-    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
+    id: "airbusan",
+    name: "에어부산 (Air Busan)",
+    badge: "AIR BUSAN",
+    cabin: {
+      maxWeight: 9,
+      cage: "기내 케이지: 가로 41cm · 세로 21cm · 높이 24cm 이내",
+      note: "기내 동반: 생후 8주 이상",
+    },
+    cargo: {
+      maxWeight: 32,
+      cage: "하드 케이지: 3면 합 246cm 이하 · 높이 84cm 이하 (국내선만 가능)",
+      note: "화물칸 동반: 국내선만 가능",
+    },
+    fees:
+      "국내선 20,000원 (편도 구간 당)\n국제선 일본/칭다오/시안/옌지/장자제/싼야/홍콩/마카오/타이베이/가오슝 70,000원/70USD\n러시아/동남아/몽골 90,000원/90USD",
+    routes: "(국내) 전 노선 · (해외) 일본/동남아 등",
+    contact: "1666-3060",
+    destinations: [],
     maxCabinWeight: 9,
-    maxCargoWeight: 0,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "aerok",
-    name: "에어로케이",
-    badge: "AERO K",
-    cabin: { maxWeight: 9, cage: "가로 37cm x 세로 23cm x 높이 23cm", note: "생후 8주 이상" },
-    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
-    maxCabinWeight: 9,
-    maxCargoWeight: 0,
+    maxCargoWeight: 32,
     breeds: ["small", "medium"],
   },
   {
     id: "airpremia",
-    name: "에어프레미아",
+    name: "에어프레미아 (Air Premia)",
     badge: "AIR PREMIA",
     cabin: {
       maxWeight: 7,
-      cage: "가로 37cm x 세로 23cm x 높이 20cm (소프트 26cm)",
-      note: "생후 8주 이상",
+      cage: "소프트: 가로 38cm 이하 · 세로 22cm 이하 · 높이 26cm 이하\n하드: 가로 38cm 이하 · 세로 22cm 이하 · 높이 23cm 이하",
+      note: "기내 동반: 생후 8주 이상",
     },
-    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
+    cargo: {
+      maxWeight: 45,
+      cage: "하드 케이지: 3면 합 285cm 이하 · 높이 84cm 이하",
+      note: "화물칸 동반 가능",
+    },
+    fees:
+      "동북아 KRW 130,000(32kg 이하) / 280,000(33~45kg)\n동남아 KRW 200,000(32kg 이하) / 430,000(33~45kg)\n미주 KRW 280,000(32kg 이하) / 580,000(33~45kg)",
+    routes: "(해외) 미주/일본/동남아 등",
     contact: "1800-2626",
-    destinations: ["lax", "ewr", "sfo", "iad", "hnl", "nrt", "bkk", "dad", "hkg"],
+    destinations: [],
     maxCabinWeight: 7,
-    maxCargoWeight: 0,
+    maxCargoWeight: 45,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "vietnam",
+    name: "베트남항공 (Vietnam Airlines)",
+    badge: "VIETNAM",
+    cabin: {
+      maxWeight: 6,
+      cage: "기내 케이지: 35×30×20cm 이내",
+      note: "기내 동반: 생후 10주 이상",
+    },
+    cargo: {
+      maxWeight: 32,
+      cage: "위탁(화물) 동반 가능 (최대 32kg)",
+      note: "위탁 동반: 생후 10~12주 이상",
+    },
+    fees:
+      "A 지역 300 USD (베트남/태국/인도네시아/말레이시아/싱가포르/라오스/캄보디아/미얀마/필리핀/홍콩/마카오)\nB 지역 400 USD (대만/중국/한국/일본/인도 등)\nC 지역 600 USD (프랑스/독일/영국/러시아/이탈리아/덴마크/호주/아메리카 및 기타)\nD 지역 650 USD (미국 및 아메리카 대륙 국가)",
+    routes: "(해외) 하노이/호치민/다낭/나트랑 등",
+    contact: "02-757-8920",
+    destinations: [],
+    maxCabinWeight: 6,
+    maxCargoWeight: 32,
+    breeds: ["small", "medium"],
+  },
+  {
+    id: "lufthansa",
+    name: "루프트한자 (Lufthansa)",
+    badge: "LUFTHANSA",
+    reservationNote: "출발 72시간 전까지 예약 필수",
+    cabin: {
+      maxWeight: 8,
+      cage: "기내 케이지: 118cm (55×40×23cm) · 하드 55×40×23cm 이하",
+      note:
+        "기내 동반: 생후 12주 이상 (독일 출발/도착/경유는 15주 이상 권장 · 미국 도착 반려견 6개월)",
+    },
+    cargo: { maxWeight: 32, cage: "화물칸 동반 가능 (최대 32kg)", note: "" },
+    fees: "항공편별 상이",
+    routes: "(해외) 프랑크푸르트/뮌헨 등 유럽 노선",
+    contact: "02-6022-4228",
+    destinations: [],
+    maxCabinWeight: 8,
+    maxCargoWeight: 32,
     breeds: ["small", "medium"],
   },
   {
     id: "delta",
-    name: "델타항공",
+    name: "델타항공 (Delta Airlines)",
     badge: "DELTA",
     cabin: {
       maxWeight: 99,
-      cage: "가로 45cm x 세로 28cm x 높이 28cm 권장",
-      note: "국제선 생후 16주 이상 · 무게 제한 없음",
+      cage: "하드 케이지(권장): 45×28×28cm",
+      note: "기내 동반: 국제선 기준 생후 16주 이상 · 무게 제한 없음",
     },
-    cargo: { maxWeight: 0, cage: "불가", note: "위탁 수하물 불가 (카고만 가능)" },
+    cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가 (별도 카고 서비스만 가능)" },
+    fees: "",
+    routes: "(해외) 애틀랜타/디트로이트/시애틀 등 미주 노선",
     contact: "0079-8651-7538",
-    destinations: ["atl", "dtw", "sea", "msp", "slc"],
+    destinations: [],
     maxCabinWeight: 99,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
   },
   {
     id: "aircanada",
-    name: "에어캐나다",
+    name: "에어캐나다 (Air Canada)",
     badge: "AIR CANADA",
     cabin: {
       maxWeight: 10,
-      cage: "가로 40cm x 세로 55cm x 높이 21cm (소프트 27cm)",
-      note: "생후 10주 이상",
+      cage:
+        "기내 소프트 케이지(기종별 상이)\n- 40×55×27cm 이하 (일부 기종)\n- 40×43×20cm 이하 (A220/A319/A320/A321/A330/737MAX/777/787 등)\n- 21×41×28cm 이하 (A330/777/787 비즈니스 클래스)",
+      note: "기내 동반: 생후 10주 이상",
     },
-    cargo: { maxWeight: 45, cage: "IATA 하드 케이지", note: "생후 12주 이상" },
+    cargo: {
+      maxWeight: 45,
+      cage: "화물칸 케이지: 선형치수 292cm(115인치) (길이+너비+높이)",
+      note: "화물칸 동반: 생후 12주 이상",
+    },
+    fees: "기내 $100~$120 · 화물칸 $270~$324",
+    routes: "(해외) 밴쿠버/토론토 등 캐나다 노선",
     contact: "02-3788-0100",
-    destinations: ["yvr", "yyz"],
+    destinations: [],
     maxCabinWeight: 10,
     maxCargoWeight: 45,
     breeds: ["small", "medium"],
   },
   {
-    id: "lufthansa",
-    name: "루프트한자",
-    badge: "LUFTHANSA",
+    id: "finnair",
+    name: "핀에어 (Finnair)",
+    badge: "FINNAIR",
     cabin: {
       maxWeight: 8,
-      cage: "가로 55cm x 세로 40cm x 높이 23cm",
-      note: "생후 12주 이상",
+      cage: "소프트: 55×40×23cm · 하드: 35×30×20cm",
+      note: "기내 동반: 생후 12주 이상 권장",
     },
-    cargo: { maxWeight: 32, cage: "IATA 표준 준수 하드케이지 필수", note: "위탁 가능" },
-    contact: "02-6022-4228",
-    destinations: ["fra", "muc"],
-    maxCabinWeight: 8,
-    maxCargoWeight: 32,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "vietnam",
-    name: "베트남항공",
-    badge: "VIETNAM",
-    cabin: {
-      maxWeight: 6,
-      cage: "가로 35cm x 세로 30cm x 높이 20cm 이하",
-      note: "생후 10주 이상",
+    cargo: {
+      maxWeight: 75,
+      cage: "화물칸 하드 케이지: 122×81×89cm",
+      note: "",
     },
-    cargo: { maxWeight: 32, cage: "IATA 표준 하드 케이지", note: "생후 10~12주 이상" },
-    contact: "02-757-8920",
-    maxCabinWeight: 6,
-    maxCargoWeight: 32,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "finnair",
-    name: "핀에어",
-    badge: "FINNAIR",
-    cabin: { maxWeight: 8, cage: "가로 42cm x 세로 30cm x 높이 24cm 이하", note: "생후 12주 이상" },
-    cargo: { maxWeight: 50, cage: "IATA 표준 하드 케이지", note: "위탁 가능" },
+    fees: "기내 60~130유로 · 화물 140~650유로 (노선별 상이)",
+    routes: "(해외) 헬싱키 및 유럽 노선",
     contact: "02-3455-8000",
+    destinations: [],
     maxCabinWeight: 8,
-    maxCargoWeight: 50,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "turkish",
-    name: "터키항공",
-    badge: "TURKISH",
-    cabin: { maxWeight: 8, cage: "가로 40cm x 세로 30cm x 높이 23cm 이하", note: "생후 10~12주 이상" },
-    cargo: { maxWeight: 50, cage: "IATA 표준 하드 케이지", note: "위탁 가능" },
-    contact: "02-6022-4270",
-    maxCabinWeight: 8,
-    maxCargoWeight: 50,
+    maxCargoWeight: 75,
     breeds: ["small", "medium"],
   },
 ];
@@ -1006,8 +874,8 @@ function renderAirlines(airlines = currentAirlines) {
   }
 
   airlineEl.innerHTML = `
-    <!-- Airline + Shopping section: 규정 + 쇼핑 (숨김 처리) -->
-    <div class="hidden rounded-[32px] border border-line bg-white p-8 text-ink shadow-card" id="shopping">
+    <!-- Airline section: 규정 + 항공사 목록 -->
+    <div class="rounded-[32px] border border-line bg-white p-8 text-ink shadow-card" id="shopping">
       <div class="flex flex-wrap items-start justify-between gap-6">
         <div>
           <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Flight rules</p>
@@ -1065,6 +933,55 @@ function renderAirlines(airlines = currentAirlines) {
           </div>
         </div>
 
+      </div>
+
+      <div class="mt-10">
+        <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Directory</p>
+        <h3 class="mt-2 text-xl font-semibold text-deep">항공사 규정 한눈에 보기</h3>
+        <p class="mt-2 text-sm text-slate-500">아래 정보는 flight.text 기준으로 정리했습니다.</p>
+        <div class="mt-6 grid gap-4 md:grid-cols-2">
+          ${currentAirlines
+            .map((airline) => {
+              const lines = (airline.fees || "")
+                .split("\n")
+                .map((l) => l.trim())
+                .filter(Boolean)
+                .slice(0, 6);
+              return `
+              <article class="rounded-2xl border border-line bg-white p-5">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h4 class="text-base font-semibold text-deep">${airline.name}</h4>
+                    <p class="mt-1 text-xs text-slate-400">${airline.badge || ""}</p>
+                    ${airline.reservationNote ? `<p class="mt-2 text-xs text-slate-500">${airline.reservationNote}</p>` : ""}
+                    ${airline.routes ? `<p class="mt-2 text-xs text-slate-500">${airline.routes}</p>` : ""}
+                  </div>
+                  ${airline.contact ? `<span class="whitespace-nowrap rounded-full bg-slate-50 px-3 py-2 text-xs text-slate-600">문의 ${airline.contact}</span>` : ""}
+                </div>
+                <div class="mt-4 grid gap-3 text-xs text-slate-600 sm:grid-cols-2">
+                  <div class="rounded-xl bg-slate-50 p-3">
+                    <p class="font-semibold text-deep">기내 동반</p>
+                    <p class="mt-1">무게: ${airline.cabin?.maxWeight >= 99 ? "제한 없음" : `${airline.cabin?.maxWeight}kg 이하`}</p>
+                    ${airline.cabin?.cage ? `<p class="mt-1 whitespace-pre-line">케이지: ${airline.cabin.cage}</p>` : ""}
+                    ${airline.cabin?.note ? `<p class="mt-2 text-xs text-slate-500">${airline.cabin.note}</p>` : ""}
+                  </div>
+                  ${renderCargoBlock(airline)}
+                </div>
+                ${
+                  lines.length
+                    ? `<div class="mt-4 rounded-xl border border-line bg-white p-3 text-xs text-slate-600">
+                        <p class="font-semibold text-deep">요금</p>
+                        <ul class="mt-2 grid gap-1">
+                          ${lines.map((l) => `<li>• ${l}</li>`).join("")}
+                        </ul>
+                      </div>`
+                    : ""
+                }
+              </article>
+            `;
+            })
+            .join("")}
+        </div>
       </div>
 
     </div>
