@@ -30,7 +30,7 @@ const destinationOptions = [
   { value: "any", label: "Anywhere" },
   { value: "icn", label: "인천 (ICN)" },
   { value: "gmp", label: "김포 (GMP)" },
-  { value: "pus", label: "부산 (PUS)" },
+  { value: "pus", label: "김해 (PUS)" },
   { value: "cju", label: "제주 (CJU)" },
   { value: "tae", label: "대구 (TAE)" },
   { value: "kwj", label: "광주 (KWJ)" },
@@ -93,6 +93,13 @@ const destinationOptions = [
   { value: "ams", label: "암스테르담 (AMS)" },
   { value: "bud", label: "부다페스트 (BUD)" },
   { value: "bcn", label: "바르셀로나 (BCN)" },
+  { value: "pek", label: "베이징 (PEK)" },
+  { value: "pkx", label: "베이징 다싱 (PKX)" },
+  { value: "hkt", label: "푸껫 (HKT)" },
+  { value: "weh", label: "웨이하이 (WEH)" },
+  { value: "ubn", label: "울란바토르 (UBN)" },
+  { value: "dtw", label: "디트로이트 (DTW)" },
+  { value: "msp", label: "미니애폴리스 (MSP)" },
 ];
 
 const destinationLabelMap = destinationOptions.reduce((acc, option) => {
@@ -104,59 +111,76 @@ const destinationOptionsMarkup = destinationOptions
   .map((option) => `<option value="${option.value}">${option.label}</option>`)
   .join("");
 
+// flight.text에 등장하는 공항(국내/해외) — 도착지 선택·필터 기준
+function uniqIata(codes) {
+  return [...new Set(codes.map((c) => String(c).toLowerCase()))];
+}
 
-// 항공사 규정 데이터 (flight.text 기준으로 정리)
-// - 화면 필터는 maxCabinWeight(kg) 기준으로 동작합니다.
-// - destinations(도착지) 필터도 취항 노선 기준으로 반영합니다.
+const FLIGHT_DOMESTIC_CODES = uniqIata(["gmp", "cju", "pus", "tae", "cjj", "kwj", "rsu", "kuv"]);
+const FLIGHT_OVERSEAS_CODES = uniqIata([
+  "nrt",
+  "hnd",
+  "kix",
+  "fuk",
+  "cts",
+  "pek",
+  "pkx",
+  "pvg",
+  "tao",
+  "weh",
+  "bkk",
+  "dad",
+  "cxr",
+  "hkt",
+  "pqc",
+  "ceb",
+  "mnl",
+  "sin",
+  "tpe",
+  "khh",
+  "ubn",
+  "gum",
+  "spn",
+  "syd",
+  "lax",
+  "ewr",
+  "sfo",
+  "jfk",
+  "atl",
+  "dtw",
+  "sea",
+  "msp",
+  "cdg",
+  "lhr",
+  "fra",
+  "muc",
+  "fco",
+  "han",
+  "sgn",
+  "yvr",
+  "yyz",
+]);
+
+function sortAirportCodesKo(codes) {
+  return [...codes].sort((a, b) => {
+    const la = destinationLabelMap[a] || a;
+    const lb = destinationLabelMap[b] || b;
+    return la.localeCompare(lb, "ko");
+  });
+}
+
+const flightDomesticSorted = sortAirportCodesKo(FLIGHT_DOMESTIC_CODES);
+const flightOverseasSorted = sortAirportCodesKo(FLIGHT_OVERSEAS_CODES);
+
+function flightAirportOptionsMarkup(codes) {
+  return codes
+    .map((code) => `<option value="${code}">${destinationLabelMap[code] || code.toUpperCase()}</option>`)
+    .join("");
+}
+
+// 항공사 규정 데이터 (flight.text 기준)
+// - maxCabinWeight(kg)·destinations(IATA)로 검색 필터
 // - 실제 규정/운임은 항공사 정책에 따라 변동될 수 있습니다.
-const DESTINATIONS = (() => {
-  const all = destinationOptions.map((d) => d.value).filter((v) => v !== "any");
-  const domestic = [
-    "icn",
-    "gmp",
-    "pus",
-    "cju",
-    "tae",
-    "kwj",
-    "rsu",
-    "usn",
-    "hin",
-    "cjj",
-    "kpo",
-    "wju",
-    "kuv",
-  ];
-  const japan = ["nrt", "hnd", "kix", "fuk", "cts", "oka"];
-  const china = ["pvg", "tao"];
-  const taiwan = ["tpe", "tsa"];
-  const hk = ["hkg"];
-  const seAsia = ["bkk", "dad", "cnx", "pqc", "mnl", "ceb", "sin", "kul", "dps"];
-  const guamSaipan = ["gum", "spn"];
-  const australia = ["syd"];
-  const us = ["lax", "jfk", "ewr", "sfo", "sea", "ord", "atl", "iad", "las", "hnl"];
-  const canada = ["yvr", "yyz"];
-  const europe = ["cdg", "lhr", "fra", "muc", "fco", "mxp", "ams", "bud", "bcn"];
-
-  function uniq(list) {
-    return [...new Set(list.filter(Boolean))];
-  }
-
-  return {
-    all,
-    domestic,
-    japan,
-    china,
-    taiwan,
-    hk,
-    seAsia,
-    guamSaipan,
-    australia,
-    us,
-    canada,
-    europe,
-    uniq,
-  };
-})();
 
 const airlineData = [
   {
@@ -175,12 +199,32 @@ const airlineData = [
       cage: "하드 케이지: 3면 합 291cm 이하 · 최대 높이 84cm 이하",
       note: "화물칸 동반: 생후 16주 이상",
     },
-    fees:
-      "국내선 30,000원\n국제선 150,000~600,000원 (노선/거리/무게에 따라 상이)\n단거리 150,000원 · 중거리 225,000원 · 장거리 300,000원",
+    fees: "(국내선) 30,000원\n(국제선) 단거리 150,000원 / 중거리 225,000원 / 장거리 300,000원",
     routes:
-      "(국내) 전 노선 · (해외) 미주/유럽/아시아 등 전 세계",
+      "(국내) 김포·제주·김해·대구·청주 (해외) 나리타·하네다·간사이·후쿠오카·베이징·상하이·방콕·다낭·나트랑·푸껫·싱가포르·LA·JFK·파리·런던",
     contact: "1588-2001",
-    destinations: DESTINATIONS.all,
+    destinations: uniqIata([
+      "gmp",
+      "cju",
+      "pus",
+      "tae",
+      "cjj",
+      "nrt",
+      "hnd",
+      "kix",
+      "fuk",
+      "pek",
+      "pvg",
+      "bkk",
+      "dad",
+      "cxr",
+      "hkt",
+      "sin",
+      "lax",
+      "jfk",
+      "cdg",
+      "lhr",
+    ]),
     maxCabinWeight: 7,
     maxCargoWeight: 45,
     breeds: ["small", "medium"],
@@ -200,10 +244,29 @@ const airlineData = [
       note: "화물칸 동반: 생후 16주 이상",
     },
     fees:
-      "국내선 30,000원 (~32kg) / 60,000원 (32~45kg)\n국제선: 한국↔일본/중국/대만/홍콩/몽골 140,000원(USD140)~290,000원(USD290)\n그 외 아시아(괌/사이판 포함) 210,000원(USD210)~440,000원(USD440)\n미주/유럽/대양주 290,000원(USD290)~590,000원(USD590)",
-    routes: "(국내) 전 노선 · (해외) 미주/유럽 등 전 세계",
+      "(국내선) 30,000원 (~32kg), 60,000원 (32~45kg)\n(국제선) 일본/중국/대만 등 140,000~290,000원 · 아시아 내(괌/사이판) 210,000~440,000원 · 미주/유럽/대양주 290,000~590,000원",
+    routes:
+      "(국내) 김포·제주·광주·여수 (해외) 나리타·하네다·간사이·후쿠오카·베이징·상하이·방콕·다낭·마닐라·LA·JFK·프랑크푸르트·파리",
     contact: "1588-8000",
-    destinations: DESTINATIONS.all,
+    destinations: uniqIata([
+      "gmp",
+      "cju",
+      "kwj",
+      "rsu",
+      "nrt",
+      "hnd",
+      "kix",
+      "fuk",
+      "pek",
+      "pvg",
+      "bkk",
+      "dad",
+      "mnl",
+      "lax",
+      "jfk",
+      "fra",
+      "cdg",
+    ]),
     maxCabinWeight: 7,
     maxCargoWeight: 45,
     breeds: ["small", "medium"],
@@ -218,19 +281,24 @@ const airlineData = [
       note: "기내 동반: 생후 8주 이상",
     },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
-    fees: "국내선 30,000원\n국제선 100,000~200,000원 (노선별 상이)",
-    routes: "(국내) 전 노선 · (해외) 유럽/일본/동남아/시드니 등",
+    fees: "(국내선) 30,000원 / (국제선) 100,000~200,000원",
+    routes:
+      "(국내) 김포·제주·대구·청주 (해외) 나리타·간사이·후쿠오카·삿포로·다낭·방콕·시드니·파리·로마",
     contact: "1688-8686",
-    destinations: DESTINATIONS.uniq([
-      ...DESTINATIONS.domestic,
-      ...DESTINATIONS.japan,
-      ...DESTINATIONS.china,
-      ...DESTINATIONS.taiwan,
-      ...DESTINATIONS.hk,
-      ...DESTINATIONS.seAsia,
-      ...DESTINATIONS.guamSaipan,
-      ...DESTINATIONS.australia,
-      ...DESTINATIONS.europe,
+    destinations: uniqIata([
+      "gmp",
+      "cju",
+      "tae",
+      "cjj",
+      "nrt",
+      "kix",
+      "fuk",
+      "cts",
+      "dad",
+      "bkk",
+      "syd",
+      "cdg",
+      "fco",
     ]),
     maxCabinWeight: 9,
     maxCargoWeight: 0,
@@ -243,22 +311,29 @@ const airlineData = [
     cabin: {
       maxWeight: 9,
       cage: "소프트: 37×23×26cm 이하 · 하드: 37×23×23cm 이하",
-      note: "기내 동반: 생후 8주 이상 · 펫멤버십 운영(고급형/기본형)",
+      note: "기내 동반: 생후 8주 이상",
     },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
     fees:
-      "국내선 25,000원\n국제선 $70~$100 (노선별 상이)\n일본/중국(산동성) 70,000원(USD70)\n홍콩/마카오/대만/중국(산동성 외)/러시아/몽골 85,000원(USD85)\n동남아/괌/사이판 100,000원(USD100)\n펫멤버십: 고급형 240,000원 / 기본형 98,000원",
-    routes: "(국내) 전 노선 · (해외) 일본/동남아/대양주 등",
+      "(국내선) 25,000원\n(국제선) 일본/산동성 70,000원 · 기타 아시아 85,000원 · 동남아/대양주 100,000원",
+    routes:
+      "(국내) 김포·제주·김해 (해외) 나리타·간사이·베이징 다싱·상하이·칭다오·웨이하이·다낭·방콕·세부·괌·사이판",
     contact: "1599-1500",
-    destinations: DESTINATIONS.uniq([
-      ...DESTINATIONS.domestic,
-      ...DESTINATIONS.japan,
-      ...DESTINATIONS.china,
-      ...DESTINATIONS.taiwan,
-      ...DESTINATIONS.hk,
-      ...DESTINATIONS.seAsia,
-      ...DESTINATIONS.guamSaipan,
-      ...DESTINATIONS.australia,
+    destinations: uniqIata([
+      "gmp",
+      "cju",
+      "pus",
+      "nrt",
+      "kix",
+      "pkx",
+      "pvg",
+      "tao",
+      "weh",
+      "dad",
+      "bkk",
+      "ceb",
+      "gum",
+      "spn",
     ]),
     maxCabinWeight: 9,
     maxCargoWeight: 0,
@@ -275,16 +350,24 @@ const airlineData = [
     },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
     fees:
-      "국내선 20,000원\n국제선 70,000~100,000원\n일본/중국/대만 70,000원 · 동남아/괌/몽골 100,000원",
-    routes: "(국내) 전 노선 · (해외) 일본/동남아/괌 등",
+      "(국내선) 20,000원\n(국제선) 일본/중국/대만 70,000원 · 동남아/괌/몽골 100,000원",
+    routes:
+      "(국내) 김포·제주·김해 (해외) 나리타·간사이·후쿠오카·상하이·타이베이·울란바토르·다낭·방콕·세부·괌",
     contact: "1600-6200",
-    destinations: DESTINATIONS.uniq([
-      ...DESTINATIONS.domestic,
-      ...DESTINATIONS.japan,
-      ...DESTINATIONS.china,
-      ...DESTINATIONS.taiwan,
-      ...DESTINATIONS.seAsia,
-      ...DESTINATIONS.guamSaipan,
+    destinations: uniqIata([
+      "gmp",
+      "cju",
+      "pus",
+      "nrt",
+      "kix",
+      "fuk",
+      "pvg",
+      "tpe",
+      "ubn",
+      "dad",
+      "bkk",
+      "ceb",
+      "gum",
     ]),
     maxCabinWeight: 7,
     maxCargoWeight: 0,
@@ -300,17 +383,25 @@ const airlineData = [
       note: "기내 동반: 생후 8주 이상",
     },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가" },
-    fees:
-      "국내선 30,000원\n국제선 일본 120,000원(USD120) · 중국/대만 150,000원(USD150) · 동남아 200,000원(USD200)",
+    fees: "(국내선) 30,000원 / (국제선) 일본 120,000원 · 중국/대만 150,000원 · 동남아 200,000원",
     routes:
-      "(국내) 전 노선 · (해외) 일본/타이베이/동남아 등",
+      "(국내) 김포·제주·청주·군산·부산 (해외) 나리타·간사이·후쿠오카·삿포로·상하이·타이베이·방콕·다낭·푸꾸옥",
     contact: "1544-0080",
-    destinations: DESTINATIONS.uniq([
-      ...DESTINATIONS.domestic,
-      ...DESTINATIONS.japan, // NRT/KIX/FUK/CTS/OKA
-      ...DESTINATIONS.china, // PVG
-      ...DESTINATIONS.taiwan, // TSA/TPE
-      ...DESTINATIONS.seAsia, // BKK/DAD/CNX/PQC
+    destinations: uniqIata([
+      "gmp",
+      "cju",
+      "cjj",
+      "kuv",
+      "pus",
+      "nrt",
+      "kix",
+      "fuk",
+      "cts",
+      "pvg",
+      "tpe",
+      "bkk",
+      "dad",
+      "pqc",
     ]),
     maxCabinWeight: 9,
     maxCargoWeight: 0,
@@ -331,17 +422,11 @@ const airlineData = [
       note: "화물칸 동반: 국내선만 가능",
     },
     fees:
-      "국내선 20,000원 (편도 구간 당)\n국제선 일본/칭다오/시안/옌지/장자제/싼야/홍콩/마카오/타이베이/가오슝 70,000원/70USD\n러시아/동남아/몽골 90,000원/90USD",
-    routes: "(국내) 전 노선 · (해외) 일본/동남아 등",
+      "(국내선) 20,000원\n(국제선) 일본/중국/대만 70,000원 · 동남아/몽골/러시아 90,000원",
+    routes:
+      "(국내) 김해·김포·제주 (해외) 나리타·간사이·칭다오·타이베이·가오슝·다낭·방콕·나트랑",
     contact: "1666-3060",
-    destinations: DESTINATIONS.uniq([
-      ...DESTINATIONS.domestic,
-      ...DESTINATIONS.japan,
-      ...DESTINATIONS.hk,
-      ...DESTINATIONS.taiwan,
-      "khh",
-      ...DESTINATIONS.seAsia,
-    ]),
+    destinations: uniqIata(["pus", "gmp", "cju", "nrt", "kix", "tao", "tpe", "khh", "dad", "bkk", "cxr"]),
     maxCabinWeight: 9,
     maxCargoWeight: 32,
     breeds: ["small", "medium"],
@@ -360,16 +445,10 @@ const airlineData = [
       cage: "하드 케이지: 3면 합 285cm 이하 · 높이 84cm 이하",
       note: "화물칸 동반 가능",
     },
-    fees:
-      "동북아 KRW 130,000(32kg 이하) / 280,000(33~45kg)\n동남아 KRW 200,000(32kg 이하) / 430,000(33~45kg)\n미주 KRW 280,000(32kg 이하) / 580,000(33~45kg)",
-    routes: "(해외) 미주/일본/동남아 등",
+    fees: "동북아 130,000~280,000원 / 동남아 200,000~430,000원 / 미주 280,000~580,000원",
+    routes: "(해외) LA·뉴어크·샌프란시스코·나리타·방콕",
     contact: "1800-2626",
-    destinations: DESTINATIONS.uniq([
-      ...DESTINATIONS.japan,
-      ...DESTINATIONS.seAsia,
-      ...DESTINATIONS.hk,
-      ...DESTINATIONS.us,
-    ]),
+    destinations: uniqIata(["lax", "ewr", "sfo", "nrt", "bkk"]),
     maxCabinWeight: 7,
     maxCargoWeight: 45,
     breeds: ["small", "medium"],
@@ -388,21 +467,10 @@ const airlineData = [
       cage: "위탁(화물) 동반 가능 (최대 32kg)",
       note: "위탁 동반: 생후 10~12주 이상",
     },
-    fees:
-      "A 지역 300 USD (베트남/태국/인도네시아/말레이시아/싱가포르/라오스/캄보디아/미얀마/필리핀/홍콩/마카오)\nB 지역 400 USD (대만/중국/한국/일본/인도 등)\nC 지역 600 USD (프랑스/독일/영국/러시아/이탈리아/덴마크/호주/아메리카 및 기타)\nD 지역 650 USD (미국 및 아메리카 대륙 국가)",
-    routes: "(해외) 하노이/호치민/다낭/나트랑 등",
+    fees: "동남아 $300 / 한국·일본·중국 $400 / 유럽 $600 / 미국 $650",
+    routes: "(해외) 하노이·호치민·다낭·나트랑",
     contact: "02-757-8920",
-    destinations: DESTINATIONS.uniq([
-      ...DESTINATIONS.seAsia,
-      ...DESTINATIONS.hk,
-      ...DESTINATIONS.taiwan,
-      ...DESTINATIONS.china,
-      ...DESTINATIONS.japan,
-      ...DESTINATIONS.europe,
-      ...DESTINATIONS.us,
-      ...DESTINATIONS.canada,
-      ...DESTINATIONS.australia,
-    ]),
+    destinations: uniqIata(["han", "sgn", "dad", "cxr"]),
     maxCabinWeight: 6,
     maxCargoWeight: 32,
     breeds: ["small", "medium"],
@@ -420,9 +488,9 @@ const airlineData = [
     },
     cargo: { maxWeight: 32, cage: "화물칸 동반 가능 (최대 32kg)", note: "" },
     fees: "항공편별 상이",
-    routes: "(해외) 프랑크푸르트/뮌헨 등 유럽 노선",
+    routes: "(해외) 프랑크푸르트·뮌헨",
     contact: "02-6022-4228",
-    destinations: DESTINATIONS.uniq([...DESTINATIONS.europe, ...DESTINATIONS.us]),
+    destinations: uniqIata(["fra", "muc"]),
     maxCabinWeight: 8,
     maxCargoWeight: 32,
     breeds: ["small", "medium"],
@@ -438,9 +506,9 @@ const airlineData = [
     },
     cargo: { maxWeight: 0, cage: "불가", note: "화물칸 동반 불가 (별도 카고 서비스만 가능)" },
     fees: "",
-    routes: "(해외) 애틀랜타/디트로이트/시애틀 등 미주 노선",
+    routes: "(해외) 애틀랜타·디트로이트·시애틀·미니애폴리스",
     contact: "0079-8651-7538",
-    destinations: DESTINATIONS.us,
+    destinations: uniqIata(["atl", "dtw", "sea", "msp"]),
     maxCabinWeight: 99,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
@@ -460,34 +528,12 @@ const airlineData = [
       cage: "화물칸 케이지: 선형치수 292cm(115인치) (길이+너비+높이)",
       note: "화물칸 동반: 생후 12주 이상",
     },
-    fees: "기내 $100~$120 · 화물칸 $270~$324",
-    routes: "(해외) 밴쿠버/토론토 등 캐나다 노선",
+    fees: "(기내) $100~$120 / (화물칸) $270~$324",
+    routes: "(해외) 밴쿠버·토론토",
     contact: "02-3788-0100",
-    destinations: DESTINATIONS.canada,
+    destinations: uniqIata(["yvr", "yyz"]),
     maxCabinWeight: 10,
     maxCargoWeight: 45,
-    breeds: ["small", "medium"],
-  },
-  {
-    id: "finnair",
-    name: "핀에어 (Finnair)",
-    badge: "FINNAIR",
-    cabin: {
-      maxWeight: 8,
-      cage: "소프트: 55×40×23cm · 하드: 35×30×20cm",
-      note: "기내 동반: 생후 12주 이상 권장",
-    },
-    cargo: {
-      maxWeight: 75,
-      cage: "화물칸 하드 케이지: 122×81×89cm",
-      note: "",
-    },
-    fees: "기내 60~130유로 · 화물 140~650유로 (노선별 상이)",
-    routes: "(해외) 헬싱키 및 유럽 노선",
-    contact: "02-3455-8000",
-    destinations: DESTINATIONS.uniq([...DESTINATIONS.europe, ...DESTINATIONS.japan]),
-    maxCabinWeight: 8,
-    maxCargoWeight: 75,
     breeds: ["small", "medium"],
   },
 ];
@@ -666,15 +712,23 @@ function renderHero() {
               <select id="hero-departure" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
                 <option value="icn">인천 (ICN)</option>
                 <option value="gmp">김포 (GMP)</option>
-                <option value="pus">부산 (PUS)</option>
+                <option value="pus">김해 (PUS)</option>
                 <option value="cju">제주 (CJU)</option>
                 <option value="tae">대구 (TAE)</option>
               </select>
             </label>
             <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
-              도착지
-              <select id="hero-destination" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
-                ${destinationOptionsMarkup}
+              도착 지역
+              <select id="hero-destination-region" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
+                <option value="any">Anywhere</option>
+                <option value="domestic">국내</option>
+                <option value="overseas">해외</option>
+              </select>
+            </label>
+            <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
+              취항지
+              <select id="hero-destination-airport" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm" disabled>
+                <option value="">—</option>
               </select>
             </label>
             <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
@@ -1145,7 +1199,10 @@ function renderResultsPage() {
 
   const breedLabel = breed === "small" ? "소형견" : breed === "medium" ? "중형견" : "대형견";
   const ageLabel = age === "puppy" ? "1살 이하" : age === "senior" ? "7살 이상" : "1~7살";
-  const destinationLabel = destinationLabelMap[destination] || destination.toUpperCase();
+  const destinationLabel =
+    destination === "any"
+      ? "Anywhere (전체)"
+      : destinationLabelMap[destination] || destination.toUpperCase();
 
   rootEl.innerHTML = `
     <main class="mx-auto flex w-[min(1000px,92%)] flex-col gap-8 pb-20 pt-10">
@@ -1753,15 +1810,51 @@ function setupBottomSheet() {
   });
 }
 
+function setupHeroDestinationControls() {
+  if (pageType !== "airline") return;
+  const regionEl = document.getElementById("hero-destination-region");
+  const airportEl = document.getElementById("hero-destination-airport");
+  if (!regionEl || !airportEl) return;
+
+  function fillAirports() {
+    const r = regionEl.value;
+    if (r === "any") {
+      airportEl.innerHTML = '<option value="">—</option>';
+      airportEl.disabled = true;
+      airportEl.value = "";
+      return;
+    }
+    airportEl.disabled = false;
+    const codes = r === "domestic" ? flightDomesticSorted : flightOverseasSorted;
+    airportEl.innerHTML =
+      '<option value="">취항지 선택</option>' + flightAirportOptionsMarkup(codes);
+  }
+
+  regionEl.addEventListener("change", fillAirports);
+  fillAirports();
+}
+
 // 히어로 영역에서 선택한 값을 규정 필터에 반영
 function setupHeroSearch() {
   const heroWeight = document.getElementById("hero-weight");
-  const heroDestination = document.getElementById("hero-destination");
+  const heroRegion = document.getElementById("hero-destination-region");
+  const heroAirport = document.getElementById("hero-destination-airport");
   const heroBtn = document.getElementById("hero-search");
 
   if (!heroBtn) return;
 
   heroBtn.addEventListener("click", () => {
+    const region = heroRegion?.value || "any";
+    const airport = heroAirport?.value?.trim() || "";
+    let destination = "any";
+    if (region !== "any") {
+      if (!airport) {
+        alert("국내 또는 해외를 선택한 경우 취항지를 선택해 주세요.");
+        return;
+      }
+      destination = airport;
+    }
+
     if (!document.getElementById("page-loading")) {
       const overlay = document.createElement("div");
       overlay.id = "page-loading";
@@ -1780,7 +1873,7 @@ function setupHeroSearch() {
       breed: "small",
       weight: heroWeight?.value || "5",
       age: "adult",
-      destination: heroDestination?.value || "any",
+      destination,
     });
     setTimeout(() => {
       window.location.href = `results.html?${params.toString()}`;
@@ -2009,6 +2102,7 @@ if (mobileNavEl) renderMobileNav();
 
 if (heroEl && pageType === "airline") {
   setupCountdown();
+  setupHeroDestinationControls();
   setupHeroSearch();
 }
 setupSkeletons();
