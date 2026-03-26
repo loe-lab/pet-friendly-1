@@ -1253,14 +1253,13 @@ function renderResultsPage() {
               <p class="font-semibold text-deep">기내 동반</p>
               <p class="mt-1">무게: ${airline.cabin.maxWeight}kg 미만</p>
               <p class="mt-1 whitespace-pre-line">케이지: ${airline.cabin.cage}</p>
-              ${airline.contact ? `<p class="mt-1">사전예약 및 안내: ${airline.contact}</p>` : ""}
+              ${airline.contact ? `<p class="mt-1">사전예약 및 안내번호: ${airline.contact}</p>` : ""}
               ${airline.reservationNote ? `<p class="mt-2 text-xs text-slate-500">${airline.reservationNote}</p>` : ""}
             </div>
             ${renderCargoBlock(airline)}
           </div>
           <div class="mt-3 rounded-xl border border-line bg-white p-3 text-xs text-slate-600">
-            ${airline.routes ? `<p class="font-semibold text-deep">취항 노선</p><p class="mt-1">${airline.routes}</p>` : ""}
-            <p class="${airline.routes ? "mt-3" : ""} font-semibold text-deep">요금(편도)</p>
+            <p class="font-semibold text-deep">요금(편도)</p>
             <p class="mt-1 whitespace-pre-line text-slate-600">${
               airline.fees && String(airline.fees).trim()
                 ? airline.fees
