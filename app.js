@@ -1253,14 +1253,13 @@ function renderResultsPage() {
         <article class="rounded-2xl border border-line bg-white p-5">
           <div class="flex items-center justify-between">
             <h4 class="text-base font-semibold text-deep">${airline.name}</h4>
-            <span class="text-xs text-slate-400">${airline.badge}</span>
+            ${airline.contact ? `<span class="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-600">사전예약 및 안내번호: ${airline.contact}</span>` : ""}
           </div>
-          <div class="mt-3 grid gap-3 text-xs text-slate-500 sm:grid-cols-2">
+          <div class="mt-3 grid gap-3 text-xs text-slate-500">
             <div class="rounded-xl bg-slate-50 p-3">
               <p class="font-semibold text-deep">기내 동반</p>
               <p class="mt-1">무게: ${airline.cabin.maxWeight}kg 미만</p>
               <p class="mt-1 whitespace-pre-line">케이지: ${airline.cabin.cage}</p>
-              ${airline.contact ? `<p class="mt-1">사전예약 및 안내번호: ${airline.contact}</p>` : ""}
               ${airline.reservationNote ? `<p class="mt-2 text-xs text-slate-500">${airline.reservationNote}</p>` : ""}
             </div>
             ${renderCargoBlock(airline)}
