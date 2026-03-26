@@ -718,7 +718,7 @@ function renderHero() {
               </select>
             </label>
             <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
-              도착 지역
+              도착지
               <select id="hero-destination-region" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
                 <option value="any">Anywhere</option>
                 <option value="domestic">국내</option>
@@ -726,7 +726,7 @@ function renderHero() {
               </select>
             </label>
             <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
-              취항지
+              취항지(공항)
               <select id="hero-destination-airport" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm" disabled>
                 <option value="">—</option>
               </select>
