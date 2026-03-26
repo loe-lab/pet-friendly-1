@@ -107,7 +107,57 @@ const destinationOptionsMarkup = destinationOptions
 
 // 항공사 규정 데이터 (flight.text 기준으로 정리)
 // - 화면 필터는 maxCabinWeight(kg) 기준으로 동작합니다.
+// - destinations(도착지) 필터도 취항 노선 기준으로 반영합니다.
 // - 실제 규정/운임은 항공사 정책에 따라 변동될 수 있습니다.
+const DESTINATIONS = (() => {
+  const all = destinationOptions.map((d) => d.value).filter((v) => v !== "any");
+  const domestic = [
+    "icn",
+    "gmp",
+    "pus",
+    "cju",
+    "tae",
+    "kwj",
+    "rsu",
+    "usn",
+    "hin",
+    "cjj",
+    "kpo",
+    "wju",
+    "kuv",
+  ];
+  const japan = ["nrt", "hnd", "kix", "fuk", "cts", "oka"];
+  const china = ["pvg", "tao"];
+  const taiwan = ["tpe", "tsa"];
+  const hk = ["hkg"];
+  const seAsia = ["bkk", "dad", "cnx", "pqc", "mnl", "ceb", "sin", "kul", "dps"];
+  const guamSaipan = ["gum", "spn"];
+  const australia = ["syd"];
+  const us = ["lax", "jfk", "ewr", "sfo", "sea", "ord", "atl", "iad", "las", "hnl"];
+  const canada = ["yvr", "yyz"];
+  const europe = ["cdg", "lhr", "fra", "muc", "fco", "mxp", "ams", "bud", "bcn"];
+
+  function uniq(list) {
+    return [...new Set(list.filter(Boolean))];
+  }
+
+  return {
+    all,
+    domestic,
+    japan,
+    china,
+    taiwan,
+    hk,
+    seAsia,
+    guamSaipan,
+    australia,
+    us,
+    canada,
+    europe,
+    uniq,
+  };
+})();
+
 const airlineData = [
   {
     id: "korean",
@@ -130,7 +180,7 @@ const airlineData = [
     routes:
       "(국내) 전 노선 · (해외) 미주/유럽/아시아 등 전 세계",
     contact: "1588-2001",
-    destinations: [],
+    destinations: DESTINATIONS.all,
     maxCabinWeight: 7,
     maxCargoWeight: 45,
     breeds: ["small", "medium"],
@@ -153,7 +203,7 @@ const airlineData = [
       "국내선 30,000원 (~32kg) / 60,000원 (32~45kg)\n국제선: 한국↔일본/중국/대만/홍콩/몽골 140,000원(USD140)~290,000원(USD290)\n그 외 아시아(괌/사이판 포함) 210,000원(USD210)~440,000원(USD440)\n미주/유럽/대양주 290,000원(USD290)~590,000원(USD590)",
     routes: "(국내) 전 노선 · (해외) 미주/유럽 등 전 세계",
     contact: "1588-8000",
-    destinations: [],
+    destinations: DESTINATIONS.all,
     maxCabinWeight: 7,
     maxCargoWeight: 45,
     breeds: ["small", "medium"],
@@ -171,7 +221,17 @@ const airlineData = [
     fees: "국내선 30,000원\n국제선 100,000~200,000원 (노선별 상이)",
     routes: "(국내) 전 노선 · (해외) 유럽/일본/동남아/시드니 등",
     contact: "1688-8686",
-    destinations: [],
+    destinations: DESTINATIONS.uniq([
+      ...DESTINATIONS.domestic,
+      ...DESTINATIONS.japan,
+      ...DESTINATIONS.china,
+      ...DESTINATIONS.taiwan,
+      ...DESTINATIONS.hk,
+      ...DESTINATIONS.seAsia,
+      ...DESTINATIONS.guamSaipan,
+      ...DESTINATIONS.australia,
+      ...DESTINATIONS.europe,
+    ]),
     maxCabinWeight: 9,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
@@ -190,7 +250,16 @@ const airlineData = [
       "국내선 25,000원\n국제선 $70~$100 (노선별 상이)\n일본/중국(산동성) 70,000원(USD70)\n홍콩/마카오/대만/중국(산동성 외)/러시아/몽골 85,000원(USD85)\n동남아/괌/사이판 100,000원(USD100)\n펫멤버십: 고급형 240,000원 / 기본형 98,000원",
     routes: "(국내) 전 노선 · (해외) 일본/동남아/대양주 등",
     contact: "1599-1500",
-    destinations: [],
+    destinations: DESTINATIONS.uniq([
+      ...DESTINATIONS.domestic,
+      ...DESTINATIONS.japan,
+      ...DESTINATIONS.china,
+      ...DESTINATIONS.taiwan,
+      ...DESTINATIONS.hk,
+      ...DESTINATIONS.seAsia,
+      ...DESTINATIONS.guamSaipan,
+      ...DESTINATIONS.australia,
+    ]),
     maxCabinWeight: 9,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
@@ -209,7 +278,14 @@ const airlineData = [
       "국내선 20,000원\n국제선 70,000~100,000원\n일본/중국/대만 70,000원 · 동남아/괌/몽골 100,000원",
     routes: "(국내) 전 노선 · (해외) 일본/동남아/괌 등",
     contact: "1600-6200",
-    destinations: [],
+    destinations: DESTINATIONS.uniq([
+      ...DESTINATIONS.domestic,
+      ...DESTINATIONS.japan,
+      ...DESTINATIONS.china,
+      ...DESTINATIONS.taiwan,
+      ...DESTINATIONS.seAsia,
+      ...DESTINATIONS.guamSaipan,
+    ]),
     maxCabinWeight: 7,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
@@ -229,7 +305,13 @@ const airlineData = [
     routes:
       "(국내) 전 노선 · (해외) 일본/타이베이/동남아 등",
     contact: "1544-0080",
-    destinations: [],
+    destinations: DESTINATIONS.uniq([
+      ...DESTINATIONS.domestic,
+      ...DESTINATIONS.japan, // NRT/KIX/FUK/CTS/OKA
+      ...DESTINATIONS.china, // PVG
+      ...DESTINATIONS.taiwan, // TSA/TPE
+      ...DESTINATIONS.seAsia, // BKK/DAD/CNX/PQC
+    ]),
     maxCabinWeight: 9,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
@@ -252,7 +334,14 @@ const airlineData = [
       "국내선 20,000원 (편도 구간 당)\n국제선 일본/칭다오/시안/옌지/장자제/싼야/홍콩/마카오/타이베이/가오슝 70,000원/70USD\n러시아/동남아/몽골 90,000원/90USD",
     routes: "(국내) 전 노선 · (해외) 일본/동남아 등",
     contact: "1666-3060",
-    destinations: [],
+    destinations: DESTINATIONS.uniq([
+      ...DESTINATIONS.domestic,
+      ...DESTINATIONS.japan,
+      ...DESTINATIONS.hk,
+      ...DESTINATIONS.taiwan,
+      "khh",
+      ...DESTINATIONS.seAsia,
+    ]),
     maxCabinWeight: 9,
     maxCargoWeight: 32,
     breeds: ["small", "medium"],
@@ -275,7 +364,12 @@ const airlineData = [
       "동북아 KRW 130,000(32kg 이하) / 280,000(33~45kg)\n동남아 KRW 200,000(32kg 이하) / 430,000(33~45kg)\n미주 KRW 280,000(32kg 이하) / 580,000(33~45kg)",
     routes: "(해외) 미주/일본/동남아 등",
     contact: "1800-2626",
-    destinations: [],
+    destinations: DESTINATIONS.uniq([
+      ...DESTINATIONS.japan,
+      ...DESTINATIONS.seAsia,
+      ...DESTINATIONS.hk,
+      ...DESTINATIONS.us,
+    ]),
     maxCabinWeight: 7,
     maxCargoWeight: 45,
     breeds: ["small", "medium"],
@@ -298,7 +392,17 @@ const airlineData = [
       "A 지역 300 USD (베트남/태국/인도네시아/말레이시아/싱가포르/라오스/캄보디아/미얀마/필리핀/홍콩/마카오)\nB 지역 400 USD (대만/중국/한국/일본/인도 등)\nC 지역 600 USD (프랑스/독일/영국/러시아/이탈리아/덴마크/호주/아메리카 및 기타)\nD 지역 650 USD (미국 및 아메리카 대륙 국가)",
     routes: "(해외) 하노이/호치민/다낭/나트랑 등",
     contact: "02-757-8920",
-    destinations: [],
+    destinations: DESTINATIONS.uniq([
+      ...DESTINATIONS.seAsia,
+      ...DESTINATIONS.hk,
+      ...DESTINATIONS.taiwan,
+      ...DESTINATIONS.china,
+      ...DESTINATIONS.japan,
+      ...DESTINATIONS.europe,
+      ...DESTINATIONS.us,
+      ...DESTINATIONS.canada,
+      ...DESTINATIONS.australia,
+    ]),
     maxCabinWeight: 6,
     maxCargoWeight: 32,
     breeds: ["small", "medium"],
@@ -318,7 +422,7 @@ const airlineData = [
     fees: "항공편별 상이",
     routes: "(해외) 프랑크푸르트/뮌헨 등 유럽 노선",
     contact: "02-6022-4228",
-    destinations: [],
+    destinations: DESTINATIONS.uniq([...DESTINATIONS.europe, ...DESTINATIONS.us]),
     maxCabinWeight: 8,
     maxCargoWeight: 32,
     breeds: ["small", "medium"],
@@ -336,7 +440,7 @@ const airlineData = [
     fees: "",
     routes: "(해외) 애틀랜타/디트로이트/시애틀 등 미주 노선",
     contact: "0079-8651-7538",
-    destinations: [],
+    destinations: DESTINATIONS.us,
     maxCabinWeight: 99,
     maxCargoWeight: 0,
     breeds: ["small", "medium"],
@@ -359,7 +463,7 @@ const airlineData = [
     fees: "기내 $100~$120 · 화물칸 $270~$324",
     routes: "(해외) 밴쿠버/토론토 등 캐나다 노선",
     contact: "02-3788-0100",
-    destinations: [],
+    destinations: DESTINATIONS.canada,
     maxCabinWeight: 10,
     maxCargoWeight: 45,
     breeds: ["small", "medium"],
@@ -381,7 +485,7 @@ const airlineData = [
     fees: "기내 60~130유로 · 화물 140~650유로 (노선별 상이)",
     routes: "(해외) 헬싱키 및 유럽 노선",
     contact: "02-3455-8000",
-    destinations: [],
+    destinations: DESTINATIONS.uniq([...DESTINATIONS.europe, ...DESTINATIONS.japan]),
     maxCabinWeight: 8,
     maxCargoWeight: 75,
     breeds: ["small", "medium"],
@@ -848,6 +952,12 @@ const dailyPlaces = [
 function renderAirlines(airlines = currentAirlines) {
   currentAirlines = airlines;
 
+  // airline.html(비행기 타볼까)에서는 히어로 검색 영역만 사용.
+  if (pageType === "airline") {
+    airlineEl.innerHTML = "";
+    return;
+  }
+
   if (pageType !== "airline") {
     airlineEl.innerHTML = `
       <!-- Travel recommendations (숨김 처리) -->
@@ -970,7 +1080,7 @@ function renderAirlines(airlines = currentAirlines) {
                 ${
                   lines.length
                     ? `<div class="mt-4 rounded-xl border border-line bg-white p-3 text-xs text-slate-600">
-                        <p class="font-semibold text-deep">요금</p>
+                        <p class="font-semibold text-deep">요금(편도)</p>
                         <ul class="mt-2 grid gap-1">
                           ${lines.map((l) => `<li>• ${l}</li>`).join("")}
                         </ul>
@@ -1085,10 +1195,20 @@ function renderResultsPage() {
             <div class="rounded-xl bg-slate-50 p-3">
               <p class="font-semibold text-deep">기내 동반</p>
               <p class="mt-1">무게: ${airline.cabin.maxWeight}kg 미만</p>
-              <p class="mt-1">케이지: ${airline.cabin.cage}</p>
+              <p class="mt-1 whitespace-pre-line">케이지: ${airline.cabin.cage}</p>
               ${airline.contact ? `<p class="mt-1">사전예약 및 안내: ${airline.contact}</p>` : ""}
+              ${airline.reservationNote ? `<p class="mt-2 text-xs text-slate-500">${airline.reservationNote}</p>` : ""}
             </div>
             ${renderCargoBlock(airline)}
+          </div>
+          <div class="mt-3 rounded-xl border border-line bg-white p-3 text-xs text-slate-600">
+            ${airline.routes ? `<p class="font-semibold text-deep">취항 노선</p><p class="mt-1">${airline.routes}</p>` : ""}
+            <p class="${airline.routes ? "mt-3" : ""} font-semibold text-deep">요금(편도)</p>
+            <p class="mt-1 whitespace-pre-line text-slate-600">${
+              airline.fees && String(airline.fees).trim()
+                ? airline.fees
+                : "항공편·노선별 상이 — 항공사에 문의해 주세요."
+            }</p>
           </div>
         </article>
       `
@@ -1559,6 +1679,15 @@ function setupEligibilityFilter() {
                 </div>
                 ${renderCargoBlock(airline)}
               </div>
+              <div class="mt-3 rounded-xl border border-line bg-white p-3 text-xs text-slate-600">
+                ${airline.routes ? `<p class="font-semibold text-deep">취항 노선</p><p class="mt-1">${airline.routes}</p>` : ""}
+                <p class="${airline.routes ? "mt-3" : ""} font-semibold text-deep">요금(편도)</p>
+                <p class="mt-1 whitespace-pre-line text-slate-600">${
+                  airline.fees && String(airline.fees).trim()
+                    ? airline.fees
+                    : "항공편·노선별 상이 — 항공사에 문의해 주세요."
+                }</p>
+              </div>
             </article>
           `
           )
@@ -1754,6 +1883,8 @@ async function fetchShopItemsFromApi() {
 
 // 외부 API 데이터가 있으면 화면을 갱신
 async function initApiData() {
+  // 비행기/검색 페이지는 flight.text 기반 데이터를 우선합니다.
+  if (pageType === "airline" || pageType === "results") return;
   const [airlines, products] = await Promise.all([
     fetchAirlinesFromApi(),
     fetchShopItemsFromApi(),
@@ -1881,12 +2012,9 @@ if (heroEl && pageType === "airline") {
   setupHeroSearch();
 }
 setupSkeletons();
+// airline 페이지는 히어로 검색만 사용 (하단 섹션/필터 UI 제거)
 if (airlineEl && pageType === "airline") {
-  setupAirlineTabs();
-  setupViewTabs();
-  setupEligibilityFilter();
-  setupBottomSheet();
-  setupShopFilters();
+  // no-op
 }
 setupThemeRowScroll();
 if (airlineEl && pageType !== "airline" && pageType !== "results") {
