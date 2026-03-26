@@ -1852,8 +1852,8 @@ function setupHeroDestinationControls() {
     const codes =
       r === "domestic" ? flightDomesticSorted : r === "overseas" ? flightOverseasSorted : flightAllSorted;
     airportEl.innerHTML =
-      '<option value="any">Anywhere</option>' + flightAirportOptionsMarkup(codes);
-    airportEl.value = "any";
+      '<option value="">도시선택</option><option value="any">Anywhere</option>' + flightAirportOptionsMarkup(codes);
+    airportEl.value = "";
   }
 
   departureEl.addEventListener("change", () => {
@@ -1876,9 +1876,9 @@ function setupHeroSearch() {
 
   heroBtn.addEventListener("click", () => {
     const region = heroRegion?.value || "any";
-    const airport = (heroAirport?.value || "any").trim();
+    const airport = (heroAirport?.value || "").trim();
     let destination = "any";
-    if (airport === "any") {
+    if (!airport || airport === "any") {
       destination = region === "domestic" ? "domestic_all" : region === "overseas" ? "overseas_all" : "any";
     } else {
       destination = airport;
