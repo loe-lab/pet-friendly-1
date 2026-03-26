@@ -1146,14 +1146,32 @@ function renderCargoBlock(airline) {
     `;
   }
 
+  const { ageText, remainingText } = splitAgeNote(cargo?.note);
+
   return `
     <div class="rounded-xl bg-slate-50 p-3">
       <p class="font-semibold text-deep">화물칸 동반</p>
-      <p class="mt-1">무게: ${cargo.maxWeight}kg 이하</p>
+      <p class="mt-1">무게: ${cargo.maxWeight}kg 이하${ageText ? ` (${ageText})` : ""}</p>
       ${renderCageInfo(cargo.cage)}
-      ${cargo?.note ? `<p class="mt-1 text-xs text-slate-500">${cargo.note}</p>` : ""}
+      ${remainingText ? `<p class="mt-1 text-xs text-slate-500">${remainingText}</p>` : ""}
     </div>
   `;
+}
+
+function splitAgeNote(noteText) {
+  const raw = String(noteText || "").trim();
+  if (!raw) return { ageText: "", remainingText: "" };
+
+  const ageMatch = raw.match(/생후\s*[^)\n,·]+(?:이상|미만|이하)?/);
+  const ageText = ageMatch ? ageMatch[0].trim() : "";
+  const remainingText = raw
+    .replace(/^기내\s*동반\s*:\s*/g, "")
+    .replace(/^화물칸\s*동반\s*:\s*/g, "")
+    .replace(ageText, "")
+    .replace(/^[\s,·-]+|[\s,·-]+$/g, "")
+    .trim();
+
+  return { ageText, remainingText };
 }
 
 function renderCageInfo(cageText) {
@@ -1260,12 +1278,18 @@ function renderResultsPage() {
             ${airline.contact ? `<span class="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-600">사전예약 및 안내번호: ${airline.contact}</span>` : ""}
           </div>
           <div class="mt-3 grid gap-3 text-xs text-slate-500">
+            ${(() => {
+              const { ageText, remainingText } = splitAgeNote(airline.cabin?.note);
+              return `
             <div class="rounded-xl bg-slate-50 p-3">
               <p class="font-semibold text-deep">기내 동반</p>
-              <p class="mt-1">무게: ${airline.cabin.maxWeight}kg 미만</p>
+              <p class="mt-1">무게: ${airline.cabin.maxWeight}kg 미만${ageText ? ` (${ageText})` : ""}</p>
               ${renderCageInfo(airline.cabin.cage)}
+              ${remainingText ? `<p class="mt-1 text-xs text-slate-500">${remainingText}</p>` : ""}
               ${airline.reservationNote ? `<p class="mt-2 text-xs text-slate-500">${airline.reservationNote}</p>` : ""}
             </div>
+              `;
+            })()}
             ${renderCargoBlock(airline)}
           </div>
           <div class="mt-3 rounded-xl border border-line bg-white p-3 text-xs text-slate-600">
