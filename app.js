@@ -1168,9 +1168,31 @@ function renderCargoBlock(airline) {
     <div class="rounded-xl bg-slate-50 p-3">
       <p class="font-semibold text-deep">화물칸 동반</p>
       <p class="mt-1">무게: ${cargo.maxWeight}kg 이하</p>
-      <p class="mt-1">케이지: ${cargo.cage}</p>
+      ${renderCageInfo(cargo.cage)}
       ${cargo?.note ? `<p class="mt-1 text-xs text-slate-500">${cargo.note}</p>` : ""}
     </div>
+  `;
+}
+
+function renderCageInfo(cageText) {
+  const raw = String(cageText || "").trim();
+  if (!raw) return '<p class="mt-1">케이지: -</p>';
+
+  const normalized = raw.replace(/\s*\n\s*/g, " ").replace(/\s{2,}/g, " ");
+  const softMatch = normalized.match(/소프트:\s*(.+?)(?=\s*(?:·\s*하드:|하드:|$))/);
+  const hardMatch = normalized.match(/하드:\s*(.+?)$/);
+
+  if (softMatch || hardMatch) {
+    return `
+      <p class="mt-1">케이지:</p>
+      ${softMatch ? `<p class="mt-1">- 소프트: ${softMatch[1].trim()}</p>` : ""}
+      ${hardMatch ? `<p class="mt-1">- 하드: ${hardMatch[1].trim()}</p>` : ""}
+    `;
+  }
+
+  return `
+    <p class="mt-1">케이지:</p>
+    <p class="mt-1">- ${raw}</p>
   `;
 }
 
@@ -1259,7 +1281,7 @@ function renderResultsPage() {
             <div class="rounded-xl bg-slate-50 p-3">
               <p class="font-semibold text-deep">기내 동반</p>
               <p class="mt-1">무게: ${airline.cabin.maxWeight}kg 미만</p>
-              <p class="mt-1 whitespace-pre-line">케이지: ${airline.cabin.cage}</p>
+              ${renderCageInfo(airline.cabin.cage)}
               ${airline.reservationNote ? `<p class="mt-2 text-xs text-slate-500">${airline.reservationNote}</p>` : ""}
             </div>
             ${renderCargoBlock(airline)}
