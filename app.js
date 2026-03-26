@@ -710,14 +710,14 @@ function renderHero() {
           <div class="flex flex-wrap items-center justify-center gap-3">
             <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
               출발지
-              <select id="hero-departure" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
+              <select id="hero-departure" class="w-full rounded-xl border border-line px-4 py-2 pr-14 text-sm">
                 <option value="icn">인천공항 (ICN)</option>
                 <option value="gmp">김포공항 (GMP)</option>
               </select>
             </label>
             <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
               도착지
-              <select id="hero-destination-region" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
+              <select id="hero-destination-region" class="w-full rounded-xl border border-line px-4 py-2 pr-14 text-sm">
                 <option value="any">Anywhere</option>
                 <option value="domestic">국내</option>
                 <option value="overseas">해외</option>
@@ -725,13 +725,13 @@ function renderHero() {
             </label>
             <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
               취항지(공항)
-              <select id="hero-destination-airport" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm" disabled>
+              <select id="hero-destination-airport" class="w-full rounded-xl border border-line px-4 py-2 pr-14 text-sm" disabled>
                 <option value="">—</option>
               </select>
             </label>
             <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
               몸무게(기내탑승 기준)
-              <select id="hero-weight" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
+              <select id="hero-weight" class="w-full rounded-xl border border-line px-4 py-2 pr-14 text-sm">
                 <option value="5">5kg 이하</option>
                 <option value="7">7kg 이하</option>
                 <option value="9">9kg 이하</option>
