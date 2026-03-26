@@ -734,9 +734,7 @@ function renderHero() {
               <select id="hero-weight" class="hero-select w-full rounded-xl border border-line px-4 py-2 pr-14 text-sm">
                 <option value="5">5kg 이하</option>
                 <option value="7">7kg 이하</option>
-                <option value="9">9kg 이하</option>
-                <option value="12">12kg 이하</option>
-                <option value="20">20kg 이하</option>
+                <option value="10">10kg 이하</option>
               </select>
             </label>
           </div>
@@ -1073,9 +1071,7 @@ function renderAirlines(airlines = currentAirlines) {
               <select id="weight-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
                 <option value="5">5kg 이하</option>
                 <option value="7">7kg 이하</option>
-                <option value="9">9kg 이하</option>
-                <option value="12">12kg 이하</option>
-                <option value="20">20kg 이하</option>
+                <option value="10">10kg 이하</option>
               </select>
             </label>
             <button
