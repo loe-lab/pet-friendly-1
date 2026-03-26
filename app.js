@@ -1152,10 +1152,21 @@ function renderCargoBlock(airline) {
     <div class="rounded-xl bg-slate-50 p-3">
       <p class="font-semibold text-deep">화물칸 동반</p>
       <p class="mt-1">무게: ${cargo.maxWeight}kg 이하${ageText ? ` (${ageText})` : ""}</p>
-      ${renderCageInfo(cargo.cage)}
+      ${renderCargoCageInfo(cargo.cage)}
       ${remainingText ? `<p class="mt-1 text-xs text-slate-500">${remainingText}</p>` : ""}
     </div>
   `;
+}
+
+function renderCargoCageInfo(cageText) {
+  const raw = String(cageText || "").trim();
+  if (!raw) return '<p class="mt-1">하드 케이지: -</p>';
+
+  const normalized = raw.replace(/\s*\n\s*/g, " ").replace(/\s{2,}/g, " ");
+  const hardMatch = normalized.match(/하드(?:\s*케이지)?:\s*(.+?)$/);
+  const hardValue = hardMatch ? hardMatch[1].trim() : normalized;
+
+  return `<p class="mt-1">하드 케이지: ${hardValue}</p>`;
 }
 
 function splitAgeNote(noteText) {
