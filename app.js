@@ -710,11 +710,8 @@ function renderHero() {
             <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
               출발지
               <select id="hero-departure" class="w-full rounded-xl border border-line px-4 py-2 pr-10 text-sm">
-                <option value="icn">인천 (ICN)</option>
-                <option value="gmp">김포 (GMP)</option>
-                <option value="pus">김해 (PUS)</option>
-                <option value="cju">제주 (CJU)</option>
-                <option value="tae">대구 (TAE)</option>
+                <option value="icn">인천공항 (ICN)</option>
+                <option value="gmp">김포공항 (GMP)</option>
               </select>
             </label>
             <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
@@ -1811,9 +1808,29 @@ function setupBottomSheet() {
 
 function setupHeroDestinationControls() {
   if (pageType !== "airline") return;
+  const departureEl = document.getElementById("hero-departure");
   const regionEl = document.getElementById("hero-destination-region");
   const airportEl = document.getElementById("hero-destination-airport");
-  if (!regionEl || !airportEl) return;
+  if (!departureEl || !regionEl || !airportEl) return;
+
+  function syncRegionOptionsByDeparture() {
+    const departure = departureEl.value;
+    if (departure === "gmp") {
+      // 김포 출발은 국내선만 선택 가능
+      regionEl.innerHTML = '<option value="domestic">국내</option>';
+      regionEl.value = "domestic";
+      return;
+    }
+    // 인천 출발은 전체 선택 가능
+    regionEl.innerHTML = `
+      <option value="any">Anywhere</option>
+      <option value="domestic">국내</option>
+      <option value="overseas">해외</option>
+    `;
+    if (!["any", "domestic", "overseas"].includes(regionEl.value)) {
+      regionEl.value = "any";
+    }
+  }
 
   function fillAirports() {
     const r = regionEl.value;
@@ -1829,7 +1846,12 @@ function setupHeroDestinationControls() {
       '<option value="">취항지 선택</option>' + flightAirportOptionsMarkup(codes);
   }
 
+  departureEl.addEventListener("change", () => {
+    syncRegionOptionsByDeparture();
+    fillAirports();
+  });
   regionEl.addEventListener("change", fillAirports);
+  syncRegionOptionsByDeparture();
   fillAirports();
 }
 
