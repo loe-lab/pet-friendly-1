@@ -171,6 +171,7 @@ function sortAirportCodesKo(codes) {
 
 const flightDomesticSorted = sortAirportCodesKo(FLIGHT_DOMESTIC_CODES);
 const flightOverseasSorted = sortAirportCodesKo(FLIGHT_OVERSEAS_CODES);
+const flightAllSorted = sortAirportCodesKo(uniqIata([...FLIGHT_DOMESTIC_CODES, ...FLIGHT_OVERSEAS_CODES]));
 
 function flightAirportOptionsMarkup(codes) {
   return codes
@@ -1189,8 +1190,17 @@ function renderResultsPage() {
   const eligible = currentAirlines.filter((airline) => {
     const cabinOk =
       airline.maxCabinWeight >= weight && airline.breeds.includes(breed) && breed !== "large";
+    const airlineDestinations = uniqIata(airline.destinations || []);
+    const hasDomestic = airlineDestinations.some((code) => FLIGHT_DOMESTIC_CODES.includes(code));
+    const hasOverseas = airlineDestinations.some((code) => FLIGHT_OVERSEAS_CODES.includes(code));
     const destinationOk =
-      destination === "any" || (airline.destinations || []).includes(destination);
+      destination === "any"
+        ? true
+        : destination === "domestic_all"
+          ? hasDomestic
+          : destination === "overseas_all"
+            ? hasOverseas
+            : airlineDestinations.includes(destination);
     return cabinOk && destinationOk;
   });
 
@@ -1199,7 +1209,11 @@ function renderResultsPage() {
   const destinationLabel =
     destination === "any"
       ? "Anywhere (전체)"
-      : destinationLabelMap[destination] || destination.toUpperCase();
+      : destination === "domestic_all"
+        ? "국내 전체"
+        : destination === "overseas_all"
+          ? "해외 전체"
+          : destinationLabelMap[destination] || destination.toUpperCase();
 
   rootEl.innerHTML = `
     <main class="mx-auto flex w-[min(1000px,92%)] flex-col gap-8 pb-20 pt-10">
@@ -1834,16 +1848,12 @@ function setupHeroDestinationControls() {
 
   function fillAirports() {
     const r = regionEl.value;
-    if (r === "any") {
-      airportEl.innerHTML = '<option value="">—</option>';
-      airportEl.disabled = true;
-      airportEl.value = "";
-      return;
-    }
     airportEl.disabled = false;
-    const codes = r === "domestic" ? flightDomesticSorted : flightOverseasSorted;
+    const codes =
+      r === "domestic" ? flightDomesticSorted : r === "overseas" ? flightOverseasSorted : flightAllSorted;
     airportEl.innerHTML =
-      '<option value="">취항지 선택</option>' + flightAirportOptionsMarkup(codes);
+      '<option value="any">Anywhere</option>' + flightAirportOptionsMarkup(codes);
+    airportEl.value = "any";
   }
 
   departureEl.addEventListener("change", () => {
@@ -1866,13 +1876,11 @@ function setupHeroSearch() {
 
   heroBtn.addEventListener("click", () => {
     const region = heroRegion?.value || "any";
-    const airport = heroAirport?.value?.trim() || "";
+    const airport = (heroAirport?.value || "any").trim();
     let destination = "any";
-    if (region !== "any") {
-      if (!airport) {
-        alert("국내 또는 해외를 선택한 경우 취항지를 선택해 주세요.");
-        return;
-      }
+    if (airport === "any") {
+      destination = region === "domestic" ? "domestic_all" : region === "overseas" ? "overseas_all" : "any";
+    } else {
       destination = airport;
     }
 
