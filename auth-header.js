@@ -12,6 +12,8 @@
 
   if (HIDE_HEADER_AUTH_UI) {
     authBtn.classList.add('hidden');
+    const authWrap = authBtn.parentElement;
+    if (authWrap) authWrap.style.display = 'none';
     return;
   }
 

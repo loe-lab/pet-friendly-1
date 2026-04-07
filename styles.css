@@ -79,6 +79,12 @@ body {
   background: #12273b;
 }
 
+/* Header: when auth UI hidden, nav stays right-aligned */
+header nav.md\:flex {
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
 /* Airline hero select: custom chevron with right spacing */
 .hero-select {
   -webkit-appearance: none;
