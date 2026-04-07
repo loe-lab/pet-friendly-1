@@ -1,11 +1,21 @@
 // 헤더 로그인 상태 관리
 (async function initAuthHeader() {
+  // 헤더 로그인/회원가입 UI 임시 숨김 토글
+  // 다시 노출하려면 false로 변경
+  const HIDE_HEADER_AUTH_UI = true;
+
   // supabase.js에서 초기화된 클라이언트 사용
   if (typeof supabaseClient === 'undefined') return;
 
-  const { data: { user } } = await supabaseClient.auth.getUser();
   const authBtn = document.getElementById('auth-btn');
   if (!authBtn) return;
+
+  if (HIDE_HEADER_AUTH_UI) {
+    authBtn.classList.add('hidden');
+    return;
+  }
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
 
   if (user) {
     // 탈퇴 후 재로그인 등으로 프로필이 없을 수 있음: 자동 생성하지 않고 가입 정보 입력 유도
