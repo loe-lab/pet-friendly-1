@@ -712,11 +712,12 @@ function renderHero() {
               </select>
             </label>
             <label class="grid min-w-[160px] flex-1 gap-1 text-xs">
-              몸무게(기내탑승 기준)
+              몸무게
               <select id="hero-weight" class="hero-select w-full rounded-xl border border-line px-4 py-2 pr-14 text-sm">
                 <option value="5">5kg 이하</option>
                 <option value="7">7kg 이하</option>
                 <option value="10">10kg 이하</option>
+                <option value="over10">10kg 초과</option>
               </select>
             </label>
           </div>
@@ -1049,11 +1050,12 @@ function renderAirlines(airlines = currentAirlines) {
               </select>
             </label>
             <label class="grid gap-2">
-              몸무게(기내탑승 기준)
+              몸무게
               <select id="weight-select" class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
                 <option value="5">5kg 이하</option>
                 <option value="7">7kg 이하</option>
                 <option value="10">10kg 이하</option>
+                <option value="over10">10kg 초과</option>
               </select>
             </label>
             <button
@@ -1185,6 +1187,22 @@ function splitAgeNote(noteText) {
   return { ageText, remainingText };
 }
 
+function getWeightFilterMeta(weightRaw) {
+  const raw = String(weightRaw ?? "").trim();
+  if (raw === "over10") {
+    return { mode: "over10", minExclusive: 10, label: "10kg 초과" };
+  }
+  const numeric = Number(raw);
+  const threshold = Number.isFinite(numeric) ? numeric : 5;
+  return { mode: "max", threshold, label: `${threshold}kg 이하` };
+}
+
+function matchesCabinWeight(maxCabinWeight, weightRaw) {
+  const meta = getWeightFilterMeta(weightRaw);
+  if (meta.mode === "over10") return Number(maxCabinWeight) > meta.minExclusive;
+  return Number(maxCabinWeight) >= meta.threshold;
+}
+
 function renderCageInfo(cageText) {
   const raw = String(cageText || "").trim();
   if (!raw) return '<p class="mt-1">케이지: -</p>';
@@ -1213,12 +1231,15 @@ function renderResultsPage() {
 
   const params = new URLSearchParams(window.location.search);
   const breed = params.get("breed") || "small";
-  const weight = Number(params.get("weight") || 5);
+  const weightRaw = params.get("weight") || "5";
+  const weightMeta = getWeightFilterMeta(weightRaw);
   const age = params.get("age") || "puppy";
   const destination = params.get("destination") || "any";
   const eligible = currentAirlines.filter((airline) => {
     const cabinOk =
-      airline.maxCabinWeight >= weight && airline.breeds.includes(breed) && breed !== "large";
+      matchesCabinWeight(airline.maxCabinWeight, weightRaw) &&
+      airline.breeds.includes(breed) &&
+      breed !== "large";
     const airlineDestinations = uniqIata(airline.destinations || []);
     const hasDomestic = airlineDestinations.some((code) => FLIGHT_DOMESTIC_CODES.includes(code));
     const hasOverseas = airlineDestinations.some((code) => FLIGHT_OVERSEAS_CODES.includes(code));
@@ -1250,7 +1271,7 @@ function renderResultsPage() {
         <div>
           <p class="text-xs uppercase tracking-[0.35em] text-slate-400">Search Results</p>
           <h1 class="mt-2 text-3xl font-semibold text-deep">탑승 가능 항공사</h1>
-          <p class="mt-2 text-sm text-slate-500">${weight}kg · ${ageLabel} · ${destinationLabel}</p>
+          <p class="mt-2 text-sm text-slate-500">${weightMeta.label} · ${ageLabel} · ${destinationLabel}</p>
           <p class="mt-2 text-xs text-slate-400">반려동물 탑승 규정은 달라질 수 있으므로, 각 항공사에 사전 문의 바랍니다.</p>
         </div>
       </div>
@@ -1752,12 +1773,14 @@ function setupEligibilityFilter() {
     const cardsEl = document.getElementById("eligible-cards");
     if (!cardsEl) return;
     const breed = breedSelect?.value || "small";
-    const weight = Number(weightSelect?.value || 5);
+    const weightRaw = weightSelect?.value || "5";
     const age = ageSelect?.value || "adult";
     const destination = destinationSelect?.value || "any";
     const eligible = currentAirlines.filter((airline) => {
       const cabinOk =
-        airline.maxCabinWeight >= weight && airline.breeds.includes(breed) && breed !== "large";
+        matchesCabinWeight(airline.maxCabinWeight, weightRaw) &&
+        airline.breeds.includes(breed) &&
+        breed !== "large";
       const destinationOk =
         destination === "any" || (airline.destinations || []).includes(destination);
       return cabinOk && destinationOk;
