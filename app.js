@@ -1300,6 +1300,13 @@ function renderResultsPage() {
         <div id="results-list" class="grid gap-4 md:grid-cols-2"></div>
       </div>
     </main>
+
+    <!-- Sticky Back Button (Mobile) -->
+    <div class="fixed bottom-0 left-0 right-0 z-50 border-t border-line bg-white/90 p-4 backdrop-blur-sm md:hidden">
+      <button onclick="window.location.href='airline.html'" class="w-full rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-soft">
+        검색 화면으로 돌아가기
+      </button>
+    </div>
   `;
 
   const loadingEl = rootEl.querySelector("#results-loading");
