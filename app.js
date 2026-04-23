@@ -1281,9 +1281,9 @@ function renderResultsPage() {
           <h1 class="mt-2 text-3xl font-semibold text-deep">탑승 가능 항공사</h1>
           <p class="mt-2 text-sm text-slate-500">${weightMeta.label} · ${ageLabel} · ${destinationLabel}</p>
           <div class="mt-2">
-            <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
-              <p>일반적으로 무게 규정은 캐리어를 포함한 무게를 나타냅니다.</p>
-              <p class="text-xs font-semibold tracking-[0.08em] text-slate-500">Last update ${lastUpdateLabel}</p>
+            <div class="flex items-start gap-2 text-xs text-slate-400">
+              <p class="flex-1">일반적으로 무게 규정은 캐리어를 포함한 무게를 나타냅니다.</p>
+              <p class="flex-shrink-0 text-xs font-semibold tracking-[0.08em] text-slate-500">Last update ${lastUpdateLabel}</p>
             </div>
             <p class="mt-1 text-xs text-slate-400">반려동물 탑승 규정은 달라질 수 있으므로, 각 항공사에 사전 문의 바랍니다.</p>
           </div>
