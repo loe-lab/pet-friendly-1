@@ -751,10 +751,7 @@ function renderHero() {
           <button id="hero-search" class="float-cta rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-soft">
             지금 우리 아이와 떠나기
           </button>
-          <button id="open-suggestion-modal" class="rounded-full border-2 border-deep bg-white px-5 py-2 text-xs font-medium text-deep hover:bg-deep hover:text-white transition">
-            문의/제안하기
-          </button>
-          <button id="open-feedback-modal" class="text-xs text-slate-500 hover:text-brand underline underline-offset-2">
+                    <button id="open-feedback-modal" class="text-xs text-slate-500 hover:text-brand underline underline-offset-2">
             잘못된 정보 또는 누락된 정보 제보하기
           </button>
         </div>
