@@ -747,9 +747,15 @@ function renderHero() {
           </div>
           <p class="text-center text-xs text-slate-400">반려동물 탑승 규정은 달라질 수 있으므로, 각 항공사에 사전 문의 바랍니다.</p>
         </div>
-        <div class="flex w-full flex-wrap justify-center gap-3">
+        <div class="flex w-full flex-col items-center gap-3">
           <button id="hero-search" class="float-cta rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-soft">
             지금 우리 아이와 떠나기
+          </button>
+          <button id="open-suggestion-modal" class="rounded-full border-2 border-deep bg-white px-5 py-2 text-xs font-medium text-deep hover:bg-deep hover:text-white transition">
+            문의/제안하기
+          </button>
+          <button id="open-feedback-modal" class="text-xs text-slate-500 hover:text-brand underline underline-offset-2">
+            잘못된 정보 또는 누락된 정보 제보하기
           </button>
         </div>
       </div>
@@ -1090,6 +1096,11 @@ function renderAirlines(airlines = currentAirlines) {
             </button>
             <p class="text-center text-xs text-slate-500 sm:col-span-3">
               검색 버튼을 누르면 결과 페이지에서 항공사 규정을 확인할 수 있어요.
+            </p>
+            <p class="text-center sm:col-span-3">
+              <button id="open-feedback-modal" class="text-xs text-slate-400 hover:text-brand underline underline-offset-2">
+                잘못된 정보 또는 누락된 정보 제보하기
+              </button>
             </p>
           </div>
           <div class="flex items-center justify-end gap-4">
@@ -1986,6 +1997,16 @@ function setupHeroSearch() {
       destination = airport;
     }
 
+    // PostHog 검색 이벤트 추적
+    if (typeof posthog !== "undefined") {
+      posthog.capture("airline_search", {
+        region: region,
+        destination: destination,
+        airport: airport,
+        weight: heroWeight?.value || "5",
+      });
+    }
+
     if (!document.getElementById("page-loading")) {
       const overlay = document.createElement("div");
       overlay.id = "page-loading";
@@ -2257,3 +2278,295 @@ if (pageType === "results") {
 }
 
 initApiData();
+
+// ---------------------------
+// 정보 제보 모달
+// ---------------------------
+(function setupFeedbackModal() {
+  // 모달 HTML 생성
+  const modalHTML = `
+    <div id="feedback-modal" class="fixed inset-0 z-50 hidden">
+      <div class="absolute inset-0 bg-black/50" id="feedback-modal-backdrop"></div>
+      <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+          <button id="close-feedback-modal" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600">
+            <span class="material-icons">close</span>
+          </button>
+          <h3 class="text-xl font-semibold text-deep mb-4">정보 제보하기</h3>
+          <p class="text-sm text-slate-500 mb-6">잘못된 정보나 누락된 정보를 알려주세요. 검토 후 반영하겠습니다.</p>
+          <form id="feedback-form" class="grid gap-4">
+            <label class="grid gap-2">
+              <span class="text-sm font-medium text-slate-700">항공사</span>
+              <select id="feedback-airline" class="rounded-xl border border-line px-3 py-2 text-sm" required>
+                <option value="">항공사 선택</option>
+                ${airlineData.map(a => `<option value="${a.id}">${a.name}</option>`).join('')}
+                <option value="other">기타 / 신규 항공사</option>
+              </select>
+            </label>
+            <label class="grid gap-2">
+              <span class="text-sm font-medium text-slate-700">제보 유형</span>
+              <select id="feedback-type" class="rounded-xl border border-line px-3 py-2 text-sm" required>
+                <option value="">유형 선택</option>
+                <option value="wrong">잘못된 정보</option>
+                <option value="missing">누락된 정보</option>
+                <option value="new">신규 항공사 추가 요청</option>
+                <option value="other">기타</option>
+              </select>
+            </label>
+            <label class="grid gap-2">
+              <span class="text-sm font-medium text-slate-700">내용</span>
+              <textarea id="feedback-content" rows="4" class="rounded-xl border border-line px-3 py-2 text-sm resize-none" placeholder="구체적인 내용을 입력해주세요. (예: 대한항공 기내 무게 제한이 7kg가 아니라 8kg입니다)" required></textarea>
+            </label>
+            <label class="grid gap-2">
+              <span class="text-sm font-medium text-slate-700">이메일 (선택)</span>
+              <input type="email" id="feedback-email" class="rounded-xl border border-line px-3 py-2 text-sm" placeholder="답변을 원하시면 이메일을 입력해주세요" />
+            </label>
+            <button type="submit" id="feedback-submit" class="rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-soft hover:bg-brand/90 disabled:opacity-50 disabled:cursor-not-allowed">
+              제보하기
+            </button>
+            <p id="feedback-status" class="text-center text-sm hidden"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  const modal = document.getElementById('feedback-modal');
+  const closeBtn = document.getElementById('close-feedback-modal');
+  const backdrop = document.getElementById('feedback-modal-backdrop');
+  const form = document.getElementById('feedback-form');
+  const submitBtn = document.getElementById('feedback-submit');
+  const statusEl = document.getElementById('feedback-status');
+
+  function openModal() {
+    modal?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal?.classList.add('hidden');
+    document.body.style.overflow = '';
+    form?.reset();
+    statusEl?.classList.add('hidden');
+  }
+
+  // 이벤트 위임: 동적으로 생성되는 버튼도 처리
+  document.body.addEventListener('click', (e) => {
+    if (e.target.closest('#open-feedback-modal')) {
+      openModal();
+    }
+  });
+  closeBtn?.addEventListener('click', closeModal);
+  backdrop?.addEventListener('click', closeModal);
+
+  // ESC 키로 닫기
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal?.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
+  // 폼 제출
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const airline = document.getElementById('feedback-airline')?.value;
+    const type = document.getElementById('feedback-type')?.value;
+    const content = document.getElementById('feedback-content')?.value;
+    const email = document.getElementById('feedback-email')?.value;
+
+    if (!airline || !type || !content) {
+      statusEl.textContent = '필수 항목을 모두 입력해주세요.';
+      statusEl.className = 'text-center text-sm text-red-500';
+      statusEl.classList.remove('hidden');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '제출 중...';
+
+    try {
+      if (typeof supabaseClient === 'undefined' || !supabaseClient) {
+        throw new Error('Supabase 연결 실패');
+      }
+
+      const { error } = await supabaseClient
+        .from('feedback')
+        .insert([{
+          airline_id: airline,
+          feedback_type: type,
+          content: content,
+          user_email: email || null,
+          created_at: new Date().toISOString()
+        }]);
+
+      if (error) throw error;
+
+      statusEl.textContent = '제보해주셔서 감사합니다! 검토 후 반영하겠습니다.';
+      statusEl.className = 'text-center text-sm text-green-600';
+      statusEl.classList.remove('hidden');
+
+      form.reset();
+
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
+
+    } catch (err) {
+      console.error('[Feedback] 제출 실패:', err);
+      statusEl.textContent = '제출에 실패했습니다. 잠시 후 다시 시도해주세요.';
+      statusEl.className = 'text-center text-sm text-red-500';
+      statusEl.classList.remove('hidden');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '제보하기';
+    }
+  });
+})();
+
+// ---------------------------
+// 문의/제안하기 모달
+// ---------------------------
+(function setupSuggestionModal() {
+  const modalHTML = `
+    <div id="suggestion-modal" class="fixed inset-0 z-50 hidden">
+      <div class="absolute inset-0 bg-black/50" id="suggestion-modal-backdrop"></div>
+      <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+          <button id="close-suggestion-modal" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600">
+            <span class="material-icons">close</span>
+          </button>
+          <h3 class="text-xl font-semibold text-deep mb-2">문의/제안하기</h3>
+          <p class="text-sm text-slate-500 mb-6">서비스 개선 아이디어나 궁금한 점을 남겨주세요.</p>
+          <form id="suggestion-form" class="grid gap-4">
+            <label class="grid gap-2">
+              <span class="text-sm font-medium text-slate-700">유형</span>
+              <select id="suggestion-type" class="rounded-xl border border-line px-3 py-2 text-sm" required>
+                <option value="">선택해주세요</option>
+                <option value="문의">문의</option>
+                <option value="제안">제안</option>
+                <option value="기타">기타</option>
+              </select>
+            </label>
+            <label class="grid gap-2">
+              <span class="text-sm font-medium text-slate-700">이름 <span class="text-slate-400 font-normal">(선택)</span></span>
+              <input type="text" id="suggestion-name" class="rounded-xl border border-line px-3 py-2 text-sm" placeholder="이름을 입력해주세요" />
+            </label>
+            <label class="grid gap-2">
+              <span class="text-sm font-medium text-slate-700">이메일 <span class="text-slate-400 font-normal">(선택)</span></span>
+              <input type="email" id="suggestion-email" class="rounded-xl border border-line px-3 py-2 text-sm" placeholder="답변받으실 이메일" />
+            </label>
+            <label class="grid gap-2">
+              <span class="text-sm font-medium text-slate-700">내용 <span class="text-red-500">*</span></span>
+              <textarea id="suggestion-content" class="rounded-xl border border-line px-3 py-2 text-sm h-28 resize-none" placeholder="문의 또는 제안 내용을 작성해주세요" required></textarea>
+            </label>
+            <button
+              type="submit"
+              id="suggestion-submit"
+              class="rounded-full bg-brand py-3 text-sm font-semibold text-white shadow-soft hover:bg-brand/90 transition"
+            >
+              보내기
+            </button>
+            <p id="suggestion-status" class="text-center text-sm hidden"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  const modal = document.getElementById('suggestion-modal');
+  const closeBtn = document.getElementById('close-suggestion-modal');
+  const backdrop = document.getElementById('suggestion-modal-backdrop');
+  const form = document.getElementById('suggestion-form');
+  const submitBtn = document.getElementById('suggestion-submit');
+  const statusEl = document.getElementById('suggestion-status');
+
+  function openModal() {
+    modal?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal?.classList.add('hidden');
+    document.body.style.overflow = '';
+    form?.reset();
+    statusEl?.classList.add('hidden');
+  }
+
+  // 이벤트 위임: 동적으로 생성되는 버튼도 처리
+  document.body.addEventListener('click', (e) => {
+    if (e.target.closest('#open-suggestion-modal')) {
+      openModal();
+    }
+  });
+  closeBtn?.addEventListener('click', closeModal);
+  backdrop?.addEventListener('click', closeModal);
+
+  // ESC 키로 닫기
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal?.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
+  // 폼 제출 (FormSubmit.co AJAX)
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const type = document.getElementById('suggestion-type')?.value;
+    const name = document.getElementById('suggestion-name')?.value || '익명';
+    const email = document.getElementById('suggestion-email')?.value || '미입력';
+    const content = document.getElementById('suggestion-content')?.value;
+
+    if (!type || !content) {
+      statusEl.textContent = '유형과 내용을 입력해주세요.';
+      statusEl.className = 'text-center text-sm text-red-500';
+      statusEl.classList.remove('hidden');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '전송 중...';
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/syeon.loe@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `[데일리펫] ${type} - ${name}`,
+          유형: type,
+          이름: name,
+          이메일: email,
+          내용: content,
+          작성시간: new Date().toLocaleString('ko-KR')
+        })
+      });
+
+      if (!response.ok) throw new Error('전송 실패');
+
+      statusEl.textContent = '전송되었습니다! 소중한 의견 감사합니다.';
+      statusEl.className = 'text-center text-sm text-green-600';
+      statusEl.classList.remove('hidden');
+
+      form.reset();
+
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
+
+    } catch (err) {
+      console.error('[Suggestion] 전송 실패:', err);
+      statusEl.textContent = '전송에 실패했습니다. 잠시 후 다시 시도해주세요.';
+      statusEl.className = 'text-center text-sm text-red-500';
+      statusEl.classList.remove('hidden');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '보내기';
+    }
+  });
+})();
