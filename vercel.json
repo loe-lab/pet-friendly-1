@@ -1,8 +1,9 @@
 {
-  "rewrites": [
+  "redirects": [
     {
       "source": "/",
-      "destination": "/airline.html"
+      "destination": "/airline.html",
+      "permanent": false
     }
   ]
 }
