@@ -1,0 +1,92 @@
+{
+  "airlines": [
+    {
+      "id": "korean",
+      "name": "대한항공 (Korean Air)",
+      "badge": "KOREAN AIR",
+      "url": "https://www.koreanair.com/contents/plan-your-travel/special-assistance/travel-with-pets",
+      "contact": "1588-2001",
+      "selectors": {}
+    },
+    {
+      "id": "asiana",
+      "name": "아시아나항공 (Asiana Airlines)",
+      "badge": "ASIANA",
+      "url": "https://flyasiana.com/C/KR/KO/contents/traveling-with-pets",
+      "contact": "1588-8000",
+      "selectors": {}
+    },
+    {
+      "id": "tway",
+      "name": "티웨이항공 (T'way Air)",
+      "badge": "T'WAY",
+      "url": "https://www.twayair.com/app/serviceInfo/contents/70",
+      "contact": "1688-8686",
+      "selectors": {}
+    },
+    {
+      "id": "jeju",
+      "name": "제주항공 (Jeju Air)",
+      "badge": "JEJU AIR",
+      "url": "https://www.jejuair.net/ko/linkService/help/main.do",
+      "contact": "1599-1500",
+      "selectors": {}
+    },
+    {
+      "id": "jinair",
+      "name": "진에어 (Jin Air)",
+      "badge": "JIN AIR",
+      "url": "https://www.jinair.com/addService/jinipet/statute",
+      "contact": "1600-6200",
+      "selectors": {}
+    },
+    {
+      "id": "eastar",
+      "name": "이스타항공 (Eastar Jet)",
+      "badge": "EASTAR",
+      "url": "https://www.eastarjet.com/newstar/PGWIK00006",
+      "contact": "1544-0080",
+      "selectors": {}
+    },
+    {
+      "id": "airbusan",
+      "name": "에어부산 (Air Busan)",
+      "badge": "AIR BUSAN",
+      "url": "https://www.airbusan.com/content/common/service/customer/animal",
+      "contact": "1666-3060",
+      "selectors": {}
+    },
+    {
+      "id": "airpremia",
+      "name": "에어프레미아 (Air Premia)",
+      "badge": "AIR PREMIA",
+      "url": "https://www.airpremia.com/a/ko/support/need/pet",
+      "contact": "1800-2626",
+      "selectors": {}
+    },
+    {
+      "id": "lufthansa",
+      "name": "루프트한자 (Lufthansa)",
+      "badge": "LUFTHANSA",
+      "url": "https://www.lufthansa.com/kr/ko/travelling-with-animals",
+      "contact": "02-6022-4228",
+      "selectors": {}
+    },
+    {
+      "id": "aircanada",
+      "name": "에어캐나다 (Air Canada)",
+      "badge": "AIR CANADA",
+      "url": "https://www.aircanada.com/kr/ko/aco/home/plan/special-assistance/pets.html",
+      "contact": "02-3483-2847",
+      "selectors": {}
+    },
+    {
+      "id": "klm",
+      "name": "KLM (KLM Airlines)",
+      "badge": "KLM",
+      "url": "https://www.klm.com/information/pets",
+      "contact": "+82 26 105 40 37",
+      "selectors": {}
+    }
+  ]
+}

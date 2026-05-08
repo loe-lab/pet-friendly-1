@@ -1,0 +1,59 @@
+name: Monthly Airline Crawl
+
+on:
+  schedule:
+    # 매월 1일 오전 9시 (KST) = 0시 (UTC)
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+    # 수동 트리거 가능
+
+jobs:
+  crawl-and-update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: scripts/package-lock.json
+
+      - name: Install dependencies
+        working-directory: scripts
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        working-directory: scripts
+        run: npx playwright install chromium --with-deps
+
+      - name: Run crawler
+        working-directory: scripts
+        run: node crawl-airlines.js
+
+      - name: Update data files
+        working-directory: scripts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: node update-data.js
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --quiet flight.text || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add flight.text
+          git commit -m "data: auto-update airline policies $(date +'%Y-%m-%d')"
+          git push

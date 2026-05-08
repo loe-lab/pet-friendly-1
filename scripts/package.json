@@ -1,0 +1,15 @@
+{
+  "name": "pet-travel-crawler",
+  "version": "1.0.0",
+  "description": "Airline pet policy crawler",
+  "type": "module",
+  "scripts": {
+    "crawl": "node crawl-airlines.js",
+    "update": "node update-data.js",
+    "all": "node crawl-airlines.js && node update-data.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "playwright": "^1.48.0"
+  }
+}
